@@ -1,0 +1,33 @@
+{
+    "name": "pz/laravel-doctrine-rest",
+    "description": "Doctrine Rest - Laravel implementation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PavelZ",
+            "email": "r3volut1oner@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Pz\\": "src/"
+        }
+    },
+    "require": {
+        "laravel/framework": "^5.5",
+        "pz/doctrine-rest": "dev-master",
+        "pmill/doctrine-array-hydrator": "^0.1.2"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pz\\LaravelDoctrine\\Rest\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.4",
+        "laravel/laravel": "^5.5",
+        "laravel-doctrine/orm": "^1.4"
+    }
+}

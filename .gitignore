@@ -1,0 +1,5 @@
+/vendor/
+.idea
+
+/tests/bootstrap/cache
+/tests/coverage
