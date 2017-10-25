@@ -1,6 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-class RestPolicy
+abstract class RestPolicy
 {
     /**
      * @return bool
@@ -12,11 +12,30 @@ class RestPolicy
 
     /**
      * @param object $user
-     * @param string $entityClass
      *
      * @return bool
      */
-    public function index($user)
+    public function index(/** @scrutinizer ignore-unused */ $user)
+    {
+        return $this->allowByDefault();
+    }
+
+    /**
+     * @param object $user
+     *
+     * @return bool
+     */
+    public function show(/** @scrutinizer ignore-unused */ $user)
+    {
+        return $this->allowByDefault();
+    }
+
+    /**
+     * @param object $user
+     *
+     * @return bool
+     */
+    public function create(/** @scrutinizer ignore-unused */ $user)
     {
         return $this->allowByDefault();
     }
@@ -27,18 +46,7 @@ class RestPolicy
      *
      * @return bool
      */
-    public function show($user, $entity)
-    {
-        return $this->allowByDefault();
-    }
-
-    /**
-     * @param object $user
-     * @param string $entityClass
-     *
-     * @return bool
-     */
-    public function create($user)
+    public function update(/** @scrutinizer ignore-unused */ $user, /** @scrutinizer ignore-unused */ $entity)
     {
         return $this->allowByDefault();
     }
@@ -49,18 +57,7 @@ class RestPolicy
      *
      * @return bool
      */
-    public function update($user, $entity)
-    {
-        return $this->allowByDefault();
-    }
-
-    /**
-     * @param object $user
-     * @param object $entity
-     *
-     * @return bool
-     */
-    public function delete($user, $entity)
+    public function delete(/** @scrutinizer ignore-unused */ $user, $entity)
     {
         return $this->allowByDefault();
     }

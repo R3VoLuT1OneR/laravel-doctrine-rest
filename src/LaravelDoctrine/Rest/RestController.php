@@ -50,7 +50,10 @@ abstract class RestController extends Controller
      */
     public function createEntity($request)
     {
-        return $this->hydrator()->hydrate($this->repository()->getClassName(), $request->validated());
+        return $this->hydrator()->hydrate(
+            $this->repository()->getClassName(),
+            $request->validated()
+        );
     }
 
     /**
@@ -62,7 +65,10 @@ abstract class RestController extends Controller
      */
     public function updateEntity($request, $entity)
     {
-        return $this->hydrator()->hydrate($entity, $request->validated());
+        return $this->hydrator()->hydrate(
+            $entity,
+            $request->validated()
+        );
     }
 
     /**
