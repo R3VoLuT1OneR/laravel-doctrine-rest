@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\Kernel;
 use \Illuminate\Foundation\Testing\TestCase as LaravelTestCase;
 
+use LaravelDoctrine\Migrations\MigrationsServiceProvider;
 use LaravelDoctrine\ORM\DoctrineServiceProvider;
 use Pz\LaravelDoctrine\Rest\RestServiceProvider;
 
@@ -14,7 +15,6 @@ use Pz\LaravelDoctrine\Rest\Tests\App\Policies\UserPolicy;
 
 class TestCase extends LaravelTestCase
 {
-
     /**
      * @var Kernel
      */
@@ -24,15 +24,6 @@ class TestCase extends LaravelTestCase
      * @var EntityManager
      */
     protected $em;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        parent::setUp();
-        $this->kernel->call('migrate:refresh');
-    }
 
     /**
      * @return Application
@@ -46,7 +37,10 @@ class TestCase extends LaravelTestCase
         $this->kernel->bootstrap();
 
         $app->register(DoctrineServiceProvider::class);
+        $app->register(MigrationsServiceProvider::class);
         $app->register(RestServiceProvider::class);
+
+        $this->kernel->call('doctrine:migrations:refresh');
 
         $this->em = $app->make(EntityManager::class);
 
