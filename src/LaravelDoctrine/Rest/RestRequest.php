@@ -19,6 +19,14 @@ abstract class RestRequest extends FormRequest implements RestRequestInterface
     abstract public function ability();
 
     /**
+     * @return $this
+     */
+    public function http()
+    {
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function rules()

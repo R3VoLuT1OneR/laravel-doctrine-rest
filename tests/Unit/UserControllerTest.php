@@ -128,11 +128,6 @@ class UserControllerTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 1], ['id' => 3]],
-                'meta' => [
-                    'count' => 2,
-                    'limit' => 10,
-                    'start' => 0,
-                ]
             ]);
 
     }
@@ -144,10 +139,15 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 1], ['id' => 2], ['id' => 3]],
                 'meta' => [
-                    'count' => 3,
-                    'limit' => 10,
-                    'start' => 0,
-                ]
+                    'pagination' => [
+                        'total' => 3,
+                        'count' => 3,
+                        'per_page' => 10,
+                        'current_page' => 1,
+                        'total_pages' => 1,
+                        'links' => [],
+                    ],
+                ],
             ]);
 
         $this->get('/rest/users?limit=1&start=2')
@@ -155,20 +155,38 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 3]],
                 'meta' => [
-                    'count' => 3,
-                    'limit' => 1,
-                    'start' => 2,
+                    'pagination' => [
+                        'total' => 3,
+                        'count' => 1,
+                        'per_page' => 1,
+                        'current_page' => 3,
+                        'total_pages' => 3,
+                        'links' => [],
+                    ],
                 ]
             ]);
 
         $this->get('/rest/users?limit=2&page=2')
             ->assertSuccessful()
             ->assertJson([
-                'data' => [['id' => 3]],
+                'data' => [
+                    [
+                        'id' => 3,
+                        'name' => 'testing user3',
+                        'email' => 'test3email@test.com',
+                    ]
+                ],
                 'meta' => [
-                    'count' => 3,
-                    'limit' => 2,
-                    'start' => 2
+                    'pagination' => [
+                        'total' => 3,
+                        'count' => 1,
+                        'per_page' => 2,
+                        'current_page' => 2,
+                        'total_pages' => 2,
+                        'links' => [
+                            'previous' => null,
+                        ],
+                    ],
                 ]
             ]);
 
@@ -177,9 +195,14 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 3], ['id' => 2], ['id' => 1]],
                 'meta' => [
-                    'count' => 3,
-                    'limit' => 10,
-                    'start' => 0,
+                    'pagination' => [
+                        'total' => 3,
+                        'count' => 3,
+                        'per_page' => 10,
+                        'current_page' => 1,
+                        'total_pages' => 1,
+                        'links' => [],
+                    ],
                 ]
             ]);
 
@@ -188,9 +211,14 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 1], ['id' => 3]],
                 'meta' => [
-                    'count' => 2,
-                    'limit' => 10,
-                    'start' => 0,
+                    'pagination' => [
+                        'total' => 2,
+                        'count' => 2,
+                        'per_page' => 10,
+                        'current_page' => 1,
+                        'total_pages' => 1,
+                        'links' => [],
+                    ],
                 ]
             ]);
 
@@ -199,9 +227,14 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 1]],
                 'meta' => [
-                    'count' => 2,
-                    'limit' => 1,
-                    'start' => 0,
+                    'pagination' => [
+                        'total' => 2,
+                        'count' => 1,
+                        'per_page' => 1,
+                        'current_page' => 1,
+                        'total_pages' => 2,
+                        'links' => [],
+                    ],
                 ]
             ]);
 
@@ -210,9 +243,14 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 3]],
                 'meta' => [
-                    'count' => 2,
-                    'limit' => 1,
-                    'start' => 1,
+                    'pagination' => [
+                        'total' => 2,
+                        'count' => 1,
+                        'per_page' => 1,
+                        'current_page' => 2,
+                        'total_pages' => 2,
+                        'links' => [],
+                    ],
                 ]
             ]);
 
@@ -221,9 +259,14 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [['id' => 2]],
                 'meta' => [
-                    'count' => 2,
-                    'limit' => 1,
-                    'start' => 0,
+                    'pagination' => [
+                        'total' => 2,
+                        'count' => 1,
+                        'per_page' => 1,
+                        'current_page' => 1,
+                        'total_pages' => 2,
+                        'links' => [],
+                    ],
                 ]
             ]);
     }

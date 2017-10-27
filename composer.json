@@ -1,5 +1,5 @@
 {
-    "name": "pz/laravel-doctrine-rest",
+    "name": "pavelz/laravel-doctrine-rest",
     "description": "Doctrine Rest - Laravel implementation",
     "type": "library",
     "license": "MIT",
@@ -9,15 +9,14 @@
             "email": "r3volut1oner@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Pz\\": "src/"
         }
     },
     "require": {
-        "laravel/framework": "^5.5",
-        "pz/doctrine-rest": "dev-master",
+        "pz/doctrine-rest": "0.0.1",
         "pmill/doctrine-array-hydrator": "^0.1.2"
     },
     "autoload-dev": {
