@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 use Pz\Doctrine\Rest\Request\DeleteRequestInterface;
 use Pz\Doctrine\Rest\Request\IndexRequestInterface;
 use Pz\Doctrine\Rest\Request\ShowRequestInterface;
+use Pz\Doctrine\Rest\Response\FractalResponse;
+use Pz\Doctrine\Rest\RestResponseFactory;
 use Pz\LaravelDoctrine\Rest\Request\DeleteRestRequest;
 use Pz\LaravelDoctrine\Rest\Request\IndexRestRequest;
 use Pz\LaravelDoctrine\Rest\Request\ShowRestRequest;
@@ -17,13 +19,19 @@ class RestServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerDefaultRequests();
-        $this->registerRequests();
+        $this->registerResponses();
     }
 
     /**
      * Register application requests.
      */
-    protected function registerRequests() {}
+    protected function registerResponses()
+    {
+        $this->app->bind(RestResponseFactory::class, RestResponse::class);
+        $this->app->bind(RestResponse::class, function() {
+            return new RestResponse();
+        });
+    }
 
     /**
      * Register default laravel requests.

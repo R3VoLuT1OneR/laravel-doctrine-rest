@@ -18,11 +18,11 @@ class UserControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Route::get('/rest/users', UserController::class.'@index');
-        Route::get('/rest/users/{id}', UserController::class.'@show');
-        Route::post('/rest/users', UserController::class.'@store');
-        Route::put('/rest/users/{id}', UserController::class.'@edit');
-        Route::delete('/rest/users/{id}', UserController::class.'@delete');
+        Route::get('/rest/users',           UserController::class.'@index');
+        Route::get('/rest/users/{id}',      UserController::class.'@show');
+        Route::post('/rest/users',          UserController::class.'@store');
+        Route::put('/rest/users/{id}',      UserController::class.'@edit');
+        Route::delete('/rest/users/{id}',   UserController::class.'@delete');
 
         $this->user = $this->em->find(User::class, 1);
         $this->actingAs($this->user);
@@ -134,15 +134,17 @@ class UserControllerTest extends TestCase
 
     public function test_index_action()
     {
-        $this->get('/rest/users')
-            ->assertSuccessful()
+        $response = $this->get('/rest/users');
+        var_export($response->getContent());
+
+            $response->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 1], ['id' => 2], ['id' => 3]],
                 'meta' => [
                     'pagination' => [
                         'total' => 3,
                         'count' => 3,
-                        'per_page' => 10,
+                        'per_page' => 50,
                         'current_page' => 1,
                         'total_pages' => 1,
                         'links' => [],
@@ -150,7 +152,7 @@ class UserControllerTest extends TestCase
                 ],
             ]);
 
-        $this->get('/rest/users?limit=1&start=2')
+        $this->get('/rest/users?page[limit]=1&page[offset]=2')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 3]],
@@ -166,7 +168,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?limit=2&page=2')
+        $this->get('/rest/users?page[limit]=2&page[offset]=2')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [
@@ -190,7 +192,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?orderBy=id&ascending=0')
+        $this->get('/rest/users?sort=-id')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 3], ['id' => 2], ['id' => 1]],
@@ -198,7 +200,7 @@ class UserControllerTest extends TestCase
                     'pagination' => [
                         'total' => 3,
                         'count' => 3,
-                        'per_page' => 10,
+                        'per_page' => 50,
                         'current_page' => 1,
                         'total_pages' => 1,
                         'links' => [],
@@ -206,7 +208,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?query=@test.com')
+        $this->get('/rest/users?filter=@test.com')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 1], ['id' => 3]],
@@ -214,7 +216,7 @@ class UserControllerTest extends TestCase
                     'pagination' => [
                         'total' => 2,
                         'count' => 2,
-                        'per_page' => 10,
+                        'per_page' => 50,
                         'current_page' => 1,
                         'total_pages' => 1,
                         'links' => [],
@@ -222,7 +224,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?query=@test.com&limit=1&page=1')
+        $this->get('/rest/users?filter=@test.com&page[limit]=1')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 1]],
@@ -238,7 +240,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?query=@test.com&limit=1&page=2')
+        $this->get('/rest/users?filter=@test.com&page[limit]=1&page[offset]=2')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 3]],
@@ -254,7 +256,7 @@ class UserControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/rest/users?limit=1&orderBy=id&ascending=0&query=' . json_encode(['id' => ['start' => 1, 'end' => 3]]))
+        $this->get('/rest/users?page[limit]=1&sort=id&filter=' . json_encode(['id' => ['start' => 1, 'end' => 3]]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 2]],

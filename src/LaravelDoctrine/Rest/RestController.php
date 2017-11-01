@@ -1,6 +1,7 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
 use Doctrine\ORM\EntityManager;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use League\Fractal\TransformerAbstract;
 
@@ -11,6 +12,7 @@ use Pz\Doctrine\Rest\Action\ShowAction;
 use Pz\Doctrine\Rest\Action\CreateAction;
 use Pz\Doctrine\Rest\Action\UpdateAction;
 
+use Pz\Doctrine\Rest\RestResponseFactory;
 use Pz\LaravelDoctrine\Rest\Request\CreateRestRequest;
 use Pz\LaravelDoctrine\Rest\Request\UpdateRestRequest;
 
@@ -28,6 +30,11 @@ abstract class RestController extends Controller
     protected $em;
 
     /**
+     * @var RestResponse|RestResponseFactory
+     */
+    protected $response;
+
+    /**
      * @return TransformerAbstract
      */
     abstract public function transformer();
@@ -36,10 +43,28 @@ abstract class RestController extends Controller
      * UserController constructor.
      *
      * @param EntityManager $em
+     * @param RestResponse  $response
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, RestResponse $response)
     {
         $this->em = $em;
+        $this->response = $response;
+
+        $this->middleware(function($request, \Closure $next) {
+            try {
+                /** @var Response $response */
+                $response =  $next($request);
+
+                if (isset($response->exception) && $response->exception instanceof \Exception) {
+                    return $this->response()->exception($response->exception);
+                }
+
+            } catch (\Exception $e) {
+                return $this->response()->exception($e);
+            }
+
+            return $response;
+        });
     }
 
     /**
@@ -76,7 +101,7 @@ abstract class RestController extends Controller
      */
     public function response()
     {
-        return new RestResponse($this->transformer());
+        return $this->response->transformer($this->transformer());
     }
 
     /**

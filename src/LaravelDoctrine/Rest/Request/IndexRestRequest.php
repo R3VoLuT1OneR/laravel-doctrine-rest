@@ -14,11 +14,16 @@ class IndexRestRequest extends RestRequest implements IndexRequestInterface
     public function rules()
     {
         return [
-            'limit'     => 'numeric',
-            'page'      => 'numeric',
-            'orderBy'   => 'string',
-            'ascending' => 'boolean',
-            'query'     => 'string',
+            // Query
+            'filter'        => 'string',
+
+            // Pagination
+            'page'          => 'array',
+            'page.offset'   => 'required_with:page|numeric',
+            'page.limit'    => 'required_with:page|numeric',
+
+            // Sorting
+            'sort'          => 'string',
         ];
     }
 
@@ -35,23 +40,7 @@ class IndexRestRequest extends RestRequest implements IndexRequestInterface
      */
     public function getStart()
     {
-        if ($start = $this->get('start')) {
-            return (int) $start;
-        }
-
-        if ($page = $this->get('page')) {
-            return $this->getLimit() * ((int) $page - 1);
-        }
-
-        return 0;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultLimit()
-    {
-        return 10;
+        return $this->input('page.offset', 0);
     }
 
     /**
@@ -59,20 +48,30 @@ class IndexRestRequest extends RestRequest implements IndexRequestInterface
      */
     public function getLimit()
     {
-        return (int) $this->get('limit', $this->getDefaultLimit());
+        return $this->input('page.limit', 50);
     }
 
     /**
-     * @param string $alias
-     *
-     * @return OrderBy|null
+     * @return array|null
      */
     public function getOrderBy()
     {
-        if ($orderBy = $this->get('orderBy')) {
-            if (is_string($orderBy)) {
-                return [$orderBy => $this->get('ascending', true) ? 'ASC' : 'DESC'];
+        if ($fields = explode(',', $this->get('sort'))) {
+            $orderBy = [];
+
+            foreach ($fields as $field) {
+                if (empty($field)) continue;
+
+                $direction = 'ASC';
+                if ($field[0] === '-') {
+                    $field = substr($field, 1);
+                    $direction = 'DESC';
+                }
+
+                $orderBy[$field] = $direction;
             }
+
+            return $orderBy;
         }
 
         return null;
@@ -83,7 +82,7 @@ class IndexRestRequest extends RestRequest implements IndexRequestInterface
      */
     public function getQuery()
     {
-        if ($query = $this->get('query')) {
+        if ($query = $this->get('filter')) {
             if (is_string($query) && (null !== ($json = json_decode($query, true)))) {
                 return $json;
             }
