@@ -11,13 +11,13 @@ class UserPolicy extends RestPolicy
      */
     public function index($user)
     {
-        return parent::allowByDefault() || parent::index($user);
+        return parent::default() || parent::index($user);
     }
 
     /**
      * @return bool
      */
-    public function allowByDefault()
+    public function default()
     {
         return true;
     }

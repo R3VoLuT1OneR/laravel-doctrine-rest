@@ -3,7 +3,7 @@
 use Pz\Doctrine\Rest\Request\UpdateRequestInterface;
 use Pz\LaravelDoctrine\Rest\RestRequest;
 
-abstract class UpdateRestRequest extends RestRequest implements UpdateRequestInterface
+class UpdateRestRequest extends RestRequest implements UpdateRequestInterface
 {
     /**
      * @return string

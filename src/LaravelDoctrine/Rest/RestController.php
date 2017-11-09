@@ -1,5 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
+use App\JsonApiHydrator;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -75,10 +76,8 @@ abstract class RestController extends Controller
      */
     public function createEntity($request)
     {
-        return $this->hydrator()->hydrate(
-            $this->repository()->getClassName(),
-            $request->validated()
-        );
+        return $this->hydrator($request)
+            ->hydrate($this->repository()->getClassName(), $request->all());
     }
 
     /**
@@ -90,10 +89,8 @@ abstract class RestController extends Controller
      */
     public function updateEntity($request, $entity)
     {
-        return $this->hydrator()->hydrate(
-            $entity,
-            $request->validated()
-        );
+        return $this->hydrator($request)
+            ->hydrate($entity, $request->all());
     }
 
     /**
@@ -107,8 +104,12 @@ abstract class RestController extends Controller
     /**
      * @return ArrayHydrator
      */
-    public function hydrator()
+    public function hydrator(RestRequest $request)
     {
+        if ($request->isJsonApi()) {
+            return new JsonApiHydrator($this->em);
+        }
+
         return new ArrayHydrator($this->em);
     }
 }

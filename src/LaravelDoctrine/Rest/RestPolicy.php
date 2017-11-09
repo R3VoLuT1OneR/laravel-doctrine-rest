@@ -5,7 +5,7 @@ abstract class RestPolicy
     /**
      * @return bool
      */
-    public function allowByDefault()
+    public function defaultAccess(/** @scrutinizer ignore-unused */ $user)
     {
         return false;
     }
@@ -15,9 +15,9 @@ abstract class RestPolicy
      *
      * @return bool
      */
-    public function index(/** @scrutinizer ignore-unused */ $user)
+    public function index($user)
     {
-        return $this->allowByDefault();
+        return $this->defaultAccess($user);
     }
 
     /**
@@ -25,9 +25,9 @@ abstract class RestPolicy
      *
      * @return bool
      */
-    public function show(/** @scrutinizer ignore-unused */ $user)
+    public function show($user, /** @scrutinizer ignore-unused */ $entity)
     {
-        return $this->allowByDefault();
+        return $this->defaultAccess($user);
     }
 
     /**
@@ -35,20 +35,9 @@ abstract class RestPolicy
      *
      * @return bool
      */
-    public function create(/** @scrutinizer ignore-unused */ $user)
+    public function create($user)
     {
-        return $this->allowByDefault();
-    }
-
-    /**
-     * @param object $user
-     * @param object $entity
-     *
-     * @return bool
-     */
-    public function update(/** @scrutinizer ignore-unused */ $user, /** @scrutinizer ignore-unused */ $entity)
-    {
-        return $this->allowByDefault();
+        return $this->defaultAccess($user);
     }
 
     /**
@@ -57,8 +46,19 @@ abstract class RestPolicy
      *
      * @return bool
      */
-    public function delete(/** @scrutinizer ignore-unused */ $user, $entity)
+    public function update($user, /** @scrutinizer ignore-unused */ $entity)
     {
-        return $this->allowByDefault();
+        return $this->defaultAccess($user);
+    }
+
+    /**
+     * @param object $user
+     * @param object $entity
+     *
+     * @return bool
+     */
+    public function delete($user, $entity)
+    {
+        return $this->defaultAccess($user);
     }
 }

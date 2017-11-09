@@ -19,6 +19,26 @@ abstract class RestRequest extends FormRequest implements RestRequestInterface
     abstract public function ability();
 
     /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->get('fields', []);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isJsonApi()
+    {
+        if (in_array(RestRequestInterface::JSON_API_CONTENT_TYPE, $this->getAcceptableContentTypes())) {
+            return true;
+        }
+
+        return $this->getContentType() === static::JSON_API_CONTENT_TYPE;
+    }
+
+    /**
      * @return $this
      */
     public function http()
@@ -31,7 +51,9 @@ abstract class RestRequest extends FormRequest implements RestRequestInterface
      */
     public function rules()
     {
-        return [];
+        return [
+            'fields' => 'array'
+        ];
     }
 
     /**
