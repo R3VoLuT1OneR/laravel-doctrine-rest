@@ -1,23 +1,28 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Policies;
 
-use Pz\LaravelDoctrine\Rest\RestPolicy;
+use Pz\LaravelDoctrine\Rest\Traits\WithRestAbilities;
 
-class UserPolicy extends RestPolicy
+class UserPolicy
 {
+    use WithRestAbilities {
+        defaultRestAccess as parentRestAccess;
+        restIndex as parentRestIndex;
+    }
+
     /**
-     * @param object $user
+     * @param $user
      *
      * @return bool
      */
-    public function index($user)
+    public function restIndex($user)
     {
-        return parent::default() || parent::index($user);
+        return $this->parentRestAccess($user) || $this->parentRestIndex($user);
     }
 
     /**
      * @return bool
      */
-    public function default()
+    public function defaultRestAccess()
     {
         return true;
     }

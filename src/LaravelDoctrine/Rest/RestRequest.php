@@ -1,94 +1,142 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Pz\Doctrine\Rest\Contracts\RestRequestContract;
 
-use Illuminate\Validation\ValidationException;
-use Pz\Doctrine\Rest\RestRequestInterface;
-
-abstract class RestRequest extends FormRequest implements RestRequestInterface
+class RestRequest extends FormRequest implements RestRequestContract
 {
-    /**
-     * Authorization gateway ability.
-     * Return `false` for pass auth.
-     *
-     * @return null|string
-     */
-    abstract public function ability();
-
-    /**
-     * @return array
-     */
-    public function getFields()
-    {
-        return $this->get('fields', []);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isJsonApi()
-    {
-        if (in_array(RestRequestInterface::JSON_API_CONTENT_TYPE, $this->getAcceptableContentTypes())) {
-            return true;
-        }
-
-        return $this->getContentType() === static::JSON_API_CONTENT_TYPE;
-    }
-
-    /**
-     * @return $this
-     */
-    public function http()
-    {
-        return $this;
-    }
-
     /**
      * @return array
      */
     public function rules()
     {
         return [
-            'fields' => 'array'
+            'filter'        => 'sometimes|required',
+            'include'       => 'sometimes|required|array',
+            'exclude'       => 'sometimes|required|array',
+            'fields'        => 'sometimes|required|array',
+            'sort'          => 'sometimes|required|string',
+            'page'          => 'sometimes|required|array',
+            'page.number'   => 'sometimes|required|numeric',
+            'page.size'     => 'sometimes|required|numeric',
+            'page.limit'    => 'sometimes|required|numeric',
+            'page.offset'   => 'sometimes|required|numeric',
         ];
     }
 
     /**
-     * @param object|string $entity
-     * @throws AuthorizationException
-     * @return void
+     * @return array|null
      */
-    public function authorize($entity)
+    public function getOrderBy()
     {
-        $this->gate()->authorize($this->ability(), $entity);
+        if ($sort = $this->input('sort')) {
+            $fields = explode(',', $sort);
+            $orderBy = [];
+
+            foreach ($fields as $field) {
+                if (empty($field)) continue;
+
+                $direction = 'ASC';
+                if ($field[0] === '-') {
+                    $field = substr($field, 1);
+                    $direction = 'DESC';
+                }
+
+                $orderBy[$field] = $direction;
+            }
+
+            return $orderBy;
+        }
+
+        return null;
     }
 
     /**
-     * @param Validator $validator
-     *
-     * @throws ValidationException
+     * @return null|int
      */
-    protected function failedValidation(Validator $validator)
+    public function getStart()
     {
-        throw (new ValidationException($validator))->errorBag($this->errorBag);
+        if (null !== ($limit = $this->getLimit())) {
+            if ($number = $this->input('page.number')) {
+                return ($number - 1) * $limit;
+            }
+
+            return $this->input('page.offset', 0);
+        }
+
+        return null;
     }
 
     /**
-     * Laravel authorization gate.
-     *
-     * @return Gate
+     * @return int|null
      */
-    public function gate()
+    public function getLimit()
     {
-        return $this->container->make(Gate::class);
+        if ($this->has('page')) {
+            if ($this->has('page.number')) {
+                return $this->input('page.size', static::DEFAULT_LIMIT);
+            }
+
+            return $this->input('page.limit', static::DEFAULT_LIMIT);
+        }
+
+        return null;
     }
 
     /**
-     * Pass default request authorization.
-     *
+     * @return bool
+     */
+    public function isAcceptJsonApi()
+    {
+        return in_array(RestRequestContract::JSON_API_CONTENT_TYPE, $this->getAcceptableContentTypes());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContentJsonApi()
+    {
+        return $this->headers->get('CONTENT_TYPE') === static::JSON_API_CONTENT_TYPE;
+    }
+
+    /**
+     * @return \Illuminate\Routing\Route|object|string
+     */
+    public function getId()
+    {
+        return $this->route('id');
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getExclude()
+    {
+        return $this->input('exclude');
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getInclude()
+    {
+        return $this->input('include');
+    }
+
+    public function getFields()
+    {
+        return $this->input('fields');
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getFilter()
+    {
+        return $this->input('filter');
+    }
+
+    /**
      * @return bool
      */
     protected function passesAuthorization()

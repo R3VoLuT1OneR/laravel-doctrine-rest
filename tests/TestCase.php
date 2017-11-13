@@ -8,7 +8,6 @@ use \Illuminate\Foundation\Testing\TestCase as LaravelTestCase;
 
 use LaravelDoctrine\Migrations\MigrationsServiceProvider;
 use LaravelDoctrine\ORM\DoctrineServiceProvider;
-use Pz\LaravelDoctrine\Rest\RestServiceProvider;
 
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 use Pz\LaravelDoctrine\Rest\Tests\App\Policies\UserPolicy;
@@ -38,7 +37,6 @@ class TestCase extends LaravelTestCase
 
         $app->register(DoctrineServiceProvider::class);
         $app->register(MigrationsServiceProvider::class);
-        $app->register(RestServiceProvider::class);
 
         $this->kernel->call('doctrine:migrations:refresh');
 

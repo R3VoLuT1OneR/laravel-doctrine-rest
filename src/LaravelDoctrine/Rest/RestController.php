@@ -1,115 +1,114 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use App\JsonApiHydrator;
 use Doctrine\ORM\EntityManager;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use League\Fractal\TransformerAbstract;
+use Pz\Doctrine\Rest\RestRepository;
+use Pz\LaravelDoctrine\Rest\Action\CreateAction;
+use Pz\LaravelDoctrine\Rest\Action\DeleteAction;
+use Pz\LaravelDoctrine\Rest\Action\IndexAction;
+use Pz\LaravelDoctrine\Rest\Action\ShowAction;
+use Pz\LaravelDoctrine\Rest\Action\UpdateAction;
 
-use pmill\Doctrine\Hydrator\ArrayHydrator;
-use Pz\Doctrine\Rest\Action\DeleteAction;
-use Pz\Doctrine\Rest\Action\IndexAction;
-use Pz\Doctrine\Rest\Action\ShowAction;
-use Pz\Doctrine\Rest\Action\CreateAction;
-use Pz\Doctrine\Rest\Action\UpdateAction;
-
-use Pz\Doctrine\Rest\RestResponseFactory;
-use Pz\LaravelDoctrine\Rest\Request\CreateRestRequest;
-use Pz\LaravelDoctrine\Rest\Request\UpdateRestRequest;
-
-abstract class RestController extends Controller
+class RestController extends Controller
 {
-    use IndexAction;
-    use ShowAction;
-    use DeleteAction;
-    use CreateAction;
-    use UpdateAction;
 
     /**
-     * @var EntityManager
+     * @var TransformerAbstract
      */
-    protected $em;
+    protected $transformer;
 
     /**
-     * @var RestResponse|RestResponseFactory
+     * @var RestRepository
      */
-    protected $response;
+    protected $repository;
+
+    /**
+     * @param RestRequest $request
+     *
+     * @return \Pz\Doctrine\Rest\RestResponse
+     */
+    public function index(RestRequest $request)
+    {
+        return (new IndexAction($this->repository(), $this->transformer()))
+            ->setFilterProperty($this->getFilterProperty())
+            ->setFilterable($this->getFilterable())
+            ->dispatch($request);
+    }
+
+    /**
+     * @param RestRequest $request
+     *
+     * @return \Pz\Doctrine\Rest\RestResponse
+     */
+    public function create(RestRequest $request)
+    {
+        return (new CreateAction($this->repository(), $this->transformer()))->dispatch($request);
+    }
+
+    /**
+     * @param RestRequest $request
+     *
+     * @return \Pz\Doctrine\Rest\RestResponse
+     */
+    public function show(RestRequest $request)
+    {
+        return (new ShowAction($this->repository(), $this->transformer()))->dispatch($request);
+    }
+
+    /**
+     * @param RestRequest $request
+     *
+     * @return \Pz\Doctrine\Rest\RestResponse
+     */
+    public function update(RestRequest $request)
+    {
+        return (new UpdateAction($this->repository(), $this->transformer()))->dispatch($request);
+    }
+
+    /**
+     * @param RestRequest $request
+     *
+     * @return \Pz\Doctrine\Rest\RestResponse
+     */
+    public function delete(RestRequest $request)
+    {
+        return (new DeleteAction($this->repository(), $this->transformer()))->dispatch($request);
+    }
+
+    /**
+     * Param that can be filtered if query is string.
+     *
+     * @return null|string
+     */
+    protected function getFilterProperty()
+    {
+        return null;
+    }
+
+    /**
+     * Get list of filterable entity properties.
+     *
+     * @return array
+     */
+    protected function getFilterable()
+    {
+        return [];
+    }
 
     /**
      * @return TransformerAbstract
      */
-    abstract public function transformer();
-
-    /**
-     * UserController constructor.
-     *
-     * @param EntityManager $em
-     * @param RestResponse  $response
-     */
-    public function __construct(EntityManager $em, RestResponse $response)
+    protected function transformer()
     {
-        $this->em = $em;
-        $this->response = $response;
-
-        $this->middleware(function($request, \Closure $next) {
-            try {
-                /** @var Response $response */
-                $response =  $next($request);
-
-                if (isset($response->exception) && $response->exception instanceof \Exception) {
-                    return $this->response()->exception($response->exception);
-                }
-
-            } catch (\Exception $e) {
-                return $this->response()->exception($e);
-            }
-
-            return $response;
-        });
+        return $this->transformer;
     }
 
     /**
-     * @param CreateRestRequest $request
-     *
-     * @return object
-     * @throws \Exception
+     * @return RestRepository
      */
-    public function createEntity($request)
+    protected function repository()
     {
-        return $this->hydrator($request)
-            ->hydrate($this->repository()->getClassName(), $request->all());
-    }
-
-    /**
-     * @param UpdateRestRequest $request
-     * @param                   $entity
-     *
-     * @return object
-     * @throws \Exception
-     */
-    public function updateEntity($request, $entity)
-    {
-        return $this->hydrator($request)
-            ->hydrate($entity, $request->all());
-    }
-
-    /**
-     * @return RestResponse
-     */
-    public function response()
-    {
-        return $this->response->transformer($this->transformer());
-    }
-
-    /**
-     * @return ArrayHydrator
-     */
-    public function hydrator(RestRequest $request)
-    {
-        if ($request->isJsonApi()) {
-            return new JsonApiHydrator($this->em);
-        }
-
-        return new ArrayHydrator($this->em);
+        return $this->repository;
     }
 }
