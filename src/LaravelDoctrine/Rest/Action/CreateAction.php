@@ -7,7 +7,7 @@ class CreateAction extends BaseAction
 {
     /**
      * @param RestRequest   $request
-     * @param object|string $entity
+     * @param string        $entity
      */
     public function authorize($request, $entity)
     {

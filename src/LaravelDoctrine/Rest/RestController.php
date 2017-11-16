@@ -1,6 +1,5 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use Doctrine\ORM\EntityManager;
 use Illuminate\Routing\Controller;
 use League\Fractal\TransformerAbstract;
 use Pz\Doctrine\Rest\RestRepository;
