@@ -18,10 +18,10 @@ class UserControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Route::get('/rest/users',           UserController::class.'@userIndex');
+        Route::get('/rest/users',           UserController::class.'@index');
         Route::get('/rest/users/{id}',      UserController::class.'@show');
-        Route::post('/rest/users',          UserController::class.'@userCreate');
-        Route::patch('/rest/users/{id}',    UserController::class.'@userUpdate');
+        Route::post('/rest/users',          UserController::class.'@create');
+        Route::patch('/rest/users/{id}',    UserController::class.'@update');
         Route::delete('/rest/users/{id}',   UserController::class.'@delete');
 
         $this->user = $this->em->find(User::class, 1);
@@ -30,22 +30,29 @@ class UserControllerTest extends TestCase
 
     public function test_edit_action()
     {
-        $this->patchJson('/rest/users/3', ['email' => 'fasdfas'])
+        $this->patchJson('/rest/users/3', ['data' => ['attributes' => ['email' => 'fasdfas']]])
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The given data was invalid.',
                 'errors' => [
-                    'email' => ['validation.email'],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'email',
+                        ],
+                        'detail' => 'Please provide correct email address'
+                    ],
                 ],
             ]);
 
-        $this->patchJson('/rest/users/3', ['email' => 'testEdit@edit.com'])
+        $this->patchJson('/rest/users/3', ['data' => ['attributes' => ['email' => 'testEdit@edit.com']]])
             ->assertSuccessful()
             ->assertJson([
                 'data' => [
                     'id' => 3,
-                    'name' => 'testing user3',
-                    'email' => 'testEdit@edit.com',
+                    'attributes' => [
+                        'name' => 'testing user3',
+                        'email' => 'testEdit@edit.com',
+                    ],
                 ],
             ]);
 
@@ -54,42 +61,91 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [
                     'id' => 3,
-                    'name' => 'testing user3',
-                    'email' => 'testEdit@edit.com',
+                    'attributes' => [
+                        'name' => 'testing user3',
+                        'email' => 'testEdit@edit.com',
+                    ]
                 ],
             ]);
     }
 
     public function test_store_action()
     {
-        $this->postJson('/rest/users')
+        $response = $this->postJson('/rest/users', ['data' => 'test']);
+        $response->assertStatus(422)
+            ->assertJson([
+                'errors' => [
+                    [
+                        'code' => 'missing-root-data',
+                        'source' => [
+                            'pointer' => '',
+                        ],
+                        'detail' => 'Missing `data` member at document top level.'
+                    ],
+                ]
+            ]);
+
+        $response = $this->postJson('/rest/users', ['data' => ['attributes' => []]]);
+        $response
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The given data was invalid.',
                 'errors' => [
-                    'name' => ['validation.required'],
-                    'email' => ['validation.required'],
-                    'password' => ['validation.required'],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'email',
+                        ],
+                        'detail' => 'This value should not be null.'
+                    ],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'name',
+                        ],
+                        'detail' => 'This value should not be null.'
+                    ],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'password',
+                        ],
+                        'detail' => 'This value should not be null.'
+                    ],
                 ],
             ]);
 
-        $this->postJson('/rest/users', ['name' => 'test1', 'email' => 'fasdf', 'password' => 'aaa'])
+        $response = $this->postJson('/rest/users', ['data' => ['attributes' => ['name' => 'te', 'email' => 'fasdf@test.com']]]);
+        $response
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The given data was invalid.',
                 'errors' => [
-                    'email' => ['validation.email'],
-                    'password' => ['validation.min.string'],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'name',
+                        ],
+                        'detail' => 'Name must be at least 3 characters long',
+                    ],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'password',
+                        ],
+                        'detail' => 'This value should not be null.',
+                    ],
                 ],
             ]);
 
-        $this->postJson('/rest/users', ['name' => 'testing user4', 'email' => 'test4email@test.com', 'password' => '123456'])
+        $response = $this->postJson('/rest/users', ['data' => ['attributes' => ['name' => 'testing user4', 'email' => 'test4email@test.com', 'password' => '123456']]]);
+        $response
             ->assertSuccessful()
             ->assertJson([
                 'data' => [
                     'id' => 4,
-                    'name' => 'testing user4',
-                    'email' => 'test4email@test.com'
+                    'attributes' => [
+                        'name' => 'testing user4',
+                        'email' => 'test4email@test.com'
+                    ]
                 ]
             ]);
 
@@ -98,8 +154,10 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [
                     'id' => 4,
-                    'name' => 'testing user4',
-                    'email' => 'test4email@test.com'
+                    'attributes' => [
+                        'name' => 'testing user4',
+                        'email' => 'test4email@test.com'
+                    ]
                 ]
             ]);
     }
@@ -111,8 +169,10 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'data' => [
                     'id' => 1,
-                    'name' => 'testing user1',
-                    'email' => 'test1email@test.com',
+                    'attributes' => [
+                        'name' => 'testing user1',
+                        'email' => 'test1email@test.com',
+                    ]
                 ],
             ]);
 
@@ -153,9 +213,9 @@ class UserControllerTest extends TestCase
                         'per_page' => 1,
                         'current_page' => 3,
                         'total_pages' => 3,
-                        'links' => [],
                     ],
-                ]
+                ],
+                'links' => [],
             ]);
 
         $this->get('/rest/users?page[limit]=2&page[offset]=2')
@@ -164,8 +224,10 @@ class UserControllerTest extends TestCase
                 'data' => [
                     [
                         'id' => 3,
-                        'name' => 'testing user3',
-                        'email' => 'test3email@test.com',
+                        'attributes' => [
+                            'name' => 'testing user3',
+                            'email' => 'test3email@test.com',
+                        ]
                     ]
                 ],
                 'meta' => [
@@ -175,10 +237,9 @@ class UserControllerTest extends TestCase
                         'per_page' => 2,
                         'current_page' => 2,
                         'total_pages' => 2,
-                        'links' => [
-                            'previous' => null,
-                        ],
                     ],
+                ],
+                'links' => [
                 ]
             ]);
 
@@ -205,9 +266,9 @@ class UserControllerTest extends TestCase
                         'per_page' => 1,
                         'current_page' => 1,
                         'total_pages' => 2,
-                        'links' => [],
                     ],
-                ]
+                ],
+                'links' => [],
             ]);
 
         $response = $this->get('/rest/users?filter=@test.com&page[number]=2&page[size]=1');
@@ -222,9 +283,9 @@ class UserControllerTest extends TestCase
                         'per_page' => 1,
                         'current_page' => 2,
                         'total_pages' => 2,
-                        'links' => [],
                     ],
-                ]
+                ],
+                'links' => [],
             ]);
 
         $response = $this->get('/rest/users?page[limit]=1&sort=-id&filter[id][start]=1&filter[id][end]=3');
@@ -239,9 +300,9 @@ class UserControllerTest extends TestCase
                         'per_page' => 1,
                         'current_page' => 1,
                         'total_pages' => 2,
-                        'links' => [],
                     ],
-                ]
+                ],
+                'links' => [],
             ]);
     }
 }

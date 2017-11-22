@@ -31,31 +31,11 @@ class UserController extends RestController
      *
      * @return \Pz\Doctrine\Rest\RestResponse
      */
-    public function userIndex(RestRequest $request)
+    public function index(RestRequest $request)
     {
         parent::getFilterProperty();
         parent::getFilterable();
         return parent::index($request);
-    }
-
-    /**
-     * @param UserCreateRequest $request
-     *
-     * @return \Pz\Doctrine\Rest\RestResponse
-     */
-    public function userCreate(UserCreateRequest $request)
-    {
-        return $this->create($request);
-    }
-
-    /**
-     * @param UserEditRequest $request
-     *
-     * @return \Pz\Doctrine\Rest\RestResponse
-     */
-    public function userUpdate(UserEditRequest $request)
-    {
-        return $this->update($request);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -33,6 +34,8 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @var string
      *
      * @ORM\Column(name="email", type="string", unique=true, nullable=false)
+     * @Assert\Email(message="Please provide correct email address", checkHost=true, checkMX=true)
+     * @Assert\NotNull()
      */
     protected $email;
 
@@ -40,13 +43,21 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @var string
      *
      * @ORM\Column(name="name", type="string", unique=false, nullable=false)
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min="3",
+     *     max="255",
+     *     minMessage="Name must be at least {{ limit }} characters long",
+     *     maxMessage="Name can't be more than {{ limit }} characters long"
+     * )
      */
     protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string")
+     * @ORM\Column(name="password", type="string", nullable=false)
+     * @Assert\NotNull()
      */
     protected $password;
 

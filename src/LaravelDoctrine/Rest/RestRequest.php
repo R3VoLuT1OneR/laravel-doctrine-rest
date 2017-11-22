@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Http\FormRequest;
 use Pz\Doctrine\Rest\Contracts\RestRequestContract;
+use Pz\Doctrine\Rest\Exceptions\RestException;
 
 class RestRequest extends FormRequest implements RestRequestContract
 {
@@ -22,6 +23,19 @@ class RestRequest extends FormRequest implements RestRequestContract
             'page.limit'    => 'sometimes|required|numeric',
             'page.offset'   => 'sometimes|required|numeric',
         ];
+    }
+
+    /**
+     * @return array
+     * @throws RestException
+     */
+    public function getData()
+    {
+        if ((null === $data = $this->get('data')) || !is_array($data)) {
+            throw RestException::missingRootData();
+        }
+
+        return $data;
     }
 
     /**
@@ -81,22 +95,6 @@ class RestRequest extends FormRequest implements RestRequestContract
         }
 
         return null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAcceptJsonApi()
-    {
-        return in_array(RestRequestContract::JSON_API_CONTENT_TYPE, $this->getAcceptableContentTypes());
-    }
-
-    /**
-     * @return bool
-     */
-    public function isContentJsonApi()
-    {
-        return $this->headers->get('CONTENT_TYPE') === static::JSON_API_CONTENT_TYPE;
     }
 
     /**
