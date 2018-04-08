@@ -1,10 +1,18 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 
 class UserTransformer extends TransformerAbstract
 {
+    /**
+     * @var array
+     */
+    protected $availableIncludes = [
+        'roles'
+    ];
+
     /**
      * @param User $user
      *
@@ -16,7 +24,16 @@ class UserTransformer extends TransformerAbstract
             'id' => $user->getId(),
             'name' => $user->getName(),
             'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
         ];
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeRoles(User $user)
+    {
+        return $this->collection($user->getRoles(), new RoleTransformer(), Role::getResourceKey());
     }
 }

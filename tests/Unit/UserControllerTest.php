@@ -1,8 +1,9 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\Unit;
 
-use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Facades\Route;
 
+use Pz\Doctrine\Rest\RestResponse;
+use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Rest\UserController;
 use Pz\LaravelDoctrine\Rest\Tests\TestCase;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
@@ -21,11 +22,255 @@ class UserControllerTest extends TestCase
         Route::get('/rest/users',           UserController::class.'@index');
         Route::get('/rest/users/{id}',      UserController::class.'@show');
         Route::post('/rest/users',          UserController::class.'@create');
+        Route::put('/rest/users/{id}',      UserController::class.'@update');
         Route::patch('/rest/users/{id}',    UserController::class.'@update');
         Route::delete('/rest/users/{id}',   UserController::class.'@delete');
 
         $this->user = $this->em->find(User::class, 1);
         $this->actingAs($this->user);
+    }
+
+    public function test_user_roles_relationship()
+    {
+        $queryString = http_build_query(['include' => ['roles']]);
+        $response = $this->get("/rest/users?$queryString");
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => 1,
+                    'relationships' => [
+                        'roles' => [
+                            'links' => [
+                                'self' => '/user/1/relationships/roles',
+                                'related' => '/user/1/roles',
+                            ],
+                            'data' => [
+                                [
+                                    'id' => Role::ROOT,
+                                    'type' => Role::getResourceKey(),
+                                ]
+                            ]
+                        ]
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'relationships' => [
+                        'roles' => [
+                            'data' => [
+                                [
+                                    'id' => Role::USER,
+                                    'type' => Role::getResourceKey(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'id' => 3,
+                    'relationships' => [
+                        'roles' => [
+                            'data' => [
+                                [
+                                    'id' => Role::USER,
+                                    'type' => Role::getResourceKey(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'included' => [
+                [
+                    'id' => Role::ROOT,
+                    'type' => Role::getResourceKey(),
+                    'attributes' => [
+                        'name' => Role::ROOT_NAME,
+                    ]
+                ],
+                [
+                    'id' => Role::USER,
+                    'type' => Role::getResourceKey(),
+                    'attributes' => [
+                        'name' => Role::USER_NAME,
+                    ]
+                ],
+            ]
+        ]);
+
+        $response = $this->putJson("/rest/users/1?$queryString", [
+            'data' => [
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'attributes' => [
+                                    'name' => 'New Role',
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $response->assertStatus(501);
+        $response->assertJson([
+            'errors' => [
+                [
+                    'code' => 'validation',
+                    'source' => [
+                        'pointer' => 'roles',
+                    ],
+                    'detail' => "Can't add not persisted new role though User entity."
+                ]
+            ]
+        ]);
+
+        $response = $this->putJson("/rest/users/2?$queryString", [
+            'data' => [
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'id' => Role::ROOT,
+                                'type' => Role::getResourceKey(),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $response->assertStatus(200);
+        $this->assertNotContains(Role::USER_NAME, $response->getContent());
+        $response->assertJson([
+            'data' => [
+                'id' => 2,
+                'type' => User::getResourceKey(),
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'id' => Role::ROOT,
+                                'type' => Role::getResourceKey(),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        /**
+         * Verify that on put controller we can't modify role name.
+         */
+        $response = $this->putJson("/rest/users/2?$queryString", [
+            'data' => [
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'id' => Role::ROOT,
+                                'type' => Role::getResourceKey(),
+                                'attributes' => [
+                                    'name' => 'Change name',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'id' => 2,
+                'type' => User::getResourceKey(),
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'id' => Role::ROOT,
+                                'type' => Role::getResourceKey(),
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'included' => [
+                [
+                    'id' => Role::ROOT,
+                    'type' => Role::getResourceKey(),
+                    'attributes' => [
+                        'name' => Role::ROOT_NAME,
+                    ]
+                ]
+            ]
+        ]);
+
+        $response = $this->postJson("/rest/users?$queryString", [
+            'data' => [
+                'attributes' => [
+                    'name' => 'testing user4',
+                    'email' => 'test4email@test.com',
+                    'password' => '123456'
+                ],
+            ]
+        ]);
+        $response->assertStatus(201);
+        $response->assertJson([
+            'data' => [
+                'relationships' => [
+                    'roles' => [
+                        'data' => []
+                    ]
+                ]
+            ]
+        ]);
+
+        $response = $this->postJson("/rest/users?$queryString", [
+            'data' => [
+                'attributes' => [
+                    'name' => 'testing user5',
+                    'email' => 'test5email@test.com',
+                    'password' => '123456'
+                ],
+                'relationships' => [
+                    'roles' => [
+                        'data' => [
+                            [
+                                'id' => Role::USER,
+                                'type' => Role::getResourceKey(),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $response
+            ->assertSuccessful()
+            ->assertJson([
+                'data' => [
+                    'id' => 5,
+                    'attributes' => [
+                        'name' => 'testing user5',
+                        'email' => 'test5email@test.com'
+                    ],
+                    'relationships' => [
+                        'roles' => [
+                            'data' => [
+                                [
+                                    'id' => Role::USER,
+                                    'type' => Role::getResourceKey(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+        $this->delete('/rest/users/4')->assertStatus(RestResponse::HTTP_NO_CONTENT);
+        $this->delete('/rest/users/5')->assertStatus(RestResponse::HTTP_NO_CONTENT);
+        $this->get('/rest/users/4')->assertStatus(RestResponse::HTTP_NOT_FOUND);
+        $this->get('/rest/users/5')->assertStatus(RestResponse::HTTP_NOT_FOUND);
     }
 
     public function test_edit_action()
@@ -304,5 +549,20 @@ class UserControllerTest extends TestCase
                 ],
                 'links' => [],
             ]);
+    }
+
+    public function test_invalid_include_param()
+    {
+        $response = $this->get('/rest/users?include=role');
+        $response->assertStatus(422);
+        $response->assertJson([
+            'errors' => [
+                [
+                    'code' => 'validation',
+                    'source' => ['pointer' => 'include'],
+                    'detail' => 'validation.array'
+                ]
+            ]
+        ]);
     }
 }

@@ -1,8 +1,13 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 use Pz\Doctrine\Rest\Contracts\RestRequestContract;
 use Pz\Doctrine\Rest\Exceptions\RestException;
+
+use Pz\Doctrine\Rest\RestResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class RestRequest extends FormRequest implements RestRequestContract
 {
@@ -140,5 +145,22 @@ class RestRequest extends FormRequest implements RestRequestContract
     protected function passesAuthorization()
     {
         return true;
+    }
+
+    /**
+     * @param Validator $validator
+     *
+     * @throws ValidationException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $exception = RestException::create(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation failed');
+        foreach ($validator->errors()->getMessages() as $pointer => $messages) {
+            foreach ($messages as $message) {
+                $exception->errorValidation($pointer, $message);
+            }
+        }
+
+        throw new ValidationException($validator, RestResponse::exception($exception));
     }
 }
