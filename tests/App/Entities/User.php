@@ -76,7 +76,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     /**
      * @var ArrayCollection|Role[]
      *
-     * @ORM\ManyToMany(targetEntity="Role", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(
      *     joinColumns={
      *         @ORM\JoinColumn(
@@ -183,7 +183,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @return $this
      * @throws RestException
      */
-    public function setRoles(ArrayCollection $roles)
+    public function setRoles($roles)
     {
         foreach ($roles as $role) {
             if (empty($role->getId())) {
@@ -201,7 +201,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      *
      * @return $this
      */
-    public function addRole(Role $role)
+    public function addRoles(Role $role)
     {
         if (!$this->roles->contains($role)) {
             $this->roles->add($role);
@@ -215,7 +215,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      *
      * @return $this
      */
-    public function removeRole(Role $role)
+    public function removeRoles(Role $role)
     {
         $this->roles->removeElement($role);
         return $this;

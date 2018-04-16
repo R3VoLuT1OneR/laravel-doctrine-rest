@@ -12,6 +12,11 @@ use Illuminate\Contracts\Validation\Validator;
 class RestRequest extends FormRequest implements RestRequestContract
 {
     /**
+     * @var bool
+     */
+    protected $isRelationships = false;
+
+    /**
      * @return array
      */
     public function rules()
@@ -28,6 +33,20 @@ class RestRequest extends FormRequest implements RestRequestContract
             'page.limit'    => 'sometimes|required|numeric',
             'page.offset'   => 'sometimes|required|numeric',
         ];
+    }
+
+    /**
+     * @param null|bool $value
+     *
+     * @return bool|null
+     */
+    public function isRelationships($value = null)
+    {
+        if ($value !== null) {
+            $this->isRelationships = $value;
+        }
+
+        return $this->isRelationships;
     }
 
     /**

@@ -9,15 +9,15 @@
             "email": "r3volut1oner@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Pz\\": "src/"
         }
     },
     "require": {
-        "pz/doctrine-rest": "dev-master",
-        "pmill/doctrine-array-hydrator": "^0.1.2"
+        "pz/doctrine-rest": "^0.0.1",
+        "pmill/doctrine-array-hydrator": "^0.1.2",
+        "laravel-doctrine/acl": "^1.0"
     },
     "autoload-dev": {
         "psr-4": {

@@ -1,7 +1,12 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Entities;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Pz\Doctrine\Rest\Contracts\JsonApiResource;
+
+use Doctrine\ORM\Mapping as ORM;
+use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
+use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Mappings as ACL;
 
 /**
  * Class Role
@@ -10,11 +15,13 @@ use Pz\Doctrine\Rest\Contracts\JsonApiResource;
  * @ORM\Entity()
  * @ORM\Table(name="role")
  */
-class Role implements JsonApiResource
+class Role implements JsonApiResource, RoleContract
 {
+    use HasPermissions;
+
     const ROOT = 1;
     const ROOT_NAME = 'Root';
-    
+
     const USER = 2;
     const USER_NAME = 'User';
 
@@ -43,6 +50,28 @@ class Role implements JsonApiResource
     protected $name;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\Column(name="permissions", type="json_array")
+     */
+    protected $permissions;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
+     */
+    protected $users;
+
+    /**
+     * Role constructor.
+     */
+    public function __construct()
+    {
+        $this->permissions = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -67,5 +96,13 @@ class Role implements JsonApiResource
     {
         $this->name = $name;
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
     }
 }

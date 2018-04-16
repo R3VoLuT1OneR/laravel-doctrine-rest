@@ -179,6 +179,7 @@ return [
 
         \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         \LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
+        \LaravelDoctrine\ACL\AclServiceProvider::class,
 
     ],
 

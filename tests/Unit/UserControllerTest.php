@@ -19,15 +19,98 @@ class UserControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Route::get('/rest/users',           UserController::class.'@index');
-        Route::get('/rest/users/{id}',      UserController::class.'@show');
-        Route::post('/rest/users',          UserController::class.'@create');
-        Route::put('/rest/users/{id}',      UserController::class.'@update');
-        Route::patch('/rest/users/{id}',    UserController::class.'@update');
-        Route::delete('/rest/users/{id}',   UserController::class.'@delete');
+
+        \Route::group(['prefix' => '/rest'], function() {
+            \Route::group(['prefix' => '/users'], function() {
+                Route::get('', UserController::class . '@index');
+                Route::post('', UserController::class . '@create');
+                Route::get('/{id}', UserController::class . '@show');
+                Route::patch('/{id}', UserController::class . '@update');
+                Route::delete('/{id}', UserController::class . '@delete');
+
+                Route::get('/{id}/roles', UserController::class . '@relatedRoles');
+                Route::get('/{id}/relationships/roles', UserController::class.'@relationshipsRolesIndex');
+                Route::post('/{id}/relationships/roles', UserController::class.'@relationshipsRolesCreate');
+                Route::patch('/{id}/relationships/roles', UserController::class.'@relationshipsRolesUpdate');
+                Route::delete('/{id}/relationships/roles', UserController::class.'@relationshipsRolesDelete');
+            });
+        });
 
         $this->user = $this->em->find(User::class, 1);
         $this->actingAs($this->user);
+    }
+
+    public function test_user_related_role()
+    {
+        $response = $this->get('/rest/users/1/roles');
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => '1',
+                    'type' => 'role',
+                    'attributes' => [
+                        'name' => 'Root',
+                    ],
+                    'links' => [
+                        'self' => '/role/1'
+                    ]
+                ]
+            ]
+        ]);
+
+        $response = $this->postJson('/rest/users/1/relationships/roles', ['data' => [
+            ['id' => Role::USER, 'type' => Role::getResourceKey()]
+        ]]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                ['id' => '1'],
+                ['id' => '2'],
+            ]
+        ]);
+        $response = $this->get('/rest/users/1/roles');
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                ['id' => '1'],
+                ['id' => '2'],
+            ]
+        ]);
+
+        $response = $this->get('/rest/users/1/relationships/roles');
+        $response->assertStatus(200);
+        $response->assertExactJson([
+            'data' => [
+                ['id' => '1', 'type' => Role::getResourceKey(), 'links' => ['self' => '/role/1']],
+                ['id' => '2', 'type' => Role::getResourceKey(), 'links' => ['self' => '/role/2']],
+            ]
+        ]);
+
+        $response = $this->patchJson('/rest/users/1/relationships/roles', ['data' => [
+            ['id' => Role::USER, 'type' => Role::getResourceKey()],
+        ]]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                ['id' => '2'],
+            ]
+        ]);
+        $response = $this->get('/rest/users/1/roles');
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                ['id' => '2'],
+            ]
+        ]);
+
+        $response = $this->delete('/rest/users/1/relationships/roles', ['data' => [
+            ['id' => 2, 'type' => Role::getResourceKey()]
+        ]]);
+        $response->assertStatus(204);
+        $response = $this->get('/rest/users/1/roles');
+        $response->assertStatus(200);
+        $response->assertJson(['data' => null]);
     }
 
     public function test_user_roles_relationship()
@@ -99,7 +182,7 @@ class UserControllerTest extends TestCase
             ]
         ]);
 
-        $response = $this->putJson("/rest/users/1?$queryString", [
+        $response = $this->patchJson("/rest/users/1?$queryString", [
             'data' => [
                 'relationships' => [
                     'roles' => [
@@ -127,7 +210,7 @@ class UserControllerTest extends TestCase
             ]
         ]);
 
-        $response = $this->putJson("/rest/users/2?$queryString", [
+        $response = $this->patchJson("/rest/users/2?$queryString", [
             'data' => [
                 'relationships' => [
                     'roles' => [
@@ -161,9 +244,9 @@ class UserControllerTest extends TestCase
         ]);
 
         /**
-         * Verify that on put controller we can't modify role name.
+         * Verify that on patch controller we can't modify role name.
          */
-        $response = $this->putJson("/rest/users/2?$queryString", [
+        $response = $this->patchJson("/rest/users/2?$queryString", [
             'data' => [
                 'relationships' => [
                     'roles' => [

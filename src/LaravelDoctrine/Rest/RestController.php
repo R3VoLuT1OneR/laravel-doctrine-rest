@@ -11,7 +11,6 @@ use Pz\LaravelDoctrine\Rest\Action\UpdateAction;
 
 class RestController extends Controller
 {
-
     /**
      * @var TransformerAbstract
      */
