@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "828ac42133b87a9f300399bbcb56ce8f",
-    "content-hash": "b578edb014475b5eb2ecbbc02b5ee31c",
+    "hash": "9af0219d218e11265edbd4165787fed7",
+    "content-hash": "e2c2704dc9e76c9647ec6a2d7f0645bd",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1260,16 +1260,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.26.1",
+            "version": "1.26.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bab61b25da5a28a6a7a5785d34802174b2a24b99"
+                "reference": "b63c0d809256a434ea74e6b41ca5f5f9d16220e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bab61b25da5a28a6a7a5785d34802174b2a24b99",
-                "reference": "bab61b25da5a28a6a7a5785d34802174b2a24b99",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/b63c0d809256a434ea74e6b41ca5f5f9d16220e6",
+                "reference": "b63c0d809256a434ea74e6b41ca5f5f9d16220e6",
                 "shasum": ""
             },
             "require": {
@@ -1281,11 +1281,6 @@
                 "phpunit/phpunit": "^4.8.35 || ^5.7"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.23-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "": "src/"
@@ -1309,7 +1304,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-04-16 08:58:42"
+            "time": "2018-04-16 14:54:26"
         },
         {
             "name": "paragonie/random_compat",
@@ -1553,16 +1548,16 @@
         },
         {
             "name": "pz/doctrine-rest",
-            "version": "0.0.1",
+            "version": "0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/R3VoLuT1OneR/doctrine-rest.git",
-                "reference": "fafa406c207a89367775442f16d0c9db1e876e20"
+                "reference": "49cbb4ce382742f106cb55b6d2f5ae9afd047b10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/fafa406c207a89367775442f16d0c9db1e876e20",
-                "reference": "fafa406c207a89367775442f16d0c9db1e876e20",
+                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/49cbb4ce382742f106cb55b6d2f5ae9afd047b10",
+                "reference": "49cbb4ce382742f106cb55b6d2f5ae9afd047b10",
                 "shasum": ""
             },
             "require": {
@@ -1600,7 +1595,7 @@
                 "doctrine",
                 "rest"
             ],
-            "time": "2018-04-16 13:45:11"
+            "time": "2018-04-17 11:33:43"
         },
         {
             "name": "ramsey/uuid",
