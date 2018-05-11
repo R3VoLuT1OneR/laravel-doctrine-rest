@@ -62,7 +62,7 @@ class UserControllerTest extends TestCase
         $response = $this->postJson('/rest/users/1/relationships/roles', ['data' => [
             ['id' => Role::USER, 'type' => Role::getResourceKey()]
         ]]);
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $response->assertJson([
             'data' => [
                 ['id' => '1'],
