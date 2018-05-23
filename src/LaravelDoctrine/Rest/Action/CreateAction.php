@@ -1,16 +1,17 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Action;
 
 use Pz\Doctrine\Rest\Action\CreateAction as BaseAction;
-use Pz\LaravelDoctrine\Rest\RestRequest;
+use Pz\LaravelDoctrine\Rest\Traits\HandlesAuthorization;
 
 class CreateAction extends BaseAction
 {
+    use HandlesAuthorization;
+
     /**
-     * @param RestRequest   $request
-     * @param string        $entity
+     * @return string
      */
-    public function authorize($request, $entity)
+    protected function restAbility()
     {
-        \Gate::authorize('restCreate', $entity);
+        return'restCreate';
     }
 }

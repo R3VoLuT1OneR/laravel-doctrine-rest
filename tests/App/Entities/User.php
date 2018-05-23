@@ -197,6 +197,16 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     }
 
     /**
+     * @return bool
+     */
+    public function isRoot()
+    {
+        $root = $this->getRoles()->filter(function(Role $role) { return $role->getId() === Role::ROOT; })->first();
+
+        return $root instanceof Role;
+    }
+
+    /**
      * @param Role $role
      *
      * @return $this

@@ -7,6 +7,7 @@ use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Rest\UserController;
 use Pz\LaravelDoctrine\Rest\Tests\TestCase;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends TestCase
 {
@@ -632,6 +633,22 @@ class UserControllerTest extends TestCase
                 ],
                 'links' => [],
             ]);
+    }
+
+    public function test_handle_authorization_exception()
+    {
+        /** @var User $user */
+        $user = $this->em->find(User::class, 2);
+
+        $data = ['attributes' => ['name' => 'testing user4', 'email' => 'test4email@test.com', 'password' => '123456']];
+
+        $this->actingAs($user);
+        $this->getJson('/rest/users')->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->getJson('/rest/users/1')->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->postJson('/rest/users', ['data' => $data])->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->patchJson('/rest/users/2', ['data' => $data])->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->deleteJson('/rest/users/2')->assertStatus(Response::HTTP_FORBIDDEN);
+
     }
 
     public function test_invalid_include_param()

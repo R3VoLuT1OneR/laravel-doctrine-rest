@@ -2,15 +2,17 @@
 
 use Pz\Doctrine\Rest\Action\DeleteAction as BaseAction;
 use Pz\LaravelDoctrine\Rest\RestRequest;
+use Pz\LaravelDoctrine\Rest\Traits\HandlesAuthorization;
 
 class DeleteAction extends BaseAction
 {
+    use HandlesAuthorization;
+
     /**
-     * @param RestRequest   $request
-     * @param object|string $entity
+     * @return string
      */
-    public function authorize($request, $entity)
+    protected function restAbility()
     {
-        \Gate::authorize('restDelete', $entity);
+        return 'restDelete';
     }
 }

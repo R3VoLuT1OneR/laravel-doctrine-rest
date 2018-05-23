@@ -2,15 +2,17 @@
 
 use Pz\Doctrine\Rest\Action\CollectionAction;
 use Pz\LaravelDoctrine\Rest\RestRequest;
+use Pz\LaravelDoctrine\Rest\Traits\HandlesAuthorization;
 
 class IndexAction extends CollectionAction
 {
+    use HandlesAuthorization;
+
     /**
-     * @param RestRequest   $request
-     * @param object|string $entity
+     * @return string
      */
-    public function authorize($request, $entity)
+    protected function restAbility()
     {
-        \Gate::authorize('restIndex', $entity);
+        return 'restIndex';
     }
 }

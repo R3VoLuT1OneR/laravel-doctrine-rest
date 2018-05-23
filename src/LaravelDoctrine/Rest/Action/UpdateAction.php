@@ -2,15 +2,17 @@
 
 use Pz\Doctrine\Rest\Action\UpdateAction as BaseAction;
 use Pz\LaravelDoctrine\Rest\RestRequest;
+use Pz\LaravelDoctrine\Rest\Traits\HandlesAuthorization;
 
 class UpdateAction extends BaseAction
 {
+    use HandlesAuthorization;
+
     /**
-     * @param RestRequest   $request
-     * @param object|string $entity
+     * @return string
      */
-    public function authorize($request, $entity)
+    protected function restAbility()
     {
-        \Gate::authorize('restUpdate', $entity);
+        return 'restUpdate';
     }
 }
