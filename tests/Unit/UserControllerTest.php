@@ -1,13 +1,13 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\Unit;
 
-use Illuminate\Support\Facades\Route;
-
 use Pz\Doctrine\Rest\RestResponse;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Rest\UserController;
 use Pz\LaravelDoctrine\Rest\Tests\TestCase;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
-use Symfony\Component\HttpFoundation\Response;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Response;
 
 class UserControllerTest extends TestCase
 {
@@ -21,8 +21,8 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
 
-        \Route::group(['prefix' => '/rest'], function() {
-            \Route::group(['prefix' => '/users'], function() {
+        Route::group(['prefix' => '/rest'], function() {
+            Route::group(['prefix' => '/users'], function() {
                 Route::get('', UserController::class . '@index');
                 Route::post('', UserController::class . '@create');
                 Route::get('/{id}', UserController::class . '@show');
@@ -116,7 +116,7 @@ class UserControllerTest extends TestCase
 
     public function test_user_roles_relationship()
     {
-        $queryString = http_build_query(['include' => ['roles']]);
+        $queryString = http_build_query(['include' => 'roles']);
         $response = $this->get("/rest/users?$queryString");
         $response->assertStatus(200);
         $response->assertJson([
@@ -619,6 +619,7 @@ class UserControllerTest extends TestCase
 
         $response = $this->get('/rest/users?page[limit]=1&sort=-id&filter[id][start]=1&filter[id][end]=3');
         $response
+            ->assertHeader('Content-Type', 'application/vnd.api+json')
             ->assertSuccessful()
             ->assertJson([
                 'data' => [['id' => 2]],
@@ -649,20 +650,5 @@ class UserControllerTest extends TestCase
         $this->patchJson('/rest/users/2', ['data' => $data])->assertStatus(Response::HTTP_FORBIDDEN);
         $this->deleteJson('/rest/users/2')->assertStatus(Response::HTTP_FORBIDDEN);
 
-    }
-
-    public function test_invalid_include_param()
-    {
-        $response = $this->get('/rest/users?include=role');
-        $response->assertStatus(422);
-        $response->assertJson([
-            'errors' => [
-                [
-                    'code' => 'validation',
-                    'source' => ['pointer' => 'include'],
-                    'detail' => 'validation.array'
-                ]
-            ]
-        ]);
     }
 }

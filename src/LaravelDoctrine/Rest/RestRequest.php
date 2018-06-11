@@ -23,10 +23,11 @@ class RestRequest extends FormRequest implements RestRequestContract
     {
         return [
             'filter'        => 'sometimes|required',
-            'include'       => 'sometimes|required|array',
+            'include'       => 'sometimes|required',
             'exclude'       => 'sometimes|required|array',
             'fields'        => 'sometimes|required|array',
             'sort'          => 'sometimes|required|string',
+
             'page'          => 'sometimes|required|array',
             'page.number'   => 'sometimes|required|numeric',
             'page.size'     => 'sometimes|required|numeric',
@@ -142,7 +143,13 @@ class RestRequest extends FormRequest implements RestRequestContract
      */
     public function getInclude()
     {
-        return $this->input('include');
+        $include = @explode(',', $this->input('include'));
+
+        if (!is_array($include)) {
+            RestException::invalidInclude();
+        }
+
+        return $include;
     }
 
     public function getFields()
