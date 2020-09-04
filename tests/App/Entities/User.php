@@ -46,7 +46,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @var string
      *
      * @ORM\Column(name="email", type="string", unique=true, nullable=false)
-     * @Assert\Email(message="Please provide correct email address", checkHost=false, checkMX=false)
+     * @Assert\Email(message="Please provide correct email address")
      * @Assert\NotNull()
      */
     protected $email;

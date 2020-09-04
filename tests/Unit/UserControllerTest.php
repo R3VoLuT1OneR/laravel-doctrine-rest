@@ -226,7 +226,7 @@ class UserControllerTest extends TestCase
             ]
         ]);
         $response->assertStatus(200);
-        $this->assertNotContains(Role::USER_NAME, $response->getContent());
+        $this->assertStringNotContainsString(Role::USER_NAME, $response->getContent());
         $response->assertJson([
             'data' => [
                 'id' => 2,
@@ -617,7 +617,7 @@ class UserControllerTest extends TestCase
                 'links' => [],
             ]);
 
-        $response = $this->get('/rest/users?page[limit]=1&sort=-id&filter[id][start]=1&filter[id][end]=3');
+        $response = $this->get('/rest/users?page[limit]=1&sort=-id&filter[id][start]=1&filter[id][end]=2');
         $response
             ->assertHeader('Content-Type', 'application/vnd.api+json')
             ->assertSuccessful()

@@ -17,9 +17,10 @@
         }
     },
     "require": {
-        "pz/doctrine-rest": "dev-master@dev",
-        "pmill/doctrine-array-hydrator": "^0.1.2",
-        "laravel-doctrine/acl": "^1.0"
+        "pz/doctrine-rest": "^0.0.10",
+        "doctrine/orm": "^2.7",
+        "doctrine/persistence": "^1.3",
+        "doctrine/common": "^2.11"
     },
     "autoload-dev": {
         "psr-4": {
@@ -27,9 +28,10 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
-        "laravel/laravel": "^5.8",
-        "laravel-doctrine/orm": "^1.4",
-        "laravel-doctrine/migrations": "^1.1.7"
+        "laravel-doctrine/orm": "^1.6",
+        "laravel-doctrine/acl": "^1.2",
+        "laravel-doctrine/migrations": "^2.1",
+        "laravel/laravel": "^7.0",
+        "phpunit/phpunit": "^9.3"
     }
 }
