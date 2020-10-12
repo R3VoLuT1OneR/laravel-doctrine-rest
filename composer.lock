@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "239f68567f5a7151b24b29875e4322eb",
+    "content-hash": "4f54ef2f762e206931eed563811fbe44",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1273,16 +1273,16 @@
         },
         {
             "name": "pz/doctrine-rest",
-            "version": "0.0.10",
+            "version": "0.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/R3VoLuT1OneR/doctrine-rest.git",
-                "reference": "a97c71128bdcea2c2921cc52957656ac64759984"
+                "reference": "89847d0d431462b248a9383e3eb9734961a4ef78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/a97c71128bdcea2c2921cc52957656ac64759984",
-                "reference": "a97c71128bdcea2c2921cc52957656ac64759984",
+                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/89847d0d431462b248a9383e3eb9734961a4ef78",
+                "reference": "89847d0d431462b248a9383e3eb9734961a4ef78",
                 "shasum": ""
             },
             "require": {
@@ -1321,7 +1321,7 @@
                 "doctrine",
                 "rest"
             ],
-            "time": "2020-09-04T10:43:06+00:00"
+            "time": "2020-10-12T12:52:57+00:00"
         },
         {
             "name": "symfony/console",
