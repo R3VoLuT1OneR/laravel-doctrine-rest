@@ -5,6 +5,9 @@
     "minimum-stability": "dev",
     "type": "library",
     "license": "MIT",
+    "scripts": {
+        "post-install-cmd": "./vendor/phpunit/phpunit/phpunit --config phpunit.xml"
+    },
     "authors": [
         {
             "name": "PavelZ",
