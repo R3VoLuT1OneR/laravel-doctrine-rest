@@ -6,6 +6,13 @@
 
 Laravel 5 Rest API for Doctrine ORM
 
+## Versions
+
+Version | Supported Laravel Versions
+:---------|:----------
+^0.2.0 | 7.x
+^0.3.0 | 8.x
+
 ## Development
 Use `docker-compose` for running PHPUnit tests even if your local PHP runtime version doesn't match librariy one.
 
