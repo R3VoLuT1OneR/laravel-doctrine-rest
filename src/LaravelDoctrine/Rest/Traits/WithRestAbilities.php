@@ -2,63 +2,33 @@
 
 trait WithRestAbilities
 {
-    /**
-     * @return bool
-     */
-    public function defaultRestAccess(/** @scrutinizer ignore-unused */$user)
+    public function defaultRestAccess($user, $resource = null): bool
     {
         return false;
     }
 
-    /**
-     * @param object $user
-     *
-     * @return bool
-     */
-    public function restIndex($user)
+    public function restIndex($user): bool
     {
         return $this->defaultRestAccess($user);
     }
 
-    /**
-     * @param object $user
-     *
-     * @return bool
-     */
-    public function restShow($user, /** @scrutinizer ignore-unused */ $entity)
+    public function restShow($user, $resource): bool
+    {
+        return $this->defaultRestAccess($user, $resource);
+    }
+
+    public function restCreate($user): bool
     {
         return $this->defaultRestAccess($user);
     }
 
-    /**
-     * @param object $user
-     *
-     * @return bool
-     */
-    public function restCreate($user)
+    public function restUpdate($user, $resource): bool
     {
-        return $this->defaultRestAccess($user);
+        return $this->defaultRestAccess($user, $resource);
     }
 
-    /**
-     * @param object $user
-     * @param object $entity
-     *
-     * @return bool
-     */
-    public function restUpdate($user, /** @scrutinizer ignore-unused */ $entity)
+    public function restDelete($user, $resource): bool
     {
-        return $this->defaultRestAccess($user);
-    }
-
-    /**
-     * @param object $user
-     * @param object $entity
-     *
-     * @return bool
-     */
-    public function restDelete($user,  /** @scrutinizer ignore-unused */$entity)
-    {
-        return $this->defaultRestAccess($user);
+        return $this->defaultRestAccess($user, $resource);
     }
 }

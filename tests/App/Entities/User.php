@@ -2,8 +2,8 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Pz\Doctrine\Rest\Contracts\JsonApiResource;
 use Pz\Doctrine\Rest\Exceptions\RestException;
+use Pz\Doctrine\Rest\Resource\ResourceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,14 +21,11 @@ use Illuminate\Auth\Passwords\CanResetPassword;
  * @ORM\Entity()
  * @ORM\Table(name="users")
  */
-class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, JsonApiResource
+class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, ResourceInterface
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
-    /**
-     * @return string
-     */
-    public static function getResourceKey()
+    public static function getResourceKey(): string
     {
         return 'user';
     }
@@ -104,10 +101,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         $this->roles = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

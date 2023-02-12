@@ -7,10 +7,7 @@ class CreateAction extends BaseAction
 {
     use HandlesAuthorization;
 
-    /**
-     * @return string
-     */
-    protected function restAbility()
+    protected function restAbility(): string
     {
         return'restCreate';
     }

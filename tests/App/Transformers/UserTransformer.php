@@ -1,10 +1,10 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Transformers;
 
-use League\Fractal\TransformerAbstract;
+use Pz\Doctrine\Rest\AbstractTransformer;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 
-class UserTransformer extends TransformerAbstract
+class UserTransformer extends AbstractTransformer
 {
     /**
      * @var array

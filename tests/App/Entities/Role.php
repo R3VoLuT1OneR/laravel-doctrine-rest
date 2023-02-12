@@ -1,12 +1,12 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Pz\Doctrine\Rest\Contracts\JsonApiResource;
 
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ACL\Mappings as ACL;
+use Pz\Doctrine\Rest\Resource\ResourceInterface;
 
 /**
  * Class Role
@@ -15,7 +15,7 @@ use LaravelDoctrine\ACL\Mappings as ACL;
  * @ORM\Entity()
  * @ORM\Table(name="role")
  */
-class Role implements JsonApiResource, RoleContract
+class Role implements ResourceInterface, RoleContract
 {
     use HasPermissions;
 
@@ -25,10 +25,7 @@ class Role implements JsonApiResource, RoleContract
     const USER = 2;
     const USER_NAME = 'User';
 
-    /**
-     * @return string
-     */
-    public static function getResourceKey()
+    public static function getResourceKey(): string
     {
         return 'role';
     }
@@ -71,10 +68,7 @@ class Role implements JsonApiResource, RoleContract
         $this->permissions = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

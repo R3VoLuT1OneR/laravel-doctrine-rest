@@ -1,25 +1,20 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use Illuminate\Validation\ValidationException;
-use Pz\Doctrine\Rest\Contracts\RestRequestContract;
 use Pz\Doctrine\Rest\Exceptions\RestException;
-
+use Pz\Doctrine\Rest\RequestInterface;
 use Pz\Doctrine\Rest\RestResponse;
-use Symfony\Component\HttpFoundation\Response;
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
-class RestRequest extends FormRequest implements RestRequestContract
+use Symfony\Component\HttpFoundation\Response;
+
+class RestRequest extends FormRequest implements RequestInterface
 {
-    /**
-     * @var bool
-     */
-    protected $isRelationships = false;
+    protected bool $isRelationships = false;
 
-    /**
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'filter'        => 'sometimes|required',
@@ -36,12 +31,7 @@ class RestRequest extends FormRequest implements RestRequestContract
         ];
     }
 
-    /**
-     * @param null|bool $value
-     *
-     * @return bool|null
-     */
-    public function isRelationships($value = null)
+    public function isRelationships(bool $value = null): bool
     {
         if ($value !== null) {
             $this->isRelationships = $value;
@@ -50,11 +40,15 @@ class RestRequest extends FormRequest implements RestRequestContract
         return $this->isRelationships;
     }
 
+    public function getBaseUrl(): string
+    {
+        return parent::getBaseUrl();
+    }
+
     /**
-     * @return array
      * @throws RestException
      */
-    public function getData()
+    public function getData(): ?array
     {
         if ((null === $data = $this->get('data')) || !is_array($data)) {
             throw RestException::missingRootData();
@@ -63,10 +57,7 @@ class RestRequest extends FormRequest implements RestRequestContract
         return $data;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getOrderBy()
+    public function getOrderBy(): ?array
     {
         if ($sort = $this->input('sort')) {
             $fields = explode(',', $sort);
@@ -90,10 +81,7 @@ class RestRequest extends FormRequest implements RestRequestContract
         return null;
     }
 
-    /**
-     * @return null|int
-     */
-    public function getStart()
+    public function getStart(): ?int
     {
         if (null !== ($limit = $this->getLimit())) {
             if ($number = $this->input('page.number')) {
@@ -106,10 +94,7 @@ class RestRequest extends FormRequest implements RestRequestContract
         return null;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getLimit()
+    public function getLimit(): ?int
     {
         if ($this->has('page')) {
             if ($this->has('page.number')) {
@@ -122,26 +107,17 @@ class RestRequest extends FormRequest implements RestRequestContract
         return null;
     }
 
-    /**
-     * @return \Illuminate\Routing\Route|object|string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->route('id');
     }
 
-    /**
-     * @return array|null
-     */
-    public function getExclude()
+    public function getExclude(): ?array
     {
         return $this->input('exclude');
     }
 
-    /**
-     * @return array|null
-     */
-    public function getInclude()
+    public function getInclude(): ?array
     {
         $include = @explode(',', $this->input('include'));
 
@@ -152,33 +128,25 @@ class RestRequest extends FormRequest implements RestRequestContract
         return $include;
     }
 
-    public function getFields()
+    public function getFields(): ?array
     {
         return $this->input('fields');
     }
 
-    /**
-     * @return array|string|null
-     */
-    public function getFilter()
+    public function getFilter(): mixed
     {
         return $this->input('filter');
     }
 
-    /**
-     * @return bool
-     */
-    protected function passesAuthorization()
+    protected function passesAuthorization(): bool
     {
         return true;
     }
 
     /**
-     * @param Validator $validator
-     *
      * @throws ValidationException
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         $exception = RestException::create(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation failed');
         foreach ($validator->errors()->getMessages() as $pointer => $messages) {
