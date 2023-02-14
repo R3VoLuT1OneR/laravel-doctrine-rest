@@ -3,8 +3,8 @@
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Pz\Doctrine\Rest\Exceptions\RestException;
-use Pz\Doctrine\Rest\Resource\ResourceInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Pz\Doctrine\Rest\Exceptions\ValidationException;
+use Pz\Doctrine\Rest\ResourceInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -181,8 +181,8 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     {
         foreach ($roles as $role) {
             if (empty($role->getId())) {
-                throw  RestException::create(501)
-                    ->errorValidation('roles', 'Can\'t add not persisted new role though User entity.');
+                throw (new ValidationException())
+                    ->validationError('roles', 'Can\'t add not persisted new role though User entity.');
             }
         }
 

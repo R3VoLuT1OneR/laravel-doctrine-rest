@@ -1,19 +1,15 @@
 <?php namespace Pz\LaravelDoctrine\Rest;
 
-use Pz\Doctrine\Rest\Exceptions\RestException;
+use Pz\Doctrine\Rest\Exceptions\MissingDataException;
 use Pz\Doctrine\Rest\RequestInterface;
-use Pz\Doctrine\Rest\RestResponse;
+use Pz\Doctrine\Rest\Response;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-use Symfony\Component\HttpFoundation\Response;
-
 class RestRequest extends FormRequest implements RequestInterface
 {
-    protected bool $isRelationships = false;
-
     public function rules(): array
     {
         return [
@@ -31,37 +27,26 @@ class RestRequest extends FormRequest implements RequestInterface
         ];
     }
 
-    public function isRelationships(bool $value = null): bool
-    {
-        if ($value !== null) {
-            $this->isRelationships = $value;
-        }
-
-        return $this->isRelationships;
-    }
-
     public function getBaseUrl(): string
     {
         return parent::getBaseUrl();
     }
 
-    /**
-     * @throws RestException
-     */
     public function getData(): ?array
     {
         if ((null === $data = $this->get('data')) || !is_array($data)) {
-            throw RestException::missingRootData();
+            throw new MissingDataException("/");
         }
 
         return $data;
     }
 
-    public function getOrderBy(): ?array
+    public function getSort(): array
     {
+        $sortBy = [];
+
         if ($sort = $this->input('sort')) {
             $fields = explode(',', $sort);
-            $orderBy = [];
 
             foreach ($fields as $field) {
                 if (empty($field)) continue;
@@ -72,36 +57,59 @@ class RestRequest extends FormRequest implements RequestInterface
                     $direction = 'DESC';
                 }
 
-                $orderBy[$field] = $direction;
+                $sortBy[$field] = $direction;
             }
+        }
 
-            return $orderBy;
+        return $sortBy;
+    }
+
+    public function getPage(): array|null
+    {
+        $page = $this->get(static::QUERY_KEY_PAGE);
+        if (is_array($page)) {
+            return $page;
         }
 
         return null;
     }
 
-    public function getStart(): ?int
+    public function getFirstResult(): int|null
     {
-        if (null !== ($limit = $this->getLimit())) {
-            if ($number = $this->input('page.number')) {
-                return ($number - 1) * $limit;
+        $page = $this->getPage();
+        $maxResults = $this->getMaxResults();
+
+        if (is_array($page) && !is_null($maxResults)) {
+            if (isset($page[static::QUERY_KEY_PAGE_NUMBER]) && is_numeric($page[static::QUERY_KEY_PAGE_NUMBER])) {
+                return ((int) $page[static::QUERY_KEY_PAGE_NUMBER] - 1) * $maxResults;
             }
 
-            return $this->input('page.offset', 0);
+            if (isset($page[static::QUERY_KEY_PAGE_OFFSET]) && is_numeric($page[static::QUERY_KEY_PAGE_OFFSET])) {
+                return (int) $page[static::QUERY_KEY_PAGE_OFFSET];
+            }
+
+            return 0;
         }
 
         return null;
     }
 
-    public function getLimit(): ?int
+    public function getMaxResults(): int|null
     {
-        if ($this->has('page')) {
-            if ($this->has('page.number')) {
-                return $this->input('page.size', static::DEFAULT_LIMIT);
+        $page = $this->getPage();
+
+        if (is_array($page)) {
+            if (isset($page[static::QUERY_KEY_PAGE_NUMBER]) && is_numeric($page[static::QUERY_KEY_PAGE_NUMBER])) {
+                if (isset($page[static::QUERY_KEY_PAGE_SIZE]) && is_numeric($page[static::QUERY_KEY_PAGE_SIZE])) {
+                    return (int) $page[static::QUERY_KEY_PAGE_SIZE];
+                }
             }
 
-            return $this->input('page.limit', static::DEFAULT_LIMIT);
+            if (isset($page[static::QUERY_KEY_PAGE_LIMIT]) && is_numeric($page[static::QUERY_KEY_PAGE_LIMIT])) {
+                return (int) $page[static::QUERY_KEY_PAGE_LIMIT];
+            }
+
+            return static::DEFAULT_LIMIT;
         }
 
         return null;
@@ -112,25 +120,19 @@ class RestRequest extends FormRequest implements RequestInterface
         return $this->route('id');
     }
 
-    public function getExclude(): ?array
+    public function getExclude(): array
     {
-        return $this->input('exclude');
+        return $this->input('exclude', []);
     }
 
-    public function getInclude(): ?array
+    public function getInclude(): array
     {
-        $include = @explode(',', $this->input('include'));
-
-        if (!is_array($include)) {
-            RestException::invalidInclude();
-        }
-
-        return $include;
+        return @explode(',', $this->input('include')) ?: [];
     }
 
-    public function getFields(): ?array
+    public function getFields(): array
     {
-        return $this->input('fields');
+        return $this->input('fields', []);
     }
 
     public function getFilter(): mixed
@@ -148,13 +150,16 @@ class RestRequest extends FormRequest implements RequestInterface
      */
     protected function failedValidation(Validator $validator): void
     {
-        $exception = RestException::create(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation failed');
+        $exception = new \Pz\Doctrine\Rest\Exceptions\ValidationException();
         foreach ($validator->errors()->getMessages() as $pointer => $messages) {
             foreach ($messages as $message) {
-                $exception->errorValidation($pointer, $message);
+                $exception->validationError($pointer, $message);
             }
         }
 
-        throw new ValidationException($validator, RestResponse::exception($exception));
+        throw new ValidationException(
+            $validator,
+            new Response(['errors' => $exception->errors()], $exception->getCode())
+        );
     }
 }

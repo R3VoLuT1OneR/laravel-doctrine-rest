@@ -1,14 +1,14 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Rest;
 
 use Doctrine\ORM\EntityManager;
-use League\Fractal\TransformerAbstract;
+use Pz\Doctrine\Rest\AbstractTransformer;
 use Pz\Doctrine\Rest\Action\Related\RelatedCollectionAction;
 use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionAction;
 use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionCreateAction;
 use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionDeleteAction;
 use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionUpdateAction;
-use Pz\Doctrine\Rest\RestRepository;
-use Pz\Doctrine\Rest\RestResponse;
+use Pz\Doctrine\Rest\ResourceRepository;
+use Pz\Doctrine\Rest\Response;
 use Pz\LaravelDoctrine\Rest\AbstractController;
 use Pz\LaravelDoctrine\Rest\RestRequest;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
@@ -30,54 +30,54 @@ class UserController extends AbstractController
         return ['id', 'email', 'name'];
     }
 
-    protected function transformer(): TransformerAbstract
+    protected function transformer(): AbstractTransformer
     {
         return new UserTransformer();
     }
 
-    protected function repository(): RestRepository
+    protected function repository(): ResourceRepository
     {
-        return RestRepository::create($this->em, User::class);
+        return ResourceRepository::create($this->em, User::class);
     }
 
-    protected function roles(): RestRepository
+    protected function roles(): ResourceRepository
     {
-        return RestRepository::create($this->em, Role::class);
+        return ResourceRepository::create($this->em, Role::class);
     }
 
-    public function relatedRoles(RestRequest $request): RestResponse
+    public function relatedRoles(RestRequest $request): Response
     {
         $action = new RelatedCollectionAction(
             $this->repository(), 'users',
-            RestRepository::create($this->em, Role::class),
+            ResourceRepository::create($this->em, Role::class),
             new RoleTransformer()
         );
 
         return $action->dispatch($request);
     }
 
-    public function relationshipsRolesIndex(RestRequest $request): RestResponse
+    public function relationshipsRolesIndex(RestRequest $request): Response
     {
         return (
             new RelationshipsCollectionAction($this->repository(), 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesCreate(RestRequest $request): RestResponse
+    public function relationshipsRolesCreate(RestRequest $request): Response
     {
         return (
             new RelationshipsCollectionCreateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesUpdate(RestRequest $request): RestResponse
+    public function relationshipsRolesUpdate(RestRequest $request): Response
     {
         return (
             new RelationshipsCollectionUpdateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesDelete(RestRequest $request): RestResponse
+    public function relationshipsRolesDelete(RestRequest $request): Response
     {
         return (
             new RelationshipsCollectionDeleteAction($this->repository(), 'roles', $this->roles(), new RoleTransformer())

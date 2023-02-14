@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aadc1795471b23efe8366ab50c2c3f66",
+    "content-hash": "4b09dacbf312e01b7c5b7e47dd6a3086",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1250,16 +1250,16 @@
         },
         {
             "name": "pz/doctrine-rest",
-            "version": "dev-migrate-to-php-8",
+            "version": "0.2.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/R3VoLuT1OneR/doctrine-rest.git",
-                "reference": "d9bc2aa6912865e4fdd3c54be13f017be4625683"
+                "reference": "38190611bae4dc0fe5d51fb9a365c2529470e2fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/d9bc2aa6912865e4fdd3c54be13f017be4625683",
-                "reference": "d9bc2aa6912865e4fdd3c54be13f017be4625683",
+                "url": "https://api.github.com/repos/R3VoLuT1OneR/doctrine-rest/zipball/38190611bae4dc0fe5d51fb9a365c2529470e2fe",
+                "reference": "38190611bae4dc0fe5d51fb9a365c2529470e2fe",
                 "shasum": ""
             },
             "require": {
@@ -1277,12 +1277,12 @@
             "require-dev": {
                 "doctrine/migrations": "^2.2",
                 "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "^8.5"
+                "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Pz\\": "src/"
+                    "Pz\\Doctrine\\Rest\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1302,9 +1302,9 @@
             ],
             "support": {
                 "issues": "https://github.com/R3VoLuT1OneR/doctrine-rest/issues",
-                "source": "https://github.com/R3VoLuT1OneR/doctrine-rest/tree/migrate-to-php-8"
+                "source": "https://github.com/R3VoLuT1OneR/doctrine-rest/tree/0.2.1"
             },
-            "time": "2023-02-12T22:29:55+00:00"
+            "time": "2023-02-14T21:19:12+00:00"
         },
         {
             "name": "symfony/console",

@@ -2,27 +2,25 @@
 
 use Illuminate\Contracts\Auth\Access\Gate;
 use Pz\Doctrine\Rest\Exceptions\RestException;
-use Pz\Doctrine\Rest\Resource\ResourceInterface;
-use Pz\Doctrine\Rest\RestRepository;
+use Pz\Doctrine\Rest\ResourceInterface;
+use Pz\Doctrine\Rest\ResourceRepository;
+use Pz\Doctrine\Rest\Response;
 
 trait HandlesAuthorization
 {
     abstract protected function restAbility(): string;
 
-    abstract protected function repository(): RestRepository;
+    abstract protected function repository(): ResourceRepository;
 
     public function gate(): Gate
     {
         return app(Gate::class);
     }
 
-    /**
-     * @throws RestException
-     */
     public function authorize(?ResourceInterface $resource = null): void
     {
         if (!$this->allowed($resource)) {
-            throw RestException::createForbidden('This action is unauthorized.');
+            throw new RestException('This action is unauthorized.', Response::HTTP_FORBIDDEN);
         }
     }
 

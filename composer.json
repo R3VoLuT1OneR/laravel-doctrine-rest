@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "pz/doctrine-rest": "dev-migrate-to-php-8"
+        "pz/doctrine-rest": "0.2.1.x-dev"
     },
     "autoload-dev": {
         "psr-4": {

@@ -1,13 +1,12 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\Unit;
 
-use Pz\Doctrine\Rest\RestResponse;
+use Pz\Doctrine\Rest\Response;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Rest\UserController;
 use Pz\LaravelDoctrine\Rest\Tests\TestCase;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Response;
 
 class UserControllerTest extends TestCase
 {
@@ -198,7 +197,7 @@ class UserControllerTest extends TestCase
                 ]
             ]
         ]);
-        $response->assertStatus(501);
+        $response->assertStatus(422);
         $response->assertJson([
             'errors' => [
                 [
@@ -351,10 +350,10 @@ class UserControllerTest extends TestCase
                     ]
                 ]
             ]);
-        $this->delete('/rest/users/4')->assertStatus(RestResponse::HTTP_NO_CONTENT);
-        $this->delete('/rest/users/5')->assertStatus(RestResponse::HTTP_NO_CONTENT);
-        $this->get('/rest/users/4')->assertStatus(RestResponse::HTTP_NOT_FOUND);
-        $this->get('/rest/users/5')->assertStatus(RestResponse::HTTP_NOT_FOUND);
+        $this->delete('/rest/users/4')->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->delete('/rest/users/5')->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->get('/rest/users/4')->assertStatus(Response::HTTP_NOT_FOUND);
+        $this->get('/rest/users/5')->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     public function test_edit_action()
@@ -401,15 +400,15 @@ class UserControllerTest extends TestCase
     public function test_store_action()
     {
         $response = $this->postJson('/rest/users', ['data' => 'test']);
-        $response->assertStatus(422)
+        $response->assertStatus(400)
             ->assertJson([
                 'errors' => [
                     [
-                        'code' => 'missing-root-data',
+                        'code' => 'missing-data',
                         'source' => [
-                            'pointer' => '',
+                            'pointer' => '/',
                         ],
-                        'detail' => 'Missing `data` member at document top level.'
+                        'detail' => 'Data is missing or not an array on pointer level.'
                     ],
                 ]
             ]);
