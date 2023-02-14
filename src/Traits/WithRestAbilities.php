@@ -1,4 +1,4 @@
-<?php namespace Pz\LaravelDoctrine\Rest\Traits;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Traits;
 
 trait WithRestAbilities
 {

@@ -9,12 +9,12 @@ use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionDeleteAction;
 use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionUpdateAction;
 use Pz\Doctrine\Rest\ResourceRepository;
 use Pz\Doctrine\Rest\Response;
-use Pz\LaravelDoctrine\Rest\AbstractController;
-use Pz\LaravelDoctrine\Rest\RestRequest;
+use Pz\LaravelDoctrine\JsonApi\AbstractController;
+use Pz\LaravelDoctrine\JsonApi\RestRequest;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
+use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 use Pz\LaravelDoctrine\Rest\Tests\App\Transformers\RoleTransformer;
 use Pz\LaravelDoctrine\Rest\Tests\App\Transformers\UserTransformer;
-use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 
 class UserController extends AbstractController
 {

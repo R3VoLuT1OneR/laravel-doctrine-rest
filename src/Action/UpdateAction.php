@@ -1,7 +1,7 @@
-<?php namespace Pz\LaravelDoctrine\Rest\Action;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\Doctrine\Rest\Action\UpdateAction as BaseAction;
-use Pz\LaravelDoctrine\Rest\Traits\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Traits\HandlesAuthorization;
 
 class UpdateAction extends BaseAction
 {

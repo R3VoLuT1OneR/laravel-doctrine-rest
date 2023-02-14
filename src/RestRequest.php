@@ -1,12 +1,11 @@
-<?php namespace Pz\LaravelDoctrine\Rest;
+<?php namespace Pz\LaravelDoctrine\JsonApi;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 use Pz\Doctrine\Rest\Exceptions\MissingDataException;
 use Pz\Doctrine\Rest\RequestInterface;
 use Pz\Doctrine\Rest\Response;
-
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
 
 class RestRequest extends FormRequest implements RequestInterface
 {

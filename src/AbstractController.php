@@ -1,14 +1,14 @@
-<?php namespace Pz\LaravelDoctrine\Rest;
+<?php namespace Pz\LaravelDoctrine\JsonApi;
 
 use Illuminate\Routing\Controller;
 use Pz\Doctrine\Rest\AbstractTransformer;
 use Pz\Doctrine\Rest\ResourceRepository;
 use Pz\Doctrine\Rest\Response;
-use Pz\LaravelDoctrine\Rest\Action\CreateAction;
-use Pz\LaravelDoctrine\Rest\Action\DeleteAction;
-use Pz\LaravelDoctrine\Rest\Action\IndexAction;
-use Pz\LaravelDoctrine\Rest\Action\ShowAction;
-use Pz\LaravelDoctrine\Rest\Action\UpdateAction;
+use Pz\LaravelDoctrine\JsonApi\Action\CreateAction;
+use Pz\LaravelDoctrine\JsonApi\Action\DeleteAction;
+use Pz\LaravelDoctrine\JsonApi\Action\IndexAction;
+use Pz\LaravelDoctrine\JsonApi\Action\ShowAction;
+use Pz\LaravelDoctrine\JsonApi\Action\UpdateAction;
 
 abstract class AbstractController extends Controller
 {
