@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ACL\Mappings as ACL;
-use Pz\Doctrine\Rest\ResourceInterface;
+use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
  * Class Role

@@ -1,6 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Transformers;
 
-use Pz\Doctrine\Rest\AbstractTransformer;
+use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 
 class RoleTransformer extends AbstractTransformer

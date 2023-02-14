@@ -2,9 +2,9 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Pz\Doctrine\Rest\Exceptions\RestException;
-use Pz\Doctrine\Rest\Exceptions\ValidationException;
-use Pz\Doctrine\Rest\ResourceInterface;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\ValidationException;
+use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;

@@ -1,16 +1,16 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Traits;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Pz\Doctrine\Rest\Exceptions\RestException;
-use Pz\Doctrine\Rest\ResourceInterface;
-use Pz\Doctrine\Rest\ResourceRepository;
-use Pz\Doctrine\Rest\Response;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
+use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
+use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 trait HandlesAuthorization
 {
-    abstract protected function restAbility(): string;
+    abstract public function restAbility(): string;
 
-    abstract protected function repository(): ResourceRepository;
+    abstract public function repository(): ResourceRepository;
 
     public function gate(): Gate
     {
@@ -20,7 +20,7 @@ trait HandlesAuthorization
     public function authorize(?ResourceInterface $resource = null): void
     {
         if (!$this->allowed($resource)) {
-            throw new RestException('This action is unauthorized.', Response::HTTP_FORBIDDEN);
+            throw new RestException('This action is unauthorized.', JsonApiResponse::HTTP_FORBIDDEN);
         }
     }
 

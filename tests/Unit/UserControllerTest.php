@@ -1,6 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\Unit;
 
-use Pz\Doctrine\Rest\Response;
+use Pz\LaravelDoctrine\JsonApi\Response;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Rest\UserController;
 use Pz\LaravelDoctrine\Rest\Tests\TestCase;

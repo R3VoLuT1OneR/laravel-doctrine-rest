@@ -1,14 +1,37 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi;
+<?php
+
+namespace Pz\LaravelDoctrine\JsonApi;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-use Pz\Doctrine\Rest\Exceptions\MissingDataException;
-use Pz\Doctrine\Rest\RequestInterface;
-use Pz\Doctrine\Rest\Response;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
 
-class RestRequest extends FormRequest implements RequestInterface
+class JsonApiRequest extends FormRequest
 {
+    const KEY_DATA = 'data';
+
+    const QUERY_KEY_FIELDS = 'fields';
+    const QUERY_KEY_FILTER = 'filter';
+    const QUERY_KEY_SORT = 'sort';
+    const QUERY_KEY_PAGE = 'page';
+    const QUERY_KEY_PAGE_NUMBER = 'number';
+    const QUERY_KEY_PAGE_OFFSET = 'offset';
+    const QUERY_KEY_PAGE_SIZE = 'size';
+    const QUERY_KEY_PAGE_LIMIT = 'limit';
+    const QUERY_KEY_INCLUDE = 'include';
+    const QUERY_KEY_EXCLUDE = 'exclude';
+
+    /**
+     * Json API type.
+     */
+    const JSON_API_CONTENT_TYPE = 'application/vnd.api+json';
+
+    /**
+     * Default limit for list.
+     */
+    const DEFAULT_LIMIT = 1000;
+
     public function rules(): array
     {
         return [
@@ -149,7 +172,7 @@ class RestRequest extends FormRequest implements RequestInterface
      */
     protected function failedValidation(Validator $validator): void
     {
-        $exception = new \Pz\Doctrine\Rest\Exceptions\ValidationException();
+        $exception = new \Pz\LaravelDoctrine\JsonApi\Exceptions\ValidationException();
         foreach ($validator->errors()->getMessages() as $pointer => $messages) {
             foreach ($messages as $message) {
                 $exception->validationError($pointer, $message);
@@ -158,7 +181,7 @@ class RestRequest extends FormRequest implements RequestInterface
 
         throw new ValidationException(
             $validator,
-            new Response(['errors' => $exception->errors()], $exception->getCode())
+            new JsonApiResponse(['errors' => $exception->errors()], $exception->getCode())
         );
     }
 }

@@ -1,16 +1,16 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Rest;
 
 use Doctrine\ORM\EntityManager;
-use Pz\Doctrine\Rest\AbstractTransformer;
-use Pz\Doctrine\Rest\Action\Related\RelatedCollectionAction;
-use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionAction;
-use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionCreateAction;
-use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionDeleteAction;
-use Pz\Doctrine\Rest\Action\Relationships\RelationshipsCollectionUpdateAction;
-use Pz\Doctrine\Rest\ResourceRepository;
-use Pz\Doctrine\Rest\Response;
 use Pz\LaravelDoctrine\JsonApi\AbstractController;
-use Pz\LaravelDoctrine\JsonApi\RestRequest;
+use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedIndexAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionCreateAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionDeleteAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionUpdateAction;
+use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
+use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
+use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\Role;
 use Pz\LaravelDoctrine\Rest\Tests\App\Entities\User;
 use Pz\LaravelDoctrine\Rest\Tests\App\Transformers\RoleTransformer;
@@ -45,9 +45,9 @@ class UserController extends AbstractController
         return ResourceRepository::create($this->em, Role::class);
     }
 
-    public function relatedRoles(RestRequest $request): Response
+    public function relatedRoles(JsonApiRequest $request): JsonApiResponse
     {
-        $action = new RelatedCollectionAction(
+        $action = new RelatedIndexAction(
             $this->repository(), 'users',
             ResourceRepository::create($this->em, Role::class),
             new RoleTransformer()
@@ -56,28 +56,28 @@ class UserController extends AbstractController
         return $action->dispatch($request);
     }
 
-    public function relationshipsRolesIndex(RestRequest $request): Response
+    public function relationshipsRolesIndex(JsonApiRequest $request): JsonApiResponse
     {
         return (
             new RelationshipsCollectionAction($this->repository(), 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesCreate(RestRequest $request): Response
+    public function relationshipsRolesCreate(JsonApiRequest $request): JsonApiResponse
     {
         return (
             new RelationshipsCollectionCreateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesUpdate(RestRequest $request): Response
+    public function relationshipsRolesUpdate(JsonApiRequest $request): JsonApiResponse
     {
         return (
             new RelationshipsCollectionUpdateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
-    public function relationshipsRolesDelete(RestRequest $request): Response
+    public function relationshipsRolesDelete(JsonApiRequest $request): JsonApiResponse
     {
         return (
             new RelationshipsCollectionDeleteAction($this->repository(), 'roles', $this->roles(), new RoleTransformer())

@@ -181,6 +181,7 @@ return [
         \LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
         \LaravelDoctrine\ACL\AclServiceProvider::class,
 
+        \Pz\LaravelDoctrine\JsonApi\JsonApiServiceProvider::class,
     ],
 
     /*
