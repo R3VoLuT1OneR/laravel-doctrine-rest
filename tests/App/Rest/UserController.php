@@ -1,9 +1,9 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Rest;
 
 use Doctrine\ORM\EntityManager;
-use Pz\LaravelDoctrine\JsonApi\AbstractController;
+use Pz\LaravelDoctrine\JsonApi\Controller\AbstractController;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedIndexAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedListResource;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionAction;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionCreateAction;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionDeleteAction;
@@ -47,7 +47,7 @@ class UserController extends AbstractController
 
     public function relatedRoles(JsonApiRequest $request): JsonApiResponse
     {
-        $action = new RelatedIndexAction(
+        $action = new RelatedListResource(
             $this->repository(), 'users',
             ResourceRepository::create($this->em, Role::class),
             new RoleTransformer()

@@ -1,13 +1,16 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Show;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\ItemAction as BaseItemAction;
+use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
-use Pz\LaravelDoctrine\JsonApi\Response;
 
-class RelatedItemAction extends BaseItemAction
+class ShowRelatedResource extends AbstractAction
 {
     use RelatedActionTrait;
+    use HandlesAuthorization;
 
     public function __construct(
         ResourceRepository $repository,
@@ -23,16 +26,16 @@ class RelatedItemAction extends BaseItemAction
     /**
      * @inheritdoc
 	*/
-	public function handle(): Response
+	public function handle(): JsonApiResponse
 	{
 		$resource = $this->repository()->findById($this->request->getId());
 
         $this->authorize($resource);
 
         if ($relation = $this->manipulator()->getProperty($resource, $this->field())) {
-            return $this->response()->item($relation, $this->transformer());
+            return response()->item($relation, $this->transformer());
         }
 
-        return $this->response()->null();
+        return response()->null();
 	}
 }

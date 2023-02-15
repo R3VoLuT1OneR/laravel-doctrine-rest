@@ -2,12 +2,12 @@
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedIndexAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedListResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedActionTrait;
-use Pz\LaravelDoctrine\JsonApi\Traits\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
 
 class RelationshipsCollectionCreateAction extends AbstractAction
 {
@@ -41,7 +41,7 @@ class RelationshipsCollectionCreateAction extends AbstractAction
         $this->repository()->em()->flush($resource);
 
         return (
-            new RelatedIndexAction(
+            new RelatedListResource(
                 $this->repository(),
                 $this->mappedBy(),
                 $this->related(),

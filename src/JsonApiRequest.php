@@ -7,6 +7,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
 
+/**
+ * TODO: Compare with last version of PZ/DoctrinRest and add improved stuff here.
+ */
 class JsonApiRequest extends FormRequest
 {
     const KEY_DATA = 'data';
@@ -144,12 +147,12 @@ class JsonApiRequest extends FormRequest
 
     public function getExclude(): array
     {
-        return $this->input('exclude', []);
+        return $this->input(static::QUERY_KEY_EXCLUDE, []);
     }
 
     public function getInclude(): array
     {
-        return @explode(',', $this->input('include')) ?: [];
+        return @explode(',', $this->input(static::QUERY_KEY_INCLUDE)) ?: [];
     }
 
     public function getFields(): array

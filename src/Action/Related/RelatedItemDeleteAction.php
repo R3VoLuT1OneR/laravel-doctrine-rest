@@ -1,6 +1,7 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
 
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Response;

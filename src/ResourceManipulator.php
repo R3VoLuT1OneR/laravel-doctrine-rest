@@ -18,7 +18,7 @@ class ResourceManipulator
         protected EntityManager $em,
     ) {}
 
-    public function hydrateResource(ResourceInterface|string $resource, array $data, string $scope): ResourceInterface
+    public function hydrateResource(ResourceInterface|string $resource, array $data, string $scope = "/data"): ResourceInterface
     {
         if (!isset($data['attributes']) && !isset($data['relationships'])) {
             throw new MissingDataMembersException($scope);

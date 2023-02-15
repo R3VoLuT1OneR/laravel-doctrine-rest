@@ -1,11 +1,15 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Controller;
 
 use Illuminate\Routing\Controller;
-use Pz\LaravelDoctrine\JsonApi\Action\CreateAction;
-use Pz\LaravelDoctrine\JsonApi\Action\DeleteAction;
-use Pz\LaravelDoctrine\JsonApi\Action\IndexAction;
-use Pz\LaravelDoctrine\JsonApi\Action\ShowAction;
-use Pz\LaravelDoctrine\JsonApi\Action\UpdateAction;
+use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
+use Pz\LaravelDoctrine\JsonApi\Action\Create\CreateResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Remove\RemoveResource;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Update\UpdateResource;
+use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
+use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
+use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 abstract class AbstractController extends Controller
 {
@@ -30,7 +34,7 @@ abstract class AbstractController extends Controller
 
     public function index(JsonApiRequest $request): JsonApiResponse
     {
-        return (new IndexAction($this->repository(), $this->transformer()))
+        return (new ListResource($this->repository(), $this->transformer()))
             ->setFilterProperty($this->getFilterProperty())
             ->setFilterable($this->getFilterable())
             ->dispatch($request);
@@ -38,21 +42,21 @@ abstract class AbstractController extends Controller
 
     public function create(JsonApiRequest $request): JsonApiResponse
     {
-        return (new CreateAction($this->repository(), $this->transformer()))->dispatch($request);
+        return (new CreateResource($this->repository(), $this->transformer()))->dispatch($request);
     }
 
     public function show(JsonApiRequest $request): JsonApiResponse
     {
-        return (new ShowAction($this->repository(), $this->transformer()))->dispatch($request);
+        return (new ShowResource($this->repository(), $this->transformer()))->dispatch($request);
     }
 
     public function update(JsonApiRequest $request): JsonApiResponse
     {
-        return (new UpdateAction($this->repository(), $this->transformer()))->dispatch($request);
+        return (new UpdateResource($this->repository(), $this->transformer()))->dispatch($request);
     }
 
     public function delete(JsonApiRequest $request): JsonApiResponse
     {
-        return (new DeleteAction($this->repository(), $this->transformer()))->dispatch($request);
+        return (new RemoveResource($this->repository(), $this->transformer()))->dispatch($request);
     }
 }

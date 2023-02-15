@@ -1,13 +1,13 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Traits;
 
-trait WithRestAbilities
+trait JsonApiPolicies
 {
     public function defaultRestAccess($user, $resource = null): bool
     {
         return false;
     }
 
-    public function restIndex($user): bool
+    public function restList($user): bool
     {
         return $this->defaultRestAccess($user);
     }

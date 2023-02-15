@@ -1,10 +1,10 @@
 <?php namespace Pz\LaravelDoctrine\Rest\Tests\App\Policies;
 
-use Pz\LaravelDoctrine\JsonApi\Traits\WithRestAbilities;
+use Pz\LaravelDoctrine\JsonApi\Traits\JsonApiPolicies;
 
 class UserPolicy
 {
-    use WithRestAbilities;
+    use JsonApiPolicies;
 
     public function restRelationshipsCollectionCreate($user, $resource, $class)
     {

@@ -1,4 +1,4 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Traits;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Illuminate\Contracts\Auth\Access\Gate;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;

@@ -1,9 +1,9 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedItemAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowRelatedResource;
 
-class RelationshipsItemAction extends RelatedItemAction
+class RelationshipsResourceShow extends ShowRelatedResource
 {
     public function transformer(): AbstractTransformer|callable
     {

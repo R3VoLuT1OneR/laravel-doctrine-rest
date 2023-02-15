@@ -2,7 +2,8 @@
 
 use Doctrine\ORM\Query\QueryException;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\IndexAction as BaseCollectionAction;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListResource as BaseCollectionAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 
@@ -12,7 +13,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
 * Action for providing collection (list or array) of data with API.
 */
-class RelatedIndexAction extends BaseCollectionAction
+class RelatedListResource extends BaseCollectionAction
 {
     use RelatedActionTrait;
 

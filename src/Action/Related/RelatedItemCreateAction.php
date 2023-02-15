@@ -2,6 +2,7 @@
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Response;
 
@@ -27,7 +28,6 @@ class RelatedItemCreateAction extends AbstractAction
         $this->authorize($resource);
 
         $item = $this->manipulator()->hydrateResource($this->related()->getClassName(), $this->request->getData(), "/data");
-        $this->validateResource($item);
         $this->related()->em()->persist($item);
         $this->manipulator()->setProperty($resource, $this->field(), $item);
 

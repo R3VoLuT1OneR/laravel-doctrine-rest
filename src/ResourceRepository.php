@@ -26,7 +26,7 @@ class ResourceRepository extends EntityRepository
         return parent::getEntityManager();
     }
 
-    public function sourceQueryBuilder(): QueryBuilder
+    public function resourceQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder($this->alias());
     }

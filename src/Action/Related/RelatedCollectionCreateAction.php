@@ -2,6 +2,7 @@
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Response;
 
@@ -30,14 +31,13 @@ class RelatedCollectionCreateAction extends AbstractAction
         foreach ($this->request->getData() as $index => $raw) {
             $item = $this->manipulator()->hydrateResource($this->related()->getClassName(), $raw, "/data/$index");
             $this->manipulator()->addRelationItem($resource, $this->field(), $item);
-            $this->validateResource($item);
             $this->related()->em()->persist($item);
         }
 
         $this->repository()->em()->flush();
 
         return (
-            new RelatedIndexAction(
+            new RelatedListResource(
                 $this->repository(),
                 $this->mappedBy(),
                 $this->related(),

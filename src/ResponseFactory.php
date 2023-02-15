@@ -2,6 +2,8 @@
 
 namespace Pz\LaravelDoctrine\JsonApi;
 
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -10,7 +12,6 @@ use League\Fractal\Manager as Fractal;
 use League\Fractal\Pagination\DoctrinePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 
 class ResponseFactory extends \Illuminate\Routing\ResponseFactory
 {
@@ -105,6 +106,11 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     public function exception(RestException $e): JsonApiResponse
     {
         return $this->jsonapi(['errors' => $e->errors()], $e->getCode());
+    }
+
+    public function noContent($status = JsonApiResponse::HTTP_NO_CONTENT, array $headers = []): JsonApiResponse
+    {
+        return $this->jsonapi(null, $status, $headers);
     }
 
     protected function linkToResource(ResourceInterface $resource): string

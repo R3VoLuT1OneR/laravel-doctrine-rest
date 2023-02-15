@@ -4,7 +4,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Response;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 
 class RelationshipsItemDeleteAction extends AbstractAction
 {

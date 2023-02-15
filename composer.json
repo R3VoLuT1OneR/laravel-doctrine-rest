@@ -19,9 +19,6 @@
             "Pz\\LaravelDoctrine\\JsonApi\\": "src/"
         }
     },
-    "require": {
-        "pz/doctrine-rest": "0.2.1.x-dev"
-    },
     "autoload-dev": {
         "psr-4": {
             "Pz\\LaravelDoctrine\\Rest\\Tests\\": "tests/"
@@ -34,5 +31,8 @@
         "doctrine/annotations": "^1.13",
         "laravel/laravel": "^8.0",
         "phpunit/phpunit": "^9.5"
+    },
+    "require": {
+        "league/fractal": "^0.20.1"
     }
 }

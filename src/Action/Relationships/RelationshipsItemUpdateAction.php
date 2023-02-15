@@ -3,7 +3,7 @@
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\Response;
 
 class RelationshipsItemUpdateAction extends AbstractAction
@@ -34,7 +34,7 @@ class RelationshipsItemUpdateAction extends AbstractAction
         $this->repository()->em()->flush($resource);
 
         return (
-            new RelationshipsItemAction(
+            new RelationshipsResourceShow(
                 $this->repository(),
                 $this->field(),
                 $this->related(),
