@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Action\Create;
 
-use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceManipulator;
@@ -10,7 +10,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 trait CreatesResource
 {
-    use HandlesAuthorization;
+    use AuthorizeResource;
 
     abstract protected function repository(): ResourceRepository;
     abstract protected function manipulator(): ResourceManipulator;
@@ -45,7 +45,7 @@ trait CreatesResource
 
     }
 
-    protected function restAbility(): string
+    protected function resourceAccessAbility(): string
     {
         return'restCreate';
     }

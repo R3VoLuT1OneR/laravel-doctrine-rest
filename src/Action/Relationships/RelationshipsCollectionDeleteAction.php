@@ -17,8 +17,8 @@ class RelationshipsCollectionDeleteAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->related = $related;
-        $this->field = $field;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): Response
@@ -28,8 +28,8 @@ class RelationshipsCollectionDeleteAction extends AbstractAction
         $this->authorize($resource);
 
         foreach ($this->request->getData() as $removeItem) {
-            $item = $this->getRelatedEntity($removeItem);
-            $this->manipulator()->removeRelationItem($resource, $this->field(), $item);
+            $item = $this->findRelatedResource($removeItem);
+            $this->manipulator()->removeRelationItem($resource, $this->relatedFieldName(), $item);
         }
 
         $this->repository()->em()->flush();

@@ -4,6 +4,7 @@ namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships;
 
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
+use League\Fractal\Scope;
 use League\Fractal\TransformerAbstract;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
@@ -27,17 +28,17 @@ class RelationshipsTransformer extends AbstractTransformer
         ];
     }
 
-    public function getAvailableIncludes()
+    public function getAvailableIncludes(): array
     {
         return $this->parent->getAvailableIncludes();
     }
 
-    public function getDefaultIncludes()
+    public function getDefaultIncludes(): array
     {
         return $this->parent->getDefaultIncludes();
     }
 
-    public function getCurrentScope()
+    public function getCurrentScope(): ?Scope
     {
         return $this->parent->getCurrentScope();
     }
@@ -49,12 +50,12 @@ class RelationshipsTransformer extends AbstractTransformer
         }
     }
 
-    protected function item($data, $transformer, $resourceKey = null)
+    protected function item($data, $transformer, $resourceKey = null): Item
     {
         return new Item($data, new static($transformer), $resourceKey);
     }
 
-    protected function collection($data, $transformer, $resourceKey = null)
+    protected function collection($data, $transformer, $resourceKey = null): Collection
     {
         return new Collection($data, new static($transformer), $resourceKey);
     }

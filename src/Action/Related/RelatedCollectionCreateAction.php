@@ -2,6 +2,7 @@
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedResources;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Response;
@@ -18,9 +19,9 @@ class RelatedCollectionCreateAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->mappedBy = $mappedBy;
-        $this->related = $related;
-        $this->field = $field;
+        $this->resourceMappedBy = $mappedBy;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): Response
@@ -29,18 +30,18 @@ class RelatedCollectionCreateAction extends AbstractAction
         $this->authorize($resource);
 
         foreach ($this->request->getData() as $index => $raw) {
-            $item = $this->manipulator()->hydrateResource($this->related()->getClassName(), $raw, "/data/$index");
-            $this->manipulator()->addRelationItem($resource, $this->field(), $item);
-            $this->related()->em()->persist($item);
+            $item = $this->manipulator()->hydrateResource($this->relatedResourceRepository()->getClassName(), $raw, "/data/$index");
+            $this->manipulator()->addRelationItem($resource, $this->relatedFieldName(), $item);
+            $this->relatedResourceRepository()->em()->persist($item);
         }
 
         $this->repository()->em()->flush();
 
         return (
-            new RelatedListResource(
+            new ListRelatedResources(
                 $this->repository(),
-                $this->mappedBy(),
-                $this->related(),
+                $this->resourceMappedBy(),
+                $this->relatedResourceRepository(),
                 $this->transformer()
             )
         )

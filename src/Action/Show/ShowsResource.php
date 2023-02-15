@@ -2,17 +2,21 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Action\Show;
 
-use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\AbilitiesInterface;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
+/**
+ * Provides helpers needed for implementation of show action.
+ */
 trait ShowsResource
 {
-    use HandlesAuthorization;
+    use AuthorizeResource;
 
     abstract protected function repository(): ResourceRepository;
 
-    protected function restAbility(): string
+    protected function resourceAccessAbility(): string
     {
-        return 'restShow';
+        return AbilitiesInterface::SHOW_RESOURCE;
     }
 }

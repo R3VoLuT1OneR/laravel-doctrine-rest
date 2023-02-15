@@ -1,5 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships;
 
+use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowRelatedRelationship;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
@@ -17,8 +18,8 @@ class RelationshipsItemUpdateAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->related = $related;
-        $this->field = $field;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): Response
@@ -27,17 +28,17 @@ class RelationshipsItemUpdateAction extends AbstractAction
 
         $this->authorize($resource);
 
-        $item = $this->getRelatedEntity($this->request->getData());
+        $item = $this->findRelatedResource($this->request->getData());
 
-        $this->manipulator()->setProperty($resource, $this->field(), $item);
+        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $item);
 
         $this->repository()->em()->flush($resource);
 
         return (
-            new RelationshipsResourceShow(
+            new ShowRelatedRelationship(
                 $this->repository(),
-                $this->field(),
-                $this->related(),
+                $this->relatedFieldName(),
+                $this->relatedResourceRepository(),
                 $this->transformer()
             )
         )->dispatch($this->request);

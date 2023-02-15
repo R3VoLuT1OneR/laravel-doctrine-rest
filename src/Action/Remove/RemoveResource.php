@@ -3,7 +3,7 @@
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
 
 class RemoveResource extends AbstractAction
 {

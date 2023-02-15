@@ -21,7 +21,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Pz\\LaravelDoctrine\\Rest\\Tests\\": "tests/"
+            "Tests\\App\\": "tests/dummy/App",
+            "Tests\\": "tests/unit"
         }
     },
     "require-dev": {

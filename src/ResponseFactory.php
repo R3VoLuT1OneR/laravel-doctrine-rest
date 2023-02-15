@@ -66,12 +66,12 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     }
 
     public function collection(
-        QueryBuilder                 $qb,
-        string                       $resourceKey,
-        AbstractTransformer|callable $transformer,
-        int                          $status = JsonApiResponse::HTTP_OK,
-        array                        $headers = [],
-        array                        $meta = []
+        QueryBuilder        $qb,
+        string              $resourceKey,
+        AbstractTransformer $transformer,
+        int                 $status = JsonApiResponse::HTTP_OK,
+        array               $headers = [],
+        array               $meta = []
     ): JsonApiResponse
     {
         $data = new Paginator($qb, false);

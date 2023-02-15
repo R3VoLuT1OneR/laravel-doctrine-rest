@@ -17,8 +17,8 @@ class RelatedItemCreateAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->related = $related;
-        $this->field = $field;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): Response
@@ -27,11 +27,11 @@ class RelatedItemCreateAction extends AbstractAction
 
         $this->authorize($resource);
 
-        $item = $this->manipulator()->hydrateResource($this->related()->getClassName(), $this->request->getData(), "/data");
-        $this->related()->em()->persist($item);
-        $this->manipulator()->setProperty($resource, $this->field(), $item);
+        $item = $this->manipulator()->hydrateResource($this->relatedResourceRepository()->getClassName(), $this->request->getData(), "/data");
+        $this->relatedResourceRepository()->em()->persist($item);
+        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $item);
 
-        $this->related()->em()->flush();
+        $this->relatedResourceRepository()->em()->flush();
 
         return $this->response()->created($item, $this->transformer());
     }

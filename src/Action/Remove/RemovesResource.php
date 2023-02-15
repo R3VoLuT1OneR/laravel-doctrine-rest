@@ -3,12 +3,12 @@
 namespace Pz\LaravelDoctrine\JsonApi\Action\Remove;
 
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 trait RemovesResource
 {
-    use HandlesAuthorization;
+    use AuthorizeResource;
 
     abstract protected function repository(): ResourceRepository;
 
@@ -18,7 +18,7 @@ trait RemovesResource
         $this->repository()->em()->flush();
     }
 
-    protected function restAbility(): string
+    protected function resourceAccessAbility(): string
     {
         return 'restRemove';
     }

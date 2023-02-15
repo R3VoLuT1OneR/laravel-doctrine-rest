@@ -2,19 +2,19 @@
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedListResource;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedResources;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
-use Pz\LaravelDoctrine\JsonApi\Action\HandlesAuthorization;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 class RelationshipsCollectionUpdateAction extends AbstractAction
 {
     use RelatedActionTrait;
-    use HandlesAuthorization;
+    use AuthorizeResource;
 
     public function __construct(
         ResourceRepository $repository,
@@ -24,9 +24,9 @@ class RelationshipsCollectionUpdateAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->mappedBy = $mappedBy;
-        $this->related = $related;
-        $this->field = $field;
+        $this->resourceMappedBy = $mappedBy;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): JsonApiResponse
@@ -35,11 +35,11 @@ class RelationshipsCollectionUpdateAction extends AbstractAction
 
         $this->authorize($resource);
 
-        $items = $this->manipulator()->getProperty($resource, $this->field());
+        $items = $this->manipulator()->getProperty($resource, $this->relatedFieldName());
 
         $replace = new ArrayCollection(array_map(
             function($raw) use ($resource) {
-                return $this->getRelatedEntity($raw);
+                return $this->findRelatedResource($raw);
             },
             $this->request->getData()
         ));
@@ -56,29 +56,29 @@ class RelationshipsCollectionUpdateAction extends AbstractAction
             }
         }
 
-        $this->manipulator()->setProperty($resource, $this->field(), $items);
+        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $items);
 
         $this->repository()->em()->flush($resource);
 
         return (
-            new RelatedListResource(
+            new ListRelatedResources(
                 $this->repository(),
-                $this->mappedBy(),
-                $this->related(),
+                $this->resourceMappedBy(),
+                $this->relatedResourceRepository(),
                 $this->transformer()
             )
         )->dispatch($this->request);
     }
 
-    protected function restAbility(): string
+    protected function resourceAccessAbility(): string
     {
         return 'restRelationshipsCollectionUpdate';
     }
 
     public function allowed(?ResourceInterface $resource = null): bool
     {
-        $ability = $this->restAbility();
-        $arguments = [$resource, $this->related()->getClassName()];
+        $ability = $this->resourceAccessAbility();
+        $arguments = [$resource, $this->relatedResourceRepository()->getClassName()];
         $allowed = $this->gate()->allows($ability, $arguments);
         return $allowed;
     }

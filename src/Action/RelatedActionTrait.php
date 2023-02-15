@@ -1,48 +1,63 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
+use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 trait RelatedActionTrait
 {
-    protected ResourceRepository $related;
-    protected string $field;
-    protected string $mappedBy;
+    protected ResourceRepository $relatedResourceRepository;
+    protected string $relatedFieldName;
+    protected string $resourceMappedBy;
 
-    public function related(): ResourceRepository
+    /**
+     * Repository of the related resource.
+     * Can be used for fetching related resources.
+     */
+    public function relatedResourceRepository(): ResourceRepository
     {
-        return $this->related;
+        return $this->relatedResourceRepository;
     }
 
     /**
-     * `field` on base entity that identify relation.
+     * The field name that wanted related entity is saved on the resource.
+     *
+     * For example if we work with "author" field on "comment" resource, we will provide "author" for related
+     * resources' manipulation.
+     *
+     * Then if we need to show relation getter "getAuthor" will be called and in case we need ot set then setter
+     * "setAuthor" will be used.
      */
-    public function field(): string
+    public function relatedFieldName(): string
     {
-        return $this->field;
+        return $this->relatedFieldName;
     }
 
-    public function mappedBy(): string
+    /**
+     * The resource is mapped by this field in doctrine relation (reverse relation).
+     * Basically the "mappedBy" field on the related entity.
+     */
+    public function resourceMappedBy(): string
     {
-        return $this->mappedBy;
+        return $this->resourceMappedBy;
     }
 
-    protected function getRelatedEntity(array $item): object
+    protected function findRelatedResource(array $item): ResourceInterface
     {
         if (!isset($item['id']) || !isset($item['type'])) {
             throw (new BadRequestException('Relation item without identifiers.'))
                 ->error(
                     'invalid-data',
-                    ['pointer' => $this->field()],
+                    ['pointer' => $this->relatedFieldName()],
                     'Relation item without `id` or `type`.'
                 );
         }
 
-        if ($this->related()->getResourceKey() !== $item['type']) {
+        if ($this->relatedResourceRepository()->getResourceKey() !== $item['type']) {
             throw (new BadRequestException('Different resource type in delete request.'))
-                ->error('invalid-data', ['pointer' => $this->field()], 'Type is not in sync with relation.');
+                ->error('invalid-data', ['pointer' => $this->relatedFieldName()], 'Type is not in sync with relation.');
         }
 
-        return $this->related()->findById($item['id']);
+        return $this->relatedResourceRepository()->findById($item['id']);
     }
 }

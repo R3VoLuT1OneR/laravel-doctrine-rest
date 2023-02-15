@@ -17,8 +17,8 @@ class RelationshipsItemDeleteAction extends AbstractAction
         AbstractTransformer $transformer
     ) {
         parent::__construct($repository, $transformer);
-        $this->related = $related;
-        $this->field = $field;
+        $this->relatedResourceRepository = $related;
+        $this->relatedFieldName = $field;
     }
 
     public function handle(): Response
@@ -27,7 +27,7 @@ class RelationshipsItemDeleteAction extends AbstractAction
 
         $this->authorize($resource);
 
-        $this->manipulator()->setProperty($resource, $this->field(), null);
+        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), null);
 
         $this->repository()->em()->flush($resource);
 

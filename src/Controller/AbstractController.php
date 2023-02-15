@@ -4,7 +4,7 @@ use Illuminate\Routing\Controller;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\Create\CreateResource;
 use Pz\LaravelDoctrine\JsonApi\Action\Remove\RemoveResource;
-use Pz\LaravelDoctrine\JsonApi\Action\List\ListResource;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListResources;
 use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowResource;
 use Pz\LaravelDoctrine\JsonApi\Action\Update\UpdateResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
@@ -34,7 +34,7 @@ abstract class AbstractController extends Controller
 
     public function index(JsonApiRequest $request): JsonApiResponse
     {
-        return (new ListResource($this->repository(), $this->transformer()))
+        return (new ListResources($this->repository(), $this->transformer()))
             ->setFilterProperty($this->getFilterProperty())
             ->setFilterable($this->getFilterable())
             ->dispatch($request);
