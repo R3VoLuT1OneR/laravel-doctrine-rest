@@ -1,7 +1,8 @@
 /vendor/
 .idea
 
-/tests/dummy/bootstrap/cache
+/tests/laravel/bootstrap/cache
+/tests/laravel/storage
 /tests/coverage
 /tests/storage
 

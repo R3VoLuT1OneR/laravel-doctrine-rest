@@ -35,7 +35,7 @@ abstract class AbstractController extends Controller
     public function index(JsonApiRequest $request): JsonApiResponse
     {
         return (new ListResources($this->repository(), $this->transformer()))
-            ->setFilterProperty($this->getFilterProperty())
+            ->setSearchProperty($this->getFilterProperty())
             ->setFilterable($this->getFilterable())
             ->dispatch($request);
     }

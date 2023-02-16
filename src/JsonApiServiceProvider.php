@@ -41,6 +41,7 @@ class JsonApiServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(Fractal::class, function (Container $app) {
+            /** @var JsonApiRequest $request */
             $request = $app[JsonApiRequest::class];
             $fractal = new Fractal($app[ScopeFactory::class]);
             $fractal->setSerializer($app[JsonApiSerializer::class]);

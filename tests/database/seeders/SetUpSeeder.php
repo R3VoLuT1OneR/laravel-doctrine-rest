@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Tests\App\Entities\Role;
 use Tests\App\Entities\User;
 
-class InitializationSeeder
+class SetUpSeeder
 {
     public function run(EntityManager $em)
     {
@@ -16,6 +16,10 @@ class InitializationSeeder
 
         $em->persist($user = (new Role())
             ->setName(Role::USER_NAME)
+        );
+
+        $em->persist($moderator = (new Role())
+            ->setName(Role::MODERATOR_NAME)
         );
 
         $em->persist((new User())
@@ -34,9 +38,9 @@ class InitializationSeeder
 
         $em->persist((new User())
             ->setName('testing user3')
-            ->setEmail('test3email@gmail.com')
+            ->setEmail('test3email@test.com')
             ->setPassword('secret')
-            ->addRoles($user)
+            ->addRoles($moderator)
         );
 
         $em->flush();

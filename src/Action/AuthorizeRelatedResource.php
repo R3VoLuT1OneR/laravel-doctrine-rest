@@ -3,6 +3,7 @@
 namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
+use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 /**
  * Used for access verification to resource and related resources.
@@ -14,6 +15,8 @@ trait AuthorizeRelatedResource
         allowed as resourceAllowed;
     }
 
+    abstract public function relatedResourceRepository(): ResourceRepository;
+
     abstract public function relatedResourceAccessAbility(): string;
 
     public function allowed(ResourceInterface $resource): bool
@@ -24,6 +27,7 @@ trait AuthorizeRelatedResource
 
         return $this->gate()->allows($this->relatedResourceAccessAbility(), [
             $resource,
+            $this->relatedResourceRepository()->getClassName()
         ]);
     }
 }

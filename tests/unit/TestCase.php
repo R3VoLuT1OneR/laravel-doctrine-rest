@@ -1,6 +1,6 @@
 <?php namespace Tests;
 
-use Database\Seeders\InitializationSeeder;
+use Database\Seeders\SetUpSeeder;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Application;
@@ -46,7 +46,7 @@ class TestCase extends LaravelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(InitializationSeeder::class);
+        $this->seed(SetUpSeeder::class);
     }
 
     public function seed($class = 'Database\\Seeders\\DatabaseSeeder')

@@ -24,8 +24,8 @@ class ListRelatedResources extends AbstractAction
 
     public function __construct(
         ResourceRepository           $repository,
-        AbstractTransformer          $transformer,
         protected ResourceRepository $relatedResourceRepository,
+        AbstractTransformer          $transformer,
         protected string             $resourceMappedBy,
     ) {
         parent::__construct($repository, $transformer);

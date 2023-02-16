@@ -13,16 +13,16 @@ trait FiltersResource
     /**
      * Field that can be filtered if filter is string.
      */
-    protected ?string $filterProperty = null;
+    protected ?string $searchProperty = null;
 
     /**
      * Get list of filterable entity fields.
      */
     protected array $filterable = [];
 
-    public function setFilterProperty(string $property): static
+    public function setSearchProperty(string $property): static
     {
-        $this->filterProperty = $property;
+        $this->searchProperty = $property;
         return $this;
     }
 
@@ -48,8 +48,8 @@ trait FiltersResource
     protected function filterParsers(): array
     {
         return [
-            new SearchFilterParser($this->request, $this->filterProperty),
-            new ArrayFilterParser($this->request, $this->filterable),
+            new SearchFilterParser($this->request(), $this->searchProperty),
+            new ArrayFilterParser($this->request(), $this->filterable),
         ];
     }
 }

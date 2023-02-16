@@ -2,6 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi;
 
+use Doctrine\Common\Collections\Criteria;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
@@ -59,27 +60,28 @@ class JsonApiRequest extends FormRequest
 
     public function getData(): ?array
     {
-        if ((null === $data = $this->get('data')) || !is_array($data)) {
-            throw new MissingDataException("/");
+        $data = $this->get(static::KEY_DATA);
+
+        if (is_array($data)) {
+            return $data;
         }
 
-        return $data;
+        throw new MissingDataException("/");
     }
 
     public function getSort(): array
     {
         $sortBy = [];
 
-        if ($sort = $this->input('sort')) {
+        $sort = $this->get(static::QUERY_KEY_SORT);
+        if (is_string($sort)) {
             $fields = explode(',', $sort);
 
             foreach ($fields as $field) {
-                if (empty($field)) continue;
-
-                $direction = 'ASC';
+                $direction = Criteria::ASC;
                 if ($field[0] === '-') {
                     $field = substr($field, 1);
-                    $direction = 'DESC';
+                    $direction = Criteria::DESC;
                 }
 
                 $sortBy[$field] = $direction;
@@ -144,25 +146,59 @@ class JsonApiRequest extends FormRequest
     {
         return $this->route('id');
     }
+    public function getInclude(): array
+    {
+        $include = $this->get(static::QUERY_KEY_INCLUDE);
+
+        if (is_string($include)) {
+            return explode(',', $include);
+        }
+
+        return [];
+    }
 
     public function getExclude(): array
     {
-        return $this->input(static::QUERY_KEY_EXCLUDE, []);
-    }
+        $exclude = $this->get(static::QUERY_KEY_EXCLUDE);
 
-    public function getInclude(): array
-    {
-        return @explode(',', $this->input(static::QUERY_KEY_INCLUDE)) ?: [];
+        if (is_string($exclude)) {
+            return explode(',', $exclude);
+        }
+
+        return [];
     }
 
     public function getFields(): array
     {
-        return $this->input('fields', []);
+        $fields = $this->get(static::QUERY_KEY_FIELDS);
+
+        if (is_array($fields)) {
+            return $fields;
+        }
+
+        return [];
     }
 
     public function getFilter(): mixed
     {
-        return $this->input('filter');
+        $filter = $this->get(static::QUERY_KEY_FILTER);
+
+        if (is_string($filter)) {
+            // Try to decode the string value as JSON.
+            // Allow passing "filter" value as JSON encoded string.
+            $json = json_decode($filter, true);
+            if (is_string($json) || is_array($json)) {
+                return $json;
+            }
+
+            return $filter;
+        }
+
+        if (is_array($filter)) {
+            return $filter;
+        }
+
+        return null;
     }
 
     protected function passesAuthorization(): bool

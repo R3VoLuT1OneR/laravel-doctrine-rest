@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
@@ -25,10 +26,8 @@ class Role implements ResourceInterface, RoleContract
     const USER = 2;
     const USER_NAME = 'User';
 
-    public static function getResourceKey(): string
-    {
-        return 'roles';
-    }
+    const MODERATOR = 3;
+    const MODERATOR_NAME = 'Moderator';
 
     /**
      * @ORM\Id();
@@ -55,6 +54,26 @@ class Role implements ResourceInterface, RoleContract
     public function __construct()
     {
         $this->permissions = new ArrayCollection();
+    }
+
+    public static function getResourceKey(): string
+    {
+        return 'roles';
+    }
+
+    public static function root(): static
+    {
+        return EntityManager::find(static::class, static::ROOT);
+    }
+
+    public static function user(): static
+    {
+        return EntityManager::find(static::class, static::USER);
+    }
+
+    public static function moderator(): static
+    {
+        return EntityManager::find(static::class, static::MODERATOR);
     }
 
     public function getId(): ?int
