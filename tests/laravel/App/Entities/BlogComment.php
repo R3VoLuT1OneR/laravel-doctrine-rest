@@ -8,7 +8,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 /**
  * Class BlogComment
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\BlogCommentsRepository")
  * @ORM\Table(name="blog_comment")
  */
 class BlogComment implements ResourceInterface

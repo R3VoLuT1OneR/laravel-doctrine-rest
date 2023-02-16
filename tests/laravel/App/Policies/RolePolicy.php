@@ -12,4 +12,9 @@ class RolePolicy
     {
         return $user->getRoles()->contains($role);
     }
+
+    public function list(): bool
+    {
+        return false;
+    }
 }

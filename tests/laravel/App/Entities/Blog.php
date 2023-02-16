@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\BlogsRepository")
  * @ORM\Table(name="blog")
  */
 class Blog implements ResourceInterface

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\TagsRepository")
  * @ORM\Table(name="tag")
  */
 class Tag implements ResourceInterface

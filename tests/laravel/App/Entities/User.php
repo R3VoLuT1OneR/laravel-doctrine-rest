@@ -18,7 +18,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 /**
  * Class User
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\UsersRepository")
  * @ORM\Table(name="users")
  */
 class User implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, ResourceInterface

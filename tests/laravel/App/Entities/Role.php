@@ -12,7 +12,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
  * Class Role
  * @package Tests\App\Entities
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\RolesRepository")
  * @ORM\Table(name="role")
  */
 class Role implements ResourceInterface, RoleContract
