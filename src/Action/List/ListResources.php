@@ -3,6 +3,7 @@
 namespace Pz\LaravelDoctrine\JsonApi\Action\List;
 
 use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 /**
@@ -23,4 +24,3 @@ class ListResources extends AbstractAction
         return response()->collection($qb, $this->repository()->getResourceKey(), $this->transformer());
     }
 }
-

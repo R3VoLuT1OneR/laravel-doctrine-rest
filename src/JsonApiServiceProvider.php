@@ -4,6 +4,7 @@ namespace Pz\LaravelDoctrine\JsonApi;
 
 
 use Illuminate\Contracts\View\Factory as ViewFactoryContract;
+use League\Fractal\Serializer\ArraySerializer;
 use Pz\LaravelDoctrine\JsonApi\Fractal\JsonApiSerializer;
 use Pz\LaravelDoctrine\JsonApi\Fractal\ScopeFactory;
 

@@ -2,10 +2,10 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
 use LaravelDoctrine\ACL\Permissions\HasPermissions;
-use LaravelDoctrine\ACL\Mappings as ACL;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
@@ -31,38 +31,27 @@ class Role implements ResourceInterface, RoleContract
     }
 
     /**
-     * @var int
-     *
      * @ORM\Id();
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    protected $name;
+    protected ?string $name;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\Column(name="permissions", type="json_array")
+     * @ORM\Column(name="permissions", type="json")
      */
-    protected $permissions;
+    protected Collection $permissions;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles", fetch="EXTRA_LAZY")
      */
-    protected $users;
+    protected Collection $users;
 
-    /**
-     * Role constructor.
-     */
     public function __construct()
     {
         $this->permissions = new ArrayCollection();
@@ -73,29 +62,18 @@ class Role implements ResourceInterface, RoleContract
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getPermissions()
+    public function getPermissions(): Collection
     {
         return $this->permissions;
     }

@@ -16,5 +16,4 @@ class UpdateResource extends AbstractAction
 
         return response()->item($resource, $this->transformer());
     }
-
 }

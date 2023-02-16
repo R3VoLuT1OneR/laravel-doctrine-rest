@@ -5,12 +5,7 @@ use Tests\App\Entities\Role;
 
 class RoleTransformer extends AbstractTransformer
 {
-    /**
-     * @param Role $role
-     *
-     * @return array
-     */
-    public function transform(Role $role)
+    public function transform(Role $role): array
     {
         return [
             'id' => $role->getId(),

@@ -1,5 +1,6 @@
 <?php namespace Tests;
 
+use Database\Seeders\InitializationSeeder;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Application;
@@ -28,7 +29,7 @@ class TestCase extends LaravelTestCase
     public function createApplication()
     {
         /** @var Application $app */
-        $app = require realpath(__DIR__) . '/../dummy/bootstrap/app.php';
+        $app = require realpath(__DIR__) . '/../laravel/bootstrap/app.php';
 
         $this->kernel = $app->make(Kernel::class);
         $this->kernel->bootstrap();
@@ -45,6 +46,28 @@ class TestCase extends LaravelTestCase
         $gate->policy(User::class, UserPolicy::class);
 
         return $app;
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(InitializationSeeder::class);
+    }
+
+    public function seed($class = 'Database\\Seeders\\DatabaseSeeder')
+    {
+        if (!class_exists($class)) {
+            throw new \Exception(sprintf("Seeder not found: %s", $class));
+        }
+
+        if (!method_exists($class, 'run')) {
+            throw new \Exception(sprintf("Seeder missing '%s::run' method.", $class));
+        }
+
+        $seeder = new $class;
+        $seeder->run($this->em);
+
+        return $this;
     }
 
     protected function actingAsUser(): User

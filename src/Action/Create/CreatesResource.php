@@ -47,6 +47,6 @@ trait CreatesResource
 
     protected function resourceAccessAbility(): string
     {
-        return'restCreate';
+        return'create';
     }
 }

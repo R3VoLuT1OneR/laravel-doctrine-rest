@@ -21,8 +21,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\App\\": "tests/dummy/App",
-            "Tests\\": "tests/unit"
+            "Tests\\App\\": "tests/laravel/App",
+            "Tests\\": "tests/unit",
+            "Database\\Migrations\\": "tests/database/migrations",
+            "Database\\Seeders\\": "tests/database/seeders"
         }
     },
     "require-dev": {

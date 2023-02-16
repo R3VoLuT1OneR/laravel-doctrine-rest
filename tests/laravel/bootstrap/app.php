@@ -1,7 +1,5 @@
 <?php
 
-include 'bootstrap.php';
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -14,7 +12,7 @@ include 'bootstrap.php';
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__ ) . '/../../dummy'
+    realpath(__DIR__ ) . '/..'
 );
 
 /*

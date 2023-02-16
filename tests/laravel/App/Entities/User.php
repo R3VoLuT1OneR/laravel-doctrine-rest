@@ -3,7 +3,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ValidationException;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
@@ -31,38 +31,28 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     }
 
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", unique=true, nullable=false)
      */
-    protected $email;
+    protected ?string $email;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", unique=false, nullable=false)
      */
-    protected $name;
+    protected ?string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="password", type="string", nullable=false)
      */
     protected $password;
 
     /**
-     * @var ArrayCollection|Role[]
-     *
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(
      *     joinColumns={
@@ -96,59 +86,35 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         return $this->id;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return $this
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): static
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return $this
-     */
-    public function setPassword($password)
+    public function setPassword(string $password): static
     {
         $this->password = bcrypt($password);
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -158,7 +124,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         return $this->roles;
     }
 
-    public function setRoles(Collection|array $roles)
+    public function setRoles(Collection|array $roles): static
     {
         foreach ($roles as $role) {
             if (empty($role->getId())) {
@@ -167,26 +133,11 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
             }
         }
 
-        $this->roles = $roles;
+        $this->roles = is_array($roles) ? new ArrayCollection($roles) : $roles;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isRoot()
-    {
-        $root = $this->getRoles()->filter(function(Role $role) { return $role->getId() === Role::ROOT; })->first();
-
-        return $root instanceof Role;
-    }
-
-    /**
-     * @param Role $role
-     *
-     * @return $this
-     */
-    public function addRoles(Role $role)
+    public function addRoles(Role $role): static
     {
         if (!$this->roles->contains($role)) {
             $this->roles->add($role);
@@ -195,14 +146,15 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         return $this;
     }
 
-    /**
-     * @param Role $role
-     *
-     * @return $this
-     */
-    public function removeRoles(Role $role)
+    public function removeRoles(Role $role): static
     {
         $this->roles->removeElement($role);
         return $this;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->getRoles()
+            ->contains(EntityManager::getReference(Role::class, Role::ROOT));
     }
 }

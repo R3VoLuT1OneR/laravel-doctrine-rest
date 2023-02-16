@@ -1,7 +1,8 @@
 /vendor/
 .idea
 
-/tests/bootstrap/cache
+/tests/dummy/bootstrap/cache
 /tests/coverage
+/tests/storage
 
 .phpunit.result.cache

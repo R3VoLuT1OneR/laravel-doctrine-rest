@@ -1,5 +1,6 @@
 <?php namespace Tests\App\Transformers;
 
+use League\Fractal\Resource\Collection;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Tests\App\Entities\Role;
 use Tests\App\Entities\User;
@@ -13,12 +14,7 @@ class UserTransformer extends AbstractTransformer
         'roles'
     ];
 
-    /**
-     * @param User $user
-     *
-     * @return array
-     */
-    public function transform(User $user)
+    public function transform(User $user): array
     {
         return [
             'id' => $user->getId(),
@@ -27,12 +23,7 @@ class UserTransformer extends AbstractTransformer
         ];
     }
 
-    /**
-     * @param User $user
-     *
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeRoles(User $user)
+    public function includeRoles(User $user): Collection
     {
         return $this->collection($user->getRoles(), new RoleTransformer(), Role::getResourceKey());
     }

@@ -175,7 +175,7 @@ class JsonApiRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator): void
     {
-        $exception = new \Pz\LaravelDoctrine\JsonApi\Exceptions\ValidationException();
+        $exception = new Exceptions\ValidationException();
         foreach ($validator->errors()->getMessages() as $pointer => $messages) {
             foreach ($messages as $message) {
                 $exception->validationError($pointer, $message);
