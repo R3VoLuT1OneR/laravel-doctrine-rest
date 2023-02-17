@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships;
+namespace Pz\LaravelDoctrine\JsonApi;
 
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;

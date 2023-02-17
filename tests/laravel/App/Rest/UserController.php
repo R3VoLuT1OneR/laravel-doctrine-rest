@@ -3,7 +3,7 @@
 use Doctrine\ORM\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedResources;
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionAction;
+use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedRelationships;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionCreateAction;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionDeleteAction;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionUpdateAction;
@@ -59,7 +59,7 @@ class UserController extends AbstractController
     public function relationshipsRolesIndex(JsonApiRequest $request): JsonApiResponse
     {
         return (
-            new RelationshipsCollectionAction($this->repository(), 'users', $this->roles(), new RoleTransformer())
+            new ListRelatedRelationships($this->repository(), 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 

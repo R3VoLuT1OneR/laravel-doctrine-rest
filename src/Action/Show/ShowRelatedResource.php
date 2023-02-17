@@ -13,18 +13,26 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 class ShowRelatedResource extends AbstractAction
 {
+    use RelatedActionTrait;
     use AuthorizeRelatedResource;
+
+    public function __construct(
+        ResourceRepository $repository,
+        AbstractTransformer $transformer,
+        protected string $relatedFieldName,
+        protected ?ResourceManipulator $manipulator = null
+    ) {
+        parent::__construct($repository, $transformer, $this->manipulator);
+    }
 
 	public function handle(): JsonApiResponse
 	{
-		$comment = $this->repository()->findById($this->request->getId());
+		$resource = $this->repository()->findById($this->request->getId());
 
-        $this->authorize($comment);
+        $this->authorize($resource);
 
-        // /comment/1
-        if ($author = $comment->getAuthor()) {
-            $this->authorize('canAccesTheAuthor', $author);
-            return response()->item($author, $this->transformer());
+        if ($relation = $this->manipulator()->getProperty($resource, $this->relatedFieldName())) {
+            return response()->item($relation, $this->transformer());
         }
 
         return response()->null();

@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Fractal;
 
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsTransformer;
+use Pz\LaravelDoctrine\JsonApi\RelationshipsTransformer;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 
 class JsonApiSerializer extends \League\Fractal\Serializer\JsonApiSerializer

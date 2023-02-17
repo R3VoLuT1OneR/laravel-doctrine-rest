@@ -1,11 +1,9 @@
-<?php
-
-namespace Pz\LaravelDoctrine\JsonApi\Action\Show;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action\List;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\RelationshipsTransformer;
 
-class ShowRelatedRelationship extends ShowRelatedResource
+class ListRelatedRelationships extends ListRelatedResources
 {
     public function transformer(): AbstractTransformer
     {
