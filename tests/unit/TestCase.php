@@ -65,17 +65,21 @@ class TestCase extends LaravelTestCase
         return $this;
     }
 
-    protected function actingAsUser(): User
-    {
-        $this->actingAs($user = $this->em->find(User::class, 1));
-
-        return $user;
-    }
-
     protected function actingAsRoot(): User
     {
         $this->actingAs($user = $this->em->find(User::class, 2));
+        return $user;
+    }
 
+    protected function actingAsUser(): User
+    {
+        $this->actingAs($user = $this->em->find(User::class, 1));
+        return $user;
+    }
+
+    protected function actingAsModerator(): User
+    {
+        $this->actingAs($user = $this->em->find(User::class, 3));
         return $user;
     }
 }

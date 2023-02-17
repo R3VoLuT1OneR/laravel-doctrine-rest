@@ -4,7 +4,7 @@ namespace Tests\App\Repositories;
 
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-class TagsRepository extends ResourceRepository
+class PagesRepository extends ResourceRepository
 {
 
 }

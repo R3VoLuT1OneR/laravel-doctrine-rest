@@ -2,10 +2,10 @@
 
 namespace Database\Migrations;
 
-use Doctrine\DBAL\Schema\Schema as Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20230216150438 extends AbstractMigration
+class Version20230217204154 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -14,12 +14,12 @@ class Version20230216150438 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
-        $this->addSql('CREATE TABLE blog (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(255) NOT NULL, content CLOB DEFAULT NULL)');
-        $this->addSql('CREATE INDEX IDX_C0155143A76ED395 ON blog (user_id)');
-        $this->addSql('CREATE TABLE blog_comment (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, blog_id INTEGER NOT NULL, user_id INTEGER NOT NULL, content VARCHAR(1023) NOT NULL)');
-        $this->addSql('CREATE INDEX IDX_7882EFEFDAE07E97 ON blog_comment (blog_id)');
-        $this->addSql('CREATE INDEX IDX_7882EFEFA76ED395 ON blog_comment (user_id)');
-        $this->addSql('CREATE TABLE role (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL, permissions CLOB NOT NULL --(DC2Type:json_array)
+        $this->addSql('CREATE TABLE page_comments (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, page_id INTEGER NOT NULL, user_id INTEGER NOT NULL, content VARCHAR(1023) NOT NULL)');
+        $this->addSql('CREATE INDEX IDX_DF01910AC4663E4 ON page_comments (page_id)');
+        $this->addSql('CREATE INDEX IDX_DF01910AA76ED395 ON page_comments (user_id)');
+        $this->addSql('CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, title VARCHAR(255) NOT NULL, content CLOB DEFAULT NULL)');
+        $this->addSql('CREATE INDEX IDX_2074E575A76ED395 ON pages (user_id)');
+        $this->addSql('CREATE TABLE role (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL, permissions CLOB NOT NULL --(DC2Type:json)
         )');
         $this->addSql('CREATE TABLE tag (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL)');
         $this->addSql('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, remember_token VARCHAR(255) DEFAULT NULL)');
@@ -29,10 +29,6 @@ class Version20230216150438 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_332CA4DDD60322AC ON role_user (role_id)');
     }
 
-    public function postUp(Schema $schema): void
-    {
-    }
-
     /**
      * @param Schema $schema
      */
@@ -40,8 +36,8 @@ class Version20230216150438 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
-        $this->addSql('DROP TABLE blog');
-        $this->addSql('DROP TABLE blog_comment');
+        $this->addSql('DROP TABLE page_comments');
+        $this->addSql('DROP TABLE pages');
         $this->addSql('DROP TABLE role');
         $this->addSql('DROP TABLE tag');
         $this->addSql('DROP TABLE users');

@@ -8,15 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Tests\App\Repositories\BlogsRepository")
- * @ORM\Table(name="blog")
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\PagesRepository")
+ * @ORM\Table()
  */
-class Blog implements ResourceInterface
+class Page implements ResourceInterface
 {
-    const STATE_DRAFT = 1;
-    const STATE_PUBLISHED = 2;
-    const STATE_UNPUBLISHED = 3;
-
     /**
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer")
@@ -25,13 +21,7 @@ class Blog implements ResourceInterface
     protected ?int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogs")
-     * @ORM\JoinColumn(name="user_id", nullable=false)
-     */
-    protected ?User $user;
-
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected ?string $title;
 
@@ -41,7 +31,13 @@ class Blog implements ResourceInterface
     protected ?string $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="BlogComment", mappedBy="blog", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="pages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected ?User $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PageComment", mappedBy="page", fetch="LAZY")
      */
     protected Collection $comments;
 
@@ -52,7 +48,7 @@ class Blog implements ResourceInterface
 
     public static function getResourceKey(): string
     {
-        return 'blog';
+        return 'pages';
     }
 
     public function getId(): ?int
@@ -94,7 +90,7 @@ class Blog implements ResourceInterface
     }
 
     /**
-     * @return Collection|BlogComment[]
+     * @return Collection|PageComment[]
      */
     public function getComments(): Collection
     {

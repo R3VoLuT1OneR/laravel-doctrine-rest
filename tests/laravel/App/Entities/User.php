@@ -16,8 +16,6 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 
 /**
- * Class User
- *
  * @ORM\Entity(repositoryClass="Tests\App\Repositories\UsersRepository")
  * @ORM\Table(name="users")
  */
@@ -79,6 +77,7 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->pages = new ArrayCollection();
     }
 
     public function getId(): int

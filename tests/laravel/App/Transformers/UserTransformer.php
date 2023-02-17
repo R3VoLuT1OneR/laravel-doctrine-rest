@@ -7,9 +7,6 @@ use Tests\App\Entities\User;
 
 class UserTransformer extends AbstractTransformer
 {
-    /**
-     * @var array
-     */
     protected array $availableIncludes = [
         'roles'
     ];

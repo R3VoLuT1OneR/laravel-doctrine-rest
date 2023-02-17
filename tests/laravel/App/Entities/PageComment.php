@@ -6,12 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
- * Class BlogComment
- *
- * @ORM\Entity(repositoryClass="Tests\App\Repositories\BlogCommentsRepository")
- * @ORM\Table(name="blog_comment")
+ * @ORM\Entity(repositoryClass="Tests\App\Repositories\PageCommentsRepository")
+ * @ORM\Table()
  */
-class BlogComment implements ResourceInterface
+class PageComment implements ResourceInterface
 {
     /**
      * @ORM\Id()
@@ -21,10 +19,15 @@ class BlogComment implements ResourceInterface
     protected ?int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
-     * @ORM\JoinColumn(name="blog_id", nullable=false)
+     * @ORM\Column(name="content", type="string", length=1023, nullable=false)
      */
-    protected ?Blog $blog;
+    protected ?string $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected ?Page $page;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -32,14 +35,9 @@ class BlogComment implements ResourceInterface
      */
     protected ?User $user;
 
-    /**
-     * @ORM\Column(name="content", type="string", length=1023, nullable=false)
-     */
-    protected ?string $content;
-
     public static function getResourceKey(): string
     {
-        return 'blog_comment';
+        return 'pageComments';
     }
 
     public function getId(): ?int
@@ -47,15 +45,15 @@ class BlogComment implements ResourceInterface
         return $this->id;
     }
 
-    public function setBlog(Blog $blog): static
+    public function setPage(Page $page): static
     {
-        $this->blog = $blog;
+        $this->page = $page;
         return $this;
     }
 
-    public function getBlog(): Blog
+    public function getPage(): Page
     {
-        return $this->blog;
+        return $this->page;
     }
 
     public function setUser(User $user): static

@@ -3,13 +3,12 @@
 namespace Tests\Helpers;
 
 use Doctrine\ORM\EntityManager;
-use Tests\App\Entities\Blog;
-use Tests\App\Entities\BlogComment;
+use Tests\App\Entities\Page;
+use Tests\App\Entities\PageComment;
 use Tests\App\Entities\Role;
-use Tests\App\Entities\Tag;
 use Tests\App\Entities\User;
-use Tests\App\Repositories\BlogCommentsRepository;
-use Tests\App\Repositories\BlogsRepository;
+use Tests\App\Repositories\PageCommentsRepository;
+use Tests\App\Repositories\PagesRepository;
 use Tests\App\Repositories\RolesRepository;
 use Tests\App\Repositories\TagsRepository;
 use Tests\App\Repositories\UsersRepository;
@@ -33,18 +32,13 @@ trait WithEntityManager
         return $this->em()->getRepository(Role::class);
     }
 
-    public function tagsRepo(): TagsRepository
+    public function pageRepo(): PagesRepository
     {
-        return $this->em()->getRepository(Tag::class);
+        return $this->em()->getRepository(Page::class);
     }
 
-    public function blogsRepo(): BlogsRepository
+    public function pageCommentsRepo(): PageCommentsRepository
     {
-        return $this->em()->getRepository(Blog::class);
-    }
-
-    public function blogCommentsRepo(): BlogCommentsRepository
-    {
-        return $this->em()->getRepository(BlogComment::class);
+        return $this->em()->getRepository(PageComment::class);
     }
 }

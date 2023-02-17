@@ -10,9 +10,6 @@ use LaravelDoctrine\ORM\Facades\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 /**
- * Class Role
- * @package Tests\App\Entities
- *
  * @ORM\Entity(repositoryClass="Tests\App\Repositories\RolesRepository")
  * @ORM\Table(name="role")
  */
@@ -44,17 +41,12 @@ class Role implements ResourceInterface, RoleContract
     /**
      * @ORM\Column(name="permissions", type="json")
      */
-    protected Collection $permissions;
+    protected array $permissions = [];
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="roles", fetch="EXTRA_LAZY")
      */
     protected Collection $users;
-
-    public function __construct()
-    {
-        $this->permissions = new ArrayCollection();
-    }
 
     public static function getResourceKey(): string
     {
@@ -89,6 +81,12 @@ class Role implements ResourceInterface, RoleContract
     public function setName(string $name): static
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function setPermissions(array $permissions): self
+    {
+        $this->permissions = $permissions;
         return $this;
     }
 
