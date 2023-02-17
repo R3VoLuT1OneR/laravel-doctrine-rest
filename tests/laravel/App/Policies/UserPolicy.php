@@ -7,7 +7,7 @@ class UserPolicy
 {
     public function show(User $user, User $resource): bool
     {
-        return $user === $resource;
+        return true;
     }
 
     public function list(): bool
@@ -17,11 +17,9 @@ class UserPolicy
 
     public function listRelated(User $user, User $resource, string $relatedResourceClass): bool
     {
-        switch ($relatedResourceClass) {
-            case Role::class:
-                return $user === $resource;
-        }
-
-        return false;
+        return match ($relatedResourceClass) {
+            Role::class => $user === $resource,
+            default => false,
+        };
     }
 }

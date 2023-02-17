@@ -77,7 +77,6 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-        $this->pages = new ArrayCollection();
     }
 
     public function getId(): int

@@ -5,7 +5,7 @@ namespace Tests\App\Actions\Page;
 use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowResource;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
-class ShowPageComments extends ShowResource
+class ShowRelatedComments extends ShowResource
 {
     /**
      * Anyone can look on the page's comments.

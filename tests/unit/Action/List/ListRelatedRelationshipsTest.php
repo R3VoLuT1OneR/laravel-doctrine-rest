@@ -31,7 +31,7 @@ class ListRelatedRelationshipsTest extends TestCase
         });
     }
 
-    public function testAuthorizationPermissionsForNoLogedIn()
+    public function testAuthorizationPermissionsForNoLoggedIn()
     {
         $this->get('/users/1/relationships/roles')->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
         $this->get('/users/2/relationships/roles')->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
