@@ -5,7 +5,7 @@ namespace Pz\LaravelDoctrine\JsonApi;
 use Illuminate\Contracts\Auth\Access\Gate;
 use League\Fractal\Resource\Primitive;
 use League\Fractal\TransformerAbstract;
-use Pz\LaravelDoctrine\JsonApi\Action\AbilitiesInterface;
+use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 
 abstract class AbstractTransformer extends TransformerAbstract

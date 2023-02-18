@@ -1,5 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
+use Doctrine\ORM\EntityManager;
 use Illuminate\Auth\Access\AuthorizationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
@@ -67,5 +68,10 @@ abstract class AbstractAction
     protected function manipulator(): ResourceManipulator
     {
         return $this->manipulator;
+    }
+
+    protected function em(): EntityManager
+    {
+        return $this->repository()->em();
     }
 }

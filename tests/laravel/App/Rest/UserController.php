@@ -2,11 +2,11 @@
 
 use Doctrine\ORM\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedResources;
-use Pz\LaravelDoctrine\JsonApi\Action\List\ListRelatedRelationships;
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionCreateAction;
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionDeleteAction;
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsCollectionUpdateAction;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\ListRelatedResources;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\ListRelationships;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\CreateRelationships;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\RemoveRelationships;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\UpdateRelationships;
 use Pz\LaravelDoctrine\JsonApi\Controller\AbstractController;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
@@ -59,28 +59,28 @@ class UserController extends AbstractController
     public function relationshipsRolesIndex(JsonApiRequest $request): JsonApiResponse
     {
         return (
-            new ListRelatedRelationships($this->repository(), 'users', $this->roles(), new RoleTransformer())
+            new ListRelationships($this->repository(), 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
     public function relationshipsRolesCreate(JsonApiRequest $request): JsonApiResponse
     {
         return (
-            new RelationshipsCollectionCreateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
+            new CreateRelationships($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
     public function relationshipsRolesUpdate(JsonApiRequest $request): JsonApiResponse
     {
         return (
-            new RelationshipsCollectionUpdateAction($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
+            new UpdateRelationships($this->repository(), 'roles', 'users', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 
     public function relationshipsRolesDelete(JsonApiRequest $request): JsonApiResponse
     {
         return (
-            new RelationshipsCollectionDeleteAction($this->repository(), 'roles', $this->roles(), new RoleTransformer())
+            new RemoveRelationships($this->repository(), 'roles', $this->roles(), new RoleTransformer())
         )->dispatch($request);
     }
 }

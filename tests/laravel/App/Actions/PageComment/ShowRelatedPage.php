@@ -2,7 +2,7 @@
 
 namespace Tests\App\Actions\PageComment;
 
-use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowRelatedResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\ShowRelatedResource;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 class ShowRelatedPage extends ShowRelatedResource

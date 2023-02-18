@@ -2,7 +2,7 @@
 
 use League\Fractal\Resource\Item;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\AbilitiesInterface;
+use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Tests\App\Entities\Page;
 use Tests\App\Entities\Role;
 use Tests\App\Entities\User;

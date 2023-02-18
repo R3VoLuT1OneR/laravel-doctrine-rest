@@ -2,7 +2,7 @@
 
 namespace Tests\App\Actions\Page;
 
-use Pz\LaravelDoctrine\JsonApi\Action\Show\ShowResource as BasicAction;
+use Pz\LaravelDoctrine\JsonApi\Action\ShowResource as BasicAction;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
 class ShowPageResource extends BasicAction

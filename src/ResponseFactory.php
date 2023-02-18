@@ -59,13 +59,26 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
             transformer: $transformer,
             status: JsonApiResponse::HTTP_CREATED,
             headers: array_merge($headers, [
-                'Response' => $this->linkToResource($resource),
+                'Location' => $this->linkToResource($resource),
             ]),
             meta: $meta
         );
     }
 
     public function collection(
+        array $collection,
+        string $resourceKey,
+        AbstractTransformer $transformer,
+        int                 $status = JsonApiResponse::HTTP_OK,
+        array               $headers = [],
+    ): JsonApiResponse
+    {
+        $collection = (new Collection($collection, $transformer, $resourceKey));
+        $body = $this->fractal->createData($collection)->toArray();
+        return $this->jsonapi($body, $status, $headers);
+    }
+
+    public function query(
         QueryBuilder        $qb,
         string              $resourceKey,
         AbstractTransformer $transformer,

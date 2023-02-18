@@ -3,7 +3,9 @@
 namespace Pz\LaravelDoctrine\JsonApi;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\NotFoundException;
 
@@ -15,6 +17,12 @@ class ResourceRepository extends EntityRepository
     const RESOURCE_TYPE_METHOD = 'getResourceKey';
 
     protected ?string $alias = null;
+
+    public function __construct(EntityManagerInterface $em, ClassMetadata $class)
+    {
+        parent::__construct($em, $class);
+        $this->verifyClassResource($this->getClassName());
+    }
 
     public static function create(EntityManager $em, string $class): self
     {
@@ -34,7 +42,6 @@ class ResourceRepository extends EntityRepository
     public function getResourceKey(): string
     {
         $class = $this->getClassName();
-        $this->verifyClassResource($class);
         return call_user_func(sprintf('%s::%s', $class, static::RESOURCE_TYPE_METHOD));
     }
 
@@ -58,6 +65,11 @@ class ResourceRepository extends EntityRepository
         }
 
         return $entity;
+    }
+
+    public function getReference(string|int $id): ResourceInterface
+    {
+        $this->em()->getReference($this->getClassName(), $id);
     }
 
     /**

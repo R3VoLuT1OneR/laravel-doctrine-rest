@@ -66,7 +66,7 @@ class JsonApiRequest extends FormRequest
             return $data;
         }
 
-        throw new MissingDataException("/");
+        throw new MissingDataException("");
     }
 
     public function getSort(): array
