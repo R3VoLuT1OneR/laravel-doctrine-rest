@@ -1,36 +1,43 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
-use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 /**
  * Used for verification access of the authenticated user to the resource.
  */
 trait AuthorizeResource
 {
+    /**
+     * Ability to check for access to the requested resource in the root level.
+     */
     abstract public function resourceAccessAbility(): string;
 
     abstract public function repository(): ResourceRepository;
 
-    public function gate(): Gate
-    {
-        return app(Gate::class);
-    }
-
+    /**
+     * @throws ForbiddenException
+     */
     public function authorize(?ResourceInterface $resource = null): void
     {
-        if (!$this->allowed($resource)) {
-            throw new RestException('This action is unauthorized.', JsonApiResponse::HTTP_FORBIDDEN);
+        $ability = $this->resourceAccessAbility();
+        $allowed = $this->gate()->allows($ability, [
+            $resource ?: $this->repository()->getClassName()
+        ]);
+
+        if (!$allowed) {
+            throw ForbiddenException::create()
+                ->errorAtPointer('/', sprintf(
+                    'No "%s" ability on "%s" resource.', $ability,
+                    $this->repository()->getResourceKey()
+                ));
         }
     }
 
-    public function allowed(?ResourceInterface $resource = null): bool
+    protected function gate(): Gate
     {
-        return $this->gate()->allows($this->resourceAccessAbility(), [
-            $resource ?: $this->repository()->getClassName()
-        ]);
+        return app(Gate::class);
     }
 }

@@ -2,14 +2,18 @@
 
 class RestException extends \Exception implements RestExceptionInterface
 {
-    protected array $errors = [];
-
     public function __construct(
         $message = '',
         $httpStatus = self::HTTP_INTERNAL_SERVER_ERROR,
         \Throwable  $previous = null,
+        protected array $errors = [],
     ) {
         parent::__construct($message, $httpStatus, $previous);
+    }
+
+    public static function create(...$args): static
+    {
+        return new static(...$args);
     }
 
     public function httpStatus(): int

@@ -1,5 +1,7 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
@@ -38,6 +40,10 @@ abstract class AbstractAction
 
         try {
             return app()->call([$this, 'handle']);
+        } catch (AuthorizationException $e) {
+            return response()->exception(new ForbiddenException(
+                previous: $e
+            ));
         } catch (RestException $e) {
             return response()->exception($e);
         }

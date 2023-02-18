@@ -2,6 +2,8 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Action;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
@@ -12,22 +14,33 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 trait AuthorizeRelatedResource
 {
     use AuthorizeResource {
-        allowed as resourceAllowed;
+        authorize as authorizeResource;
     }
 
     abstract public function relatedResourceRepository(): ResourceRepository;
 
     abstract public function relatedResourceAccessAbility(): string;
 
-    public function allowed(ResourceInterface $resource): bool
+    /**
+     * @throws ForbiddenException
+     */
+    public function authorize(?ResourceInterface $resource = null): void
     {
-        if (!$this->resourceAllowed($resource)) {
-            return false;
-        }
+        $this->authorizeResource($resource);
 
-        return $this->gate()->allows($this->relatedResourceAccessAbility(), [
+        $ability = $this->relatedResourceAccessAbility();
+        $allowed = $this->gate()->allows($ability, [
             $resource,
             $this->relatedResourceRepository()->getClassName()
         ]);
+
+        if (!$allowed) {
+            throw ForbiddenException::create()
+                ->errorAtPointer('/', sprintf(
+                    'No "%s" ability on "%s" and related "%s" resource.', $ability,
+                    $this->repository()->getResourceKey(),
+                    $this->relatedResourceRepository()->getResourceKey(),
+                ));
+        }
     }
 }

@@ -11,4 +11,12 @@ class PagePolicy
     {
         return true;
     }
+
+    public function showRelated(User $user, Page $page, string $relatedResourceClass): bool
+    {
+        return match ($relatedResourceClass) {
+            User::class => true,
+            default => false
+        };
+    }
 }

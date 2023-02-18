@@ -2,6 +2,7 @@
 
 use League\Fractal\Resource\Collection;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
+use Pz\LaravelDoctrine\JsonApi\Action\AbilitiesInterface;
 use Tests\App\Entities\Role;
 use Tests\App\Entities\User;
 
@@ -22,6 +23,8 @@ class UserTransformer extends AbstractTransformer
 
     public function includeRoles(User $user): Collection
     {
+        $this->gate()->authorize(AbilitiesInterface::LIST_RELATED_RESOURCES, [$user, Role::class]);
+
         return $this->collection($user->getRoles(), new RoleTransformer(), Role::getResourceKey());
     }
 }

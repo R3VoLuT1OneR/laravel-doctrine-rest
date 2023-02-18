@@ -422,6 +422,14 @@ class ShowResourceTest extends TestCase
 
     public function testIncludePageUserAndUserRoles()
     {
+        $this->actingAsModerator();
+        $this->get('/pages/1?include=user,user.roles')
+            ->assertStatus(403)
+            ->assertExactJson([
+                'errors' => []
+            ]);
+
+        $this->actingAsUser();
         $this->get('/pages/1?include=user,user.roles')
             ->assertStatus(200)
             ->assertExactJson([
