@@ -8,6 +8,7 @@ use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Actions\Page\ShowPageResource;
 use Tests\App\Actions\Page\ShowRelatedComments;
+use Tests\App\Entities\Role;
 use Tests\App\Transformers\PageCommentTransformer;
 use Tests\App\Transformers\PagesTransformer;
 use Tests\App\Transformers\RoleTransformer;
@@ -352,6 +353,137 @@ class ShowResourceTest extends TestCase
                     'links' => [
                         'self' => '/pageComments/3'
                     ]
+                ]
+            ]);
+    }
+
+    public function testIncludeUserRoles()
+    {
+        $user = $this->actingAsUser();
+        $user->addRoles(Role::moderator());
+        $this->em()->flush();
+
+        $this->get('/users/1?include=roles')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'data' => [
+                    'id' => '1',
+                    'type' => 'users',
+                    'attributes' => [
+                        'email' => 'test1email@test.com',
+                        'name' => 'testing user1',
+                    ],
+                    'relationships' => [
+                        'roles' => [
+                            'data' => [
+                                [
+                                    'id' => (string) Role::user()->getId(),
+                                    'type' => 'roles',
+                                ],
+                                [
+                                    'id' => (string) Role::moderator()->getId(),
+                                    'type' => 'roles',
+                                ],
+                            ],
+                            'links' => [
+                                'related' => '/users/1/roles',
+                                'self' => '/users/1/relationships/roles'
+                            ]
+                        ]
+                    ],
+                    'links' => [
+                        'self' => '/users/1'
+                    ]
+                ],
+                'included' => [
+                    [
+                        'id' => '2',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'User',
+                        ],
+                        'links' => [
+                            'self' => '/roles/2',
+                        ]
+                    ],
+                    [
+                        'id' => '3',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'Moderator',
+                        ],
+                        'links' => [
+                            'self' => '/roles/3',
+                        ]
+                    ],
+                ]
+            ]);
+    }
+
+    public function testIncludePageUserAndUserRoles()
+    {
+        $this->get('/pages/1?include=user,user.roles')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'data' => [
+                    'id' => '1',
+                    'type' => 'pages',
+                    'attributes' => [
+                        'title' => 'JSON:API standard',
+                        'content' => '<strong>JSON:API</strong>'
+                    ],
+                    'relationships' => [
+                        'user' => [
+                            'data' => [
+                                'id' => '1',
+                                'type' => 'users'
+                            ],
+                            'links' => [
+                                'related' => '/pages/1/user',
+                                'self' => '/pages/1/relationships/user'
+                            ]
+                        ]
+                    ],
+                    'links' => [
+                        'self' => '/pages/1'
+                    ]
+                ],
+                'included' => [
+                    [
+                        'id' => '2',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'User',
+                        ],
+                        'links' => [
+                            'self' => '/roles/2',
+                        ]
+                   ],
+                   [
+                       'id' => '1',
+                       'type' => 'users',
+                       'attributes' => [
+                           'email' => 'test1email@test.com',
+                           'name' => 'testing user1',
+                       ],
+                       'relationships' => [
+                           'roles' => [
+                               'data' => [
+                                   [
+                                       'id' => '2',
+                                       'type' => 'roles',
+                                   ],
+                               ],
+                               'links' => [
+                                   'related' => '/users/1/roles',
+                                   'self' => '/users/1/relationships/roles'
+                               ]
+                           ]
+                       ],
+                       'links' => [
+                           'self' => '/users/1'
+                       ],
+                   ]
                 ]
             ]);
     }
