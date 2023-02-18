@@ -15,6 +15,21 @@ class UserPolicy
         return false;
     }
 
+    public function create(User $user, User $resource): bool
+    {
+        return $user === $resource;
+    }
+
+    public function update(User $user, User $resource): bool
+    {
+        return $user === $resource;
+    }
+
+    public function remove(User $user, User $resource): bool
+    {
+        return $user === $resource;
+    }
+
     public function listRelated(User $user, User $resource, string $relatedResourceClass): bool
     {
         return match ($relatedResourceClass) {

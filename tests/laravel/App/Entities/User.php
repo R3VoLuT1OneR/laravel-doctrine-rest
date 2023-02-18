@@ -72,6 +72,18 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
     protected Collection $roles;
 
     /**
+     * @ORM\OneToMany(targetEntity="Page", mappedBy="user", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected Collection $pages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PageComment", mappedBy="user", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected Collection $pageComments;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -79,7 +91,12 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         $this->roles = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function __toString(): string
+    {
+        return sprintf('Account %d name: %s', $this->getId(), $this->getName());
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }

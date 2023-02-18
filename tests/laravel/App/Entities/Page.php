@@ -32,7 +32,7 @@ class Page implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="pages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected ?User $user;
 

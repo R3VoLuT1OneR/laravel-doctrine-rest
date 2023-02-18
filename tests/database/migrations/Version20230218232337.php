@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20230217204154 extends AbstractMigration
+class Version20230218232337 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -21,7 +21,6 @@ class Version20230217204154 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_2074E575A76ED395 ON pages (user_id)');
         $this->addSql('CREATE TABLE role (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL, permissions CLOB NOT NULL --(DC2Type:json)
         )');
-        $this->addSql('CREATE TABLE tag (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL)');
         $this->addSql('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, remember_token VARCHAR(255) DEFAULT NULL)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
         $this->addSql('CREATE TABLE role_user (user_id INTEGER NOT NULL, role_id INTEGER NOT NULL, PRIMARY KEY(user_id, role_id))');
@@ -39,7 +38,6 @@ class Version20230217204154 extends AbstractMigration
         $this->addSql('DROP TABLE page_comments');
         $this->addSql('DROP TABLE pages');
         $this->addSql('DROP TABLE role');
-        $this->addSql('DROP TABLE tag');
         $this->addSql('DROP TABLE users');
         $this->addSql('DROP TABLE role_user');
     }

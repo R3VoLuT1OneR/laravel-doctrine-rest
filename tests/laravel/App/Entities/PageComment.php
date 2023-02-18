@@ -25,13 +25,13 @@ class PageComment implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected ?Page $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="pageComments")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected ?User $user;
 

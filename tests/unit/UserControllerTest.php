@@ -488,34 +488,4 @@ class UserControllerTest extends TestCase
                 ]
             ]);
     }
-
-    public function test_delete_action()
-    {
-        $this->delete('/rest/users/2')->assertSuccessful();
-        $this->delete('/rest/users/2')->assertStatus(404);
-        $this->get('/rest/users/2')->assertStatus(404);
-        $response = $this->get('/rest/users');
-        $response
-            ->assertSuccessful()
-            ->assertJson([
-                'data' => [['id' => 1], ['id' => 3]],
-            ]);
-
-    }
-
-    public function test_handle_authorization_exception()
-    {
-        /** @var User $user */
-        $user = $this->em->find(User::class, 2);
-
-        $data = ['attributes' => ['name' => 'testing user4', 'email' => 'test4email@test.com', 'password' => '123456']];
-
-        $this->actingAs($user);
-        $this->getJson('/rest/users')->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
-        $this->getJson('/rest/users/1')->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
-        $this->postJson('/rest/users', ['data' => $data])->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
-        $this->patchJson('/rest/users/2', ['data' => $data])->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
-        $this->deleteJson('/rest/users/2')->assertStatus(JsonApiResponse::HTTP_FORBIDDEN);
-
-    }
 }

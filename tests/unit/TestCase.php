@@ -36,10 +36,6 @@ class TestCase extends LaravelTestCase
 
         $this->em = $app->make(EntityManager::class);
 
-        /** @var Gate $gate */
-        $gate = $app->make(Gate::class);
-        $gate->policy(User::class, UserPolicy::class);
-
         return $app;
     }
 
@@ -47,6 +43,7 @@ class TestCase extends LaravelTestCase
     {
         parent::setUp();
         $this->seed(SetUpSeeder::class);
+        $this->em()->clear();
     }
 
     public function seed($class = 'Database\\Seeders\\DatabaseSeeder')
@@ -59,8 +56,10 @@ class TestCase extends LaravelTestCase
             throw new \Exception(sprintf("Seeder missing '%s::run' method.", $class));
         }
 
+        $this->em()->clear();
         $seeder = new $class;
         $seeder->run($this->em);
+        $this->em()->clear();
 
         return $this;
     }
