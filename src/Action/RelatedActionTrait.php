@@ -46,37 +46,6 @@ trait RelatedActionTrait
         return $this->resourceMappedBy;
     }
 
-    /**
-     * Find resource interface by the primary data.
-     *
-     * Example: [
-     *   "id" => 1,
-     *   "type" => "relatedKey"
-     * ]
-     */
-    protected function findRelatedResource(array $item, bool $reference = false): ResourceInterface
-    {
-        if (!isset($item['id']) || !isset($item['type'])) {
-            throw (new BadRequestException('Relation item without identifiers.'))
-                ->error(
-                    'invalid-data',
-                    ['pointer' => $this->relatedFieldName()],
-                    'Relation item without `id` or `type`.'
-                );
-        }
-
-        if ($this->relatedResourceRepository()->getResourceKey() !== $item['type']) {
-            throw (new BadRequestException('Different resource type in delete request.'))
-                ->error('invalid-data', ['pointer' => $this->relatedFieldName()], 'Type is not in sync with relation.');
-        }
-
-        if ($reference) {
-            return $this->relatedResourceRepository()->getReference($item['id']);
-        }
-
-        return $this->relatedResourceRepository()->findById($item['id']);
-    }
-
     protected function relatedLink(ResourceInterface $resource): string
     {
         return sprintf('%s/%s/%s/%s',

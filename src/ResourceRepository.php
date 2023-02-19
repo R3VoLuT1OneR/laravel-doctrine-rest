@@ -7,9 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\NotFoundException;
 
 use InvalidArgumentException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 use UnexpectedValueException;
 
 class ResourceRepository extends EntityRepository
@@ -21,12 +23,18 @@ class ResourceRepository extends EntityRepository
     public function __construct(EntityManagerInterface $em, ClassMetadata $class)
     {
         parent::__construct($em, $class);
-        $this->verifyClassResource($this->getClassName());
+        static::verifyClassResource($this->getClassName());
     }
 
     public static function create(EntityManager $em, string $class): self
     {
         return new static($em, $em->getClassMetadata($class));
+    }
+
+    public static function classResourceKey(string $class): string
+    {
+        static::verifyClassResource($class);
+        return call_user_func(sprintf('%s::%s', $class, static::RESOURCE_TYPE_METHOD));
     }
 
     public function em(): EntityManager
@@ -41,8 +49,7 @@ class ResourceRepository extends EntityRepository
 
     public function getResourceKey(): string
     {
-        $class = $this->getClassName();
-        return call_user_func(sprintf('%s::%s', $class, static::RESOURCE_TYPE_METHOD));
+        return call_user_func(sprintf('%s::%s', $this->getClassName(), static::RESOURCE_TYPE_METHOD));
     }
 
     /**
@@ -69,13 +76,36 @@ class ResourceRepository extends EntityRepository
 
     public function getReference(string|int $id): ResourceInterface
     {
-        $this->em()->getReference($this->getClassName(), $id);
+        return $this->em()->getReference($this->getClassName(), $id);
+    }
+
+    public function findByPrimaryData(array $data, string $scope = "/data"): ResourceInterface
+    {
+        if (!isset($data['id']) || !isset($data['type'])) {
+            throw BadRequestException::create('Relation item without identifiers.')
+                ->error(400, ['pointer' => $scope], 'Relation item without `id` or `type`.');
+        }
+
+        if ($this->getResourceKey() !== $data['type']) {
+            throw BadRequestException::create('Wrong type provided.')
+                ->error(400, ['pointer' => $scope], 'Type is not in sync with relation.');
+        }
+
+        if (null === ($resource = $this->find($data['id']))) {
+            throw RestException::create('Resource is not found', 404)
+                ->error(404, ['pointer' => $scope], sprintf(
+                    'Resource not found by primary data %s(%s)',
+                    $data['type'], $data['id']
+                ));
+        }
+
+        return $resource;
     }
 
     /**
      * Make sure class is implements resource interface.
      */
-    private function verifyClassResource(string $class): void
+    private static function verifyClassResource(string $class): void
     {
         if (!class_exists($class)) {
             throw new InvalidArgumentException(sprintf('%s - is not a class', $class));

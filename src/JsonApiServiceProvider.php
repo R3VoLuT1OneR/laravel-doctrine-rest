@@ -26,7 +26,7 @@ class JsonApiServiceProvider extends ServiceProvider
     protected function registerResponseFactory()
     {
         $this->app->singleton(ResponseFactoryContract::class, function ($app) {
-            return new ResponseFactory($app[ViewFactoryContract::class], $app['redirect'], $app[Fractal::class]);
+            return new ResponseFactory($app[ViewFactoryContract::class], $app['redirect']);
         });
     }
 

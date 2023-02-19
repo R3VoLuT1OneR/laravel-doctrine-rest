@@ -3,6 +3,7 @@
 namespace Tests\Action\Related;
 
 use Illuminate\Support\Facades\Route;
+use Pz\LaravelDoctrine\JsonApi\Action\Related\ListRelatedResources;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Entities\Role;
@@ -17,7 +18,7 @@ class ListRelatedResourcesTest extends TestCase
 
         Route::get('/users/{id}/roles', function (JsonApiRequest $request) {
             return (
-                new \Pz\LaravelDoctrine\JsonApi\Action\Related\ListRelatedResources(
+                new ListRelatedResources(
                     $this->usersRepo(),
                     $this->rolesRepo(),
                     RoleTransformer::create(),
@@ -58,6 +59,7 @@ class ListRelatedResourcesTest extends TestCase
     public function testListRelatedUserRolesResponse()
     {
         $user = $this->actingAsUser();
+        $roles = $user->getRoles()->toArray();
 
         $this->get('/users/'.$user->getId().'/roles')
             ->assertStatus(200)

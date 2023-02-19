@@ -7,6 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 
 /**
  * TODO: Compare with last version of PZ/DoctrinRest and add improved stuff here.
@@ -60,13 +61,14 @@ class JsonApiRequest extends FormRequest
 
     public function getData(): ?array
     {
-        $data = $this->get(static::KEY_DATA);
+        $validated = $this->validated();
 
-        if (is_array($data)) {
-            return $data;
+        if (!isset($validated['data'])) {
+            throw RestException::create('Not valid data', 400)
+                ->error(400, ['pointer' => '/data'], 'Not found any validated data.');
         }
 
-        throw new MissingDataException("");
+        return $validated['data'];
     }
 
     public function getSort(): array
@@ -212,8 +214,9 @@ class JsonApiRequest extends FormRequest
     protected function failedValidation(Validator $validator): void
     {
         $exception = new Exceptions\ValidationException();
-        foreach ($validator->errors()->getMessages() as $pointer => $messages) {
+        foreach ($validator->errors()->getMessages() as $attribute => $messages) {
             foreach ($messages as $message) {
+                $pointer = "/".str_replace('.', '/', $attribute);
                 $exception->validationError($pointer, $message);
             }
         }

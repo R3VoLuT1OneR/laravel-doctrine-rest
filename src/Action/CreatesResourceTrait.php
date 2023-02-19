@@ -51,7 +51,7 @@ trait CreatesResourceTrait
     protected function hydrateResource(array $data, string $scope = '/data'): ResourceInterface
     {
         $class = $this->repository()->getClassName();
-        $resource = $this->manipulator()->hydrateResource($class, $data, $scope);
+        $resource = $this->manipulator()->hydrateResource(new $class, $data, $scope);
         return $resource;
     }
 

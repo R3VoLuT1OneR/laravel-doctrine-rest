@@ -163,7 +163,10 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
 
     public function removeRoles(Role $role): static
     {
-        $this->roles->removeElement($role);
+        if ($role !== Role::user()){
+            $this->roles->removeElement($role);
+        }
+
         return $this;
     }
 

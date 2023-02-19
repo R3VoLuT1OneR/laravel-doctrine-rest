@@ -377,11 +377,11 @@ class ShowResourceTest extends TestCase
                         'roles' => [
                             'data' => [
                                 [
-                                    'id' => (string) Role::user()->getId(),
+                                    'id' => '2',
                                     'type' => 'roles',
                                 ],
                                 [
-                                    'id' => (string) Role::moderator()->getId(),
+                                    'id' => '3',
                                     'type' => 'roles',
                                 ],
                             ],

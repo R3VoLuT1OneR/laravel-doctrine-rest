@@ -30,6 +30,11 @@ class UserPolicy
         return $user === $resource;
     }
 
+    public function assignRole(User $user, User $resource, Role $role): bool
+    {
+        return false;
+    }
+
     public function listRelated(User $user, User $resource, string $relatedResourceClass): bool
     {
         return match ($relatedResourceClass) {

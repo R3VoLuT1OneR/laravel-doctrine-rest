@@ -33,10 +33,14 @@ class UpdateRelationships extends AbstractAction
 
         $this->authorize($resource);
 
-        $relationships = new ArrayCollection(array_map(
-            fn ($raw) => $this->findRelatedResource($raw, true),
-            $this->request()->getData()
-        ));
+        $relationships = new ArrayCollection();
+        foreach ($this->request()->getData() as $index => $relatedPrimaryData) {
+            $relatedResource = $this
+                ->relatedResourceRepository()
+                ->findByPrimaryData($relatedPrimaryData, "/data/$index");
+
+            $relationships->add($relatedResource);
+        }
 
         $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $relationships);
         $this->repository()->em()->flush();

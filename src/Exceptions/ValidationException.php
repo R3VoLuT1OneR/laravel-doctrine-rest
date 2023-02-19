@@ -4,7 +4,7 @@ namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
 class ValidationException extends RestException
 {
-    const ERROR_CODE = 'validation';
+    const ERROR_CODE = 422;
     const ERROR_MESSAGE = 'Validation error.';
 
     public function __construct(\Exception $exception = null)

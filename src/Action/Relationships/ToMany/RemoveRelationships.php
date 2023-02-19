@@ -30,14 +30,17 @@ class RemoveRelationships extends AbstractAction
 
         $this->authorize($resource);
 
-        foreach ($this->request()->getData() as $removeItem) {
-            $item = $this->findRelatedResource($removeItem, true);
-            $this->manipulator()->removeRelationItem($resource, $this->relatedFieldName(), $item);
+        foreach ($this->request()->getData() as $index => $relatedPrimaryData) {
+            $relatedResource = $this
+                ->relatedResourceRepository()
+                ->findByPrimaryData($relatedPrimaryData, "/data/$index");
+
+            $this->manipulator()->removeRelationItem($resource, $this->relatedFieldName(), $relatedResource);
         }
 
         $this->repository()->em()->flush();
 
-        return $this->response()->noContent();
+        return response()->noContent();
     }
 
     public function resourceAccessAbility(): string

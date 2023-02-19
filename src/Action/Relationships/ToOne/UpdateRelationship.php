@@ -35,7 +35,7 @@ class UpdateRelationship extends AbstractAction
             return response()->null();
         }
 
-        $relatedResource = $this->findRelatedResource($data);
+        $relatedResource = $this->relatedResourceRepository()->findByPrimaryData($data);
         $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $relatedResource);
         $this->repository()->em()->flush();
 

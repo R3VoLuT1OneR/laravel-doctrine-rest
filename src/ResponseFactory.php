@@ -12,18 +12,11 @@ use League\Fractal\Manager as Fractal;
 use League\Fractal\Pagination\DoctrinePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
+use Pz\LaravelDoctrine\JsonApi\Fractal\JsonApiSerializer;
+use Pz\LaravelDoctrine\JsonApi\Fractal\ScopeFactory;
 
 class ResponseFactory extends \Illuminate\Routing\ResponseFactory
 {
-    public function __construct(
-        ViewFactory $view,
-        Redirector $redirector,
-        protected Fractal $fractal
-    )
-    {
-        parent::__construct($view, $redirector);
-    }
-
     public function request(): JsonApiRequest
     {
         return app(JsonApiRequest::class);
@@ -43,7 +36,7 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     ): JsonApiResponse
     {
         $item = (new Item($resource, $transformer, $resource->getResourceKey()))->setMeta($meta);
-        $body = $this->fractal->createData($item)->toArray();
+        $body = $this->fractal()->createData($item)->toArray();
         return $this->jsonapi($body, $status, $headers);
     }
 
@@ -74,7 +67,7 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     ): JsonApiResponse
     {
         $collection = (new Collection($collection, $transformer, $resourceKey));
-        $body = $this->fractal->createData($collection)->toArray();
+        $body = $this->fractal()->createData($collection)->toArray();
         return $this->jsonapi($body, $status, $headers);
     }
 
@@ -107,7 +100,7 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
             );
         }
 
-        $body = $this->fractal->createData($collection)->toArray();
+        $body = $this->fractal()->createData($collection)->toArray();
         return $this->jsonapi($body, $status, $headers);
     }
 
@@ -129,5 +122,29 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     protected function linkToResource(ResourceInterface $resource): string
     {
         return sprintf('%s/%s/%s', $this->request()->getBaseUrl(), $resource->getResourceKey(), $resource->getId());
+    }
+
+    protected function fractal(): Fractal
+    {
+        $request = $this->request();
+        $serializer = new JsonApiSerializer($request);
+        $scopeFactory = new ScopeFactory($request);
+
+        $fractal = new Fractal($scopeFactory);
+        $fractal->setSerializer($serializer);
+
+        if ($includes = $request->getInclude()) {
+            $fractal->parseIncludes($includes);
+        }
+
+        if ($excludes = $request->getExclude()) {
+            $fractal->parseExcludes($excludes);
+        }
+
+        if ($fields = $request->getFields()) {
+            $fractal->parseFieldsets($fields);
+        }
+
+        return $fractal;
     }
 }

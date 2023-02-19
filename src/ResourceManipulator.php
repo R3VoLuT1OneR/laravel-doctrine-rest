@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataMembersException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\UnknownAttributeException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\UnknownRelationException;
 
@@ -18,45 +19,44 @@ class ResourceManipulator
         protected EntityManager $em,
     ) {}
 
-    public function hydrateResource(ResourceInterface|string $resource, array $data, string $scope = "/data"): ResourceInterface
+    public function hydrateResource(
+        ResourceInterface $resource,
+        array $data,
+        string $scope = "/data",
+        bool $throwOnMissing = false
+    ): ResourceInterface
     {
-        if (!isset($data['attributes']) && !isset($data['relationships'])) {
+        if ($throwOnMissing && !isset($data['attributes']) && !isset($data['relationships'])) {
             throw new MissingDataMembersException($scope);
         }
 
-        if (is_string($resource)) {
-            $resource = new $resource;
-        }
-
         if (isset($data['attributes']) && is_array($data['attributes'])) {
-            $resource = $this->hydrateAttributes($resource, $data['attributes'], "$scope/attributes");
+            $this->hydrateAttributes($resource, $data['attributes'], "$scope/attributes");
         }
 
         if (isset($data['relationships']) && is_array($data['relationships'])) {
-            $resource = $this->hydrateRelationships($resource, $data['relationships'], "$scope/relationships");
+            $this->hydrateRelationships($resource, $data['relationships'], "$scope/relationships");
         }
 
         return $resource;
     }
 
-    public function hydrateAttributes(ResourceInterface $entity, array $attributes, string $scope): ResourceInterface
+    public function hydrateAttributes(ResourceInterface $resource, array $attributes, string $scope): void
     {
-        $metadata = $this->em->getClassMetadata(ClassUtils::getClass($entity));
+        $metadata = $this->em->getClassMetadata(ClassUtils::getClass($resource));
 
         foreach ($attributes as $name => $value) {
             if (!isset($metadata->reflFields[$name])) {
                 throw new UnknownAttributeException("$scope/$name");
             }
 
-            $this->setProperty($entity, $name, $value);
+            $this->setProperty($resource, $name, $value);
         }
-
-        return $entity;
     }
 
-    public function hydrateRelationships(ResourceInterface $entity, array $relationships, string $scope): ResourceInterface
+    public function hydrateRelationships(ResourceInterface $resource, array $relationships, string $scope): void
     {
-        $metadata = $this->em->getClassMetadata(ClassUtils::getClass($entity));
+        $metadata = $this->em->getClassMetadata(ClassUtils::getClass($resource));
 
         foreach ($relationships as $name => $data) {
             if (!isset($metadata->associationMappings[$name])) {
@@ -69,38 +69,36 @@ class ResourceManipulator
                 throw new MissingDataException("$scope/$name");
             }
 
+            // To-One relation update
             if (in_array($mapping['type'], [ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE])) {
-                $this->setProperty($entity, $name,
-                    $this->hydrateRelationData($mapping['targetEntity'], $data['data'], "$scope/$name")
+                $this->setProperty($resource, $name,
+                    $this->primaryDataToResource($mapping['targetEntity'], $data['data'], "$scope/$name")
                 );
             }
 
+            // To-Many relation update
             if (in_array($mapping['type'], [ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY])) {
-                $this->hydrateToManyRelation($entity, $name, $mapping['targetEntity'], $data['data'], "$scope/$name");
+                $this->hydrateToManyRelation($resource, $name, $mapping['targetEntity'], $data['data'], "$scope/$name");
             }
         }
-
-        return $entity;
     }
 
-    private function hydrateToManyRelation(object $entity, string $name, string $targetEntity, mixed $data, string $scope): void
+    public function hydrateToManyRelation(ResourceInterface $resource, string $name, string $targetEntity, mixed $data, string $scope): void
     {
         if (!is_array($data)) {
             throw new MissingDataException($scope);
         }
 
-        $this->setProperty($entity, $name,
+        $this->setProperty($resource, $name,
             new ArrayCollection(array_map(
-                function($item, $index) use ($targetEntity, $scope) {
-                    return $this->hydrateRelationData($targetEntity, $item, "$scope/$index");
-                },
+                fn ($item, $index) => $this->primaryDataToResource($targetEntity, $item, "$scope/$index"),
                 $data,
                 array_keys($data)
             ))
         );
     }
 
-    private function hydrateRelationData(string $class, mixed $data, string $scope): ?object
+    public function primaryDataToResource(string $class, mixed $data, string $scope): ?ResourceInterface
     {
         if (is_null($data)) {
             return null;
@@ -110,19 +108,28 @@ class ResourceManipulator
             return $data;
         }
 
-        if (is_scalar($data)) {
-            return $this->em->getReference($class, $data);
+        if (is_array($data) && isset($data['id']) && isset($data['type']) && is_string($data['type'])) {
+            if (ResourceRepository::classResourceKey($class) !== $data['type']) {
+                throw BadRequestException::create()
+                    ->error(400, ['pointer' => $scope], sprintf(
+                        'Provider relationships type "%s" is not matched with resource class.',
+                        $data['type']
+                    ));
+            }
+
+            if (null === ($resource = $this->em->find($class, $data['id']))) {
+                throw RestException::create('Resource is not found', 404)
+                    ->error(404, ['pointer' => $scope], sprintf(
+                        'Resource not found by primary data %s(%s)',
+                        $data['type'], $data['id']
+                    ));
+            }
+
+            return $resource;
         }
 
-        if (!is_array($data)) {
-            throw new MissingDataException($scope);
-        }
-
-        if (isset($data['id']) && isset($data['type'])) {
-            return $this->em->getReference($class, $data['id']);
-        } else {
-            return $this->hydrateResource(new $class, $data, "$scope/");
-        }
+        throw RestException::create('Wrong primary data provided.', 400)
+            ->error(400, ['pointer' => $scope], 'Wrong primary data provided.');
     }
 
     public function getProperty(ResourceInterface $resource, string $property): mixed
@@ -140,7 +147,7 @@ class ResourceManipulator
         return $resource->$getter();
     }
 
-    public function setProperty(object $resource, string $property, mixed $value): object
+    public function setProperty(ResourceInterface $resource, string $property, mixed $value): ResourceInterface
     {
         $setter = 'set' . ucfirst($property);
 
@@ -155,7 +162,7 @@ class ResourceManipulator
         return $resource->$setter($value);
     }
 
-    public static function addRelationItem(object $resource, string $field, mixed $item): object
+    public function addRelationItem(object $resource, string $field, mixed $item): object
     {
         $adder = 'add' . ucfirst($field);
 
@@ -170,7 +177,7 @@ class ResourceManipulator
         return $resource->$adder($item);
     }
 
-    public static function removeRelationItem(object $resource, string $field, mixed $item): object
+    public function removeRelationItem(ResourceInterface $resource, string $field, mixed $item): ResourceInterface
     {
         $remover = 'remove' . ucfirst($field);
 

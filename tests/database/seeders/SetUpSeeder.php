@@ -12,15 +12,15 @@ class SetUpSeeder
 {
     public function run(EntityManager $em)
     {
-        $em->persist($root = (new Role())
+        $em->persist($rootRole = (new Role())
             ->setName(Role::ROOT_NAME)
         );
 
-        $em->persist($user = (new Role())
+        $em->persist($userRole = (new Role())
             ->setName(Role::USER_NAME)
         );
 
-        $em->persist($moderator = (new Role())
+        $em->persist($moderatorRole = (new Role())
             ->setName(Role::MODERATOR_NAME)
         );
 
@@ -28,21 +28,23 @@ class SetUpSeeder
             ->setName('testing user1')
             ->setEmail('test1email@test.com')
             ->setPassword('secret')
-            ->addRoles($user)
+            ->addRoles($userRole)
         );
 
         $em->persist($root = (new User())
             ->setName('testing user2')
             ->setEmail('test2email@gmail.com')
             ->setPassword('secret')
-            ->addRoles($root)
+            ->addRoles($userRole)
+            ->addRoles($rootRole)
         );
 
         $em->persist($moderator = (new User())
             ->setName('testing user3')
             ->setEmail('test3email@test.com')
             ->setPassword('secret')
-            ->addRoles($moderator)
+            ->addRoles($userRole)
+            ->addRoles($moderatorRole)
         );
 
         $em->persist($page = (new Page())
