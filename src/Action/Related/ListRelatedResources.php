@@ -1,8 +1,8 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\ListsRelatedResources;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\ListsRelatedResourcesTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
@@ -11,7 +11,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 */
 class ListRelatedResources extends AbstractAction
 {
-    use ListsRelatedResources;
+    use ListsRelatedResourcesTrait;
 
     public function __construct(
         ResourceRepository           $repository,

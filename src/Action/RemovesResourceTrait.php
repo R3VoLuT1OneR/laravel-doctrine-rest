@@ -4,12 +4,12 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-trait RemovesResource
+trait RemovesResourceTrait
 {
-    use AuthorizeResource;
+    use AuthorizeResourceTrait;
 
     abstract protected function repository(): ResourceRepository;
 

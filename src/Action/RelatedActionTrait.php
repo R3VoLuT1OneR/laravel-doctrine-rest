@@ -1,4 +1,4 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;

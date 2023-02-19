@@ -1,12 +1,12 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Resource;
 
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\UpdatesResource;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\UpdatesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 class UpdateResource extends AbstractAction
 {
-    use UpdatesResource;
+    use UpdatesResourceTrait;
 
     public function handle(): JsonApiResponse
     {

@@ -2,15 +2,15 @@
 
 namespace Tests\App\Actions\User;
 
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\CreatesResource;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\CreatesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Entities\Role;
 use Tests\App\Entities\User;
 
 class CreateUserAction extends AbstractAction
 {
-    use CreatesResource;
+    use CreatesResourceTrait;
 
     public function handle(): JsonApiResponse
     {

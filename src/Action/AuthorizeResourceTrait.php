@@ -8,7 +8,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 /**
  * Used for verification access of the authenticated user to the resource.
  */
-trait AuthorizeResource
+trait AuthorizeResourceTrait
 {
     /**
      * Ability to check for access to the requested resource in the root level.

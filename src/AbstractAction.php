@@ -1,14 +1,9 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
+<?php namespace Pz\LaravelDoctrine\JsonApi;
 
 use Doctrine\ORM\EntityManager;
 use Illuminate\Auth\Access\AuthorizationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
-use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
-use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
-use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\ResourceManipulator;
-use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 /**
  * Any JSON:API endpoint handler should inherit this class.

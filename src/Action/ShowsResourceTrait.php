@@ -3,15 +3,15 @@
 namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 /**
  * Provides helpers needed for implementation of show action.
  */
-trait ShowsResource
+trait ShowsResourceTrait
 {
-    use AuthorizeResource;
+    use AuthorizeResourceTrait;
 
     abstract protected function repository(): ResourceRepository;
 

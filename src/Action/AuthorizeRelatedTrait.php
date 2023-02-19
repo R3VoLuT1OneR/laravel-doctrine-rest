@@ -2,7 +2,6 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Action;
 
-use Illuminate\Auth\Access\AuthorizationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
@@ -11,9 +10,9 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
  * Used for access verification to resource and related resources.
  * It's verifies that user have access to resource and related resource.
  */
-trait AuthorizeRelatedResource
+trait AuthorizeRelatedTrait
 {
-    use AuthorizeResource {
+    use AuthorizeResourceTrait {
         authorize as authorizeResource;
     }
 

@@ -2,11 +2,11 @@
 
 use Illuminate\Routing\Controller;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\CreateResource;
-use Pz\LaravelDoctrine\JsonApi\Action\RemoveResource;
-use Pz\LaravelDoctrine\JsonApi\Action\ListResources;
-use Pz\LaravelDoctrine\JsonApi\Action\ShowResource;
-use Pz\LaravelDoctrine\JsonApi\Action\UpdateResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\CreateResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\RemoveResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\ListResources;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\ShowResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\UpdateResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;

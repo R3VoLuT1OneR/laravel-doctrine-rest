@@ -1,19 +1,19 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToOne;
 
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedResource;
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsAction;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\RelationshipsActionTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 
 class UpdateRelationship extends AbstractAction
 {
      use RelatedActionTrait;
-     use AuthorizeRelatedResource;
-     use RelationshipsAction;
+     use AuthorizeRelatedTrait;
+     use RelationshipsActionTrait;
 
     public function __construct(
         ResourceRepository $repository,

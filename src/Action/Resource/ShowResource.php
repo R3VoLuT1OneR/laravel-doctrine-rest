@@ -1,9 +1,9 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action;
+namespace Pz\LaravelDoctrine\JsonApi\Action\Resource;
 
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\ShowsResource;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\ShowsResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 /**
@@ -14,7 +14,7 @@ use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
  */
 class ShowResource extends AbstractAction
 {
-    use ShowsResource;
+    use ShowsResourceTrait;
 
     public function handle(): JsonApiResponse
     {

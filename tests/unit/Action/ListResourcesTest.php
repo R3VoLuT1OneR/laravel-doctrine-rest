@@ -3,7 +3,7 @@
 namespace Tests\Action;
 
 use Illuminate\Support\Facades\Route;
-use Pz\LaravelDoctrine\JsonApi\Action\ListResources;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\ListResources;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Transformers\RoleTransformer;

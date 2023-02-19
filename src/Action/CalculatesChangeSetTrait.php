@@ -5,7 +5,7 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-trait CalculatesChangeSet
+trait CalculatesChangeSetTrait
 {
     private ?array $changeSet = null;
 

@@ -1,12 +1,12 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action;
+<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Resource;
 
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\RemovesResource;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RemovesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 class RemoveResource extends AbstractAction
 {
-    use RemovesResource;
+    use RemovesResourceTrait;
 
     public function handle(): JsonApiResponse
     {

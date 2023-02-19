@@ -8,7 +8,7 @@ use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\ArrayFilterParser;
 use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\BuilderChain\CriteriaChain;
 use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\SearchFilterParser;
 
-trait FiltersResource
+trait FiltersResourceTrait
 {
     /**
      * Field that can be filtered if filter is string.

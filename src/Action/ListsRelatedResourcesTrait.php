@@ -1,21 +1,21 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
+namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedResource;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResource;
-use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResource;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\RelatedActionTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
-trait ListsRelatedResources
+trait ListsRelatedResourcesTrait
 {
-    use FiltersResource;
-    use PaginatesResource;
-    use AuthorizeRelatedResource;
+    use FiltersResourceTrait;
+    use PaginatesResourceTrait;
+    use AuthorizeRelatedTrait;
     use RelatedActionTrait;
 
     /**

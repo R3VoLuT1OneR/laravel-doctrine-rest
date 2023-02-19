@@ -3,7 +3,7 @@
 namespace Tests\Action;
 
 use Illuminate\Support\Facades\Route;
-use Pz\LaravelDoctrine\JsonApi\Action\RemoveResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\RemoveResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Entities\User;

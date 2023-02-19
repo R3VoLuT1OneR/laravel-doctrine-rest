@@ -4,15 +4,15 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 use Pz\LaravelDoctrine\JsonApi\ResourceManipulator;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-trait CreatesResource
+trait CreatesResourceTrait
 {
-    use AuthorizeResource;
+    use AuthorizeResourceTrait;
 
     abstract protected function repository(): ResourceRepository;
     abstract protected function manipulator(): ResourceManipulator;

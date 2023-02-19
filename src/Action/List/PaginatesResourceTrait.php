@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 
-trait PaginatesResource
+trait PaginatesResourceTrait
 {
     abstract protected function request(): JsonApiRequest;
 

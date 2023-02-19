@@ -2,7 +2,7 @@
 
 namespace Tests\App\Rest\Actions;
 
-use Pz\LaravelDoctrine\JsonApi\Action\ShowResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Resource\ShowResource;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 

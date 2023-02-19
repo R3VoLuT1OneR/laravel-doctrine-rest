@@ -2,9 +2,9 @@
 
 namespace Tests\App\Actions\PageComment;
 
-use Pz\LaravelDoctrine\JsonApi\Action\Relationships\RelationshipsAction;
+use Pz\LaravelDoctrine\JsonApi\Action\RelationshipsActionTrait;
 
 class ShowRelatedUserRelationship extends ShowRelatedUser
 {
-    use RelationshipsAction;
+    use RelationshipsActionTrait;
 }

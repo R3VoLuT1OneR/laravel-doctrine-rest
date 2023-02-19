@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Validation;
  * If we want to enable and use this trait we need to install  "symfony/validator"
  * @deprecated
  */
-trait ValidatesResource
+trait ValidatesResourceTrait
 {
     abstract public function repository(): ResourceRepository;
 

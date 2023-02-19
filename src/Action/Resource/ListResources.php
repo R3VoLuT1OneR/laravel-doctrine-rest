@@ -1,9 +1,9 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action;
+namespace Pz\LaravelDoctrine\JsonApi\Action\Resource;
 
-use Pz\LaravelDoctrine\JsonApi\Action\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\ListsResources;
+use Pz\LaravelDoctrine\JsonApi\AbstractAction;
+use Pz\LaravelDoctrine\JsonApi\Action\ListsResourcesTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 
 /**
@@ -11,7 +11,7 @@ use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
  */
 class ListResources extends AbstractAction
 {
-    use ListsResources;
+    use ListsResourcesTrait;
 
     public function handle(): JsonApiResponse
     {

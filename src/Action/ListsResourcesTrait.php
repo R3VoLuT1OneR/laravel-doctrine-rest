@@ -4,16 +4,16 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Doctrine\ORM\QueryBuilder;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResource;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResource;
-use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResource;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-trait ListsResources
+trait ListsResourcesTrait
 {
-    use AuthorizeResource;
-    use FiltersResource;
-    use PaginatesResource;
+    use AuthorizeResourceTrait;
+    use FiltersResourceTrait;
+    use PaginatesResourceTrait;
 
     abstract protected function repository(): ResourceRepository;
 
