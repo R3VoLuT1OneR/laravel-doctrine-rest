@@ -6,8 +6,7 @@ use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Routing\Redirector;
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use League\Fractal\Manager as Fractal;
 use League\Fractal\Pagination\DoctrinePaginatorAdapter;
 use League\Fractal\Resource\Collection;
@@ -59,7 +58,7 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
     }
 
     public function collection(
-        array $collection,
+        array|DoctrineCollection $collection,
         string $resourceKey,
         AbstractTransformer $transformer,
         int                 $status = JsonApiResponse::HTTP_OK,

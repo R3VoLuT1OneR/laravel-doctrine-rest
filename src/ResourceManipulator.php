@@ -3,6 +3,7 @@
 namespace Pz\LaravelDoctrine\JsonApi;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -89,13 +90,33 @@ class ResourceManipulator
             throw new MissingDataException($scope);
         }
 
-        $this->setProperty($resource, $name,
-            new ArrayCollection(array_map(
-                fn ($item, $index) => $this->primaryDataToResource($targetEntity, $item, "$scope/$index"),
-                $data,
-                array_keys($data)
-            ))
-        );
+        $collection = new ArrayCollection(array_map(
+            fn ($item, $index) => $this->primaryDataToResource($targetEntity, $item, "$scope/$index"),
+            $data,
+            array_keys($data)
+        ));
+
+        $this->replaceResourceCollection($resource, $name, $collection);
+    }
+
+    public function replaceResourceCollection(ResourceInterface $resource, string $field, Collection $replace): void
+    {
+        /** @var Collection $current */
+        $current = $this->getProperty($resource, $field);
+
+        // Remove relationships that not exists anymore
+        foreach ($current as $currentResource) {
+            if (!$replace->contains($currentResource)) {
+                $this->removeRelationItem($resource, $field, $currentResource);
+            }
+        }
+
+        // Add new relationships
+        foreach ($replace as $replaceResource) {
+            if (!$current->contains($replaceResource)) {
+                $this->addRelationItem($resource, $field, $replaceResource);
+            }
+        }
     }
 
     public function primaryDataToResource(string $class, mixed $data, string $scope): ?ResourceInterface

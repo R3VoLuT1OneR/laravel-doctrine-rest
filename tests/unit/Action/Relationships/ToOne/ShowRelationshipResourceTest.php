@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Action\Related;
+namespace Tests\Action\Relationships\ToOne;
 
 use Illuminate\Support\Facades\Route;
 use Pz\LaravelDoctrine\JsonApi\Action\Related\ShowRelatedResource;
@@ -14,7 +14,7 @@ use Tests\App\Transformers\PagesTransformer;
 use Tests\App\Transformers\UserTransformer;
 use Tests\TestCase;
 
-class ShowRelatedRelationshipResourceTest extends TestCase
+class ShowRelationshipResourceTest extends TestCase
 {
     public function setUp(): void
     {

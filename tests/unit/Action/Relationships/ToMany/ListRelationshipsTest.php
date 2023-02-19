@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Action\Related;
+namespace Tests\Action\Relationships\ToMany;
 
 use Illuminate\Support\Facades\Route;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\ListRelationships;
@@ -10,7 +10,7 @@ use Tests\App\Entities\Role;
 use Tests\App\Transformers\RoleTransformer;
 use Tests\TestCase;
 
-class ListRelatedRelationshipsTest extends TestCase
+class ListRelationshipsTest extends TestCase
 {
     public function setUp(): void
     {

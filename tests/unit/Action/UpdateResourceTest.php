@@ -125,7 +125,9 @@ class UpdateResourceTest extends TestCase
                 ],
                 'relationships' => [
                     'roles' => [
-                        'data' => [],
+                        'data' => [
+                            ['type' => 'roles', 'id' => '2'],
+                        ],
                         'links' => [
                             'related' => '/users/1/roles',
                             'self' => '/users/1/relationships/roles'
@@ -135,12 +137,26 @@ class UpdateResourceTest extends TestCase
                 'links' => [
                     'self' => '/users/1'
                 ]
+            ],
+            'included' => [
+                [
+                    'id' => '2',
+                    'type' => 'roles',
+                    'attributes' => [
+                        'name' => 'User'
+                    ],
+                    'links' => [
+                        'self' => '/roles/2'
+                    ]
+                ]
             ]
         ]);
 
         $this->em()->clear();
         $user = $this->em()->find(User::class, 1);
-        $this->assertEmpty($user->getRoles()->toArray());
+
+        $this->assertCount(1, $user->getRoles()->toArray());
+        $this->assertTrue($user->getRoles()->contains(Role::user()));
 
         $this->actingAsRoot();
         $response = $this->patch('/users/1?include=roles', [

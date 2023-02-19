@@ -39,6 +39,16 @@ class JsonApiRequest extends FormRequest
 
     public function rules(): array
     {
+        return $this->dataRules() + $this->queryParamsRules();
+    }
+
+    public function dataRules(): array
+    {
+        return [];
+    }
+
+    public function queryParamsRules(): array
+    {
         return [
             'filter'        => 'sometimes|required',
             'include'       => 'sometimes|required',

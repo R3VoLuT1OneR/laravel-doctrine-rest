@@ -139,19 +139,6 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
         return $this->roles;
     }
 
-    public function setRoles(Collection|array $roles): static
-    {
-        foreach ($roles as $role) {
-            if (empty($role->getId())) {
-                throw (new ValidationException())
-                    ->validationError('roles', 'Can\'t add not persisted new role though User entity.');
-            }
-        }
-
-        $this->roles = is_array($roles) ? new ArrayCollection($roles) : $roles;
-        return $this;
-    }
-
     public function addRoles(Role $role): static
     {
         if (!$this->roles->contains($role)) {

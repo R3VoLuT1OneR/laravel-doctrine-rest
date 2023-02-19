@@ -1,5 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany;
 
+use Doctrine\Common\Collections\Collection;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
@@ -33,20 +34,21 @@ class UpdateRelationships extends AbstractAction
 
         $this->authorize($resource);
 
-        $relationships = new ArrayCollection();
-        foreach ($this->request()->getData() as $index => $relatedPrimaryData) {
-            $relatedResource = $this
-                ->relatedResourceRepository()
-                ->findByPrimaryData($relatedPrimaryData, "/data/$index");
+        $replaceRelationships = new ArrayCollection(array_map(
+            function (array $relatedPrimaryData, $index) {
+                return $this
+                    ->relatedResourceRepository()
+                    ->findByPrimaryData($relatedPrimaryData, "/data/$index");
+            },
+            $this->request()->getData(),
+            array_keys($this->request()->getData()),
+        ));
 
-            $relationships->add($relatedResource);
-        }
-
-        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $relationships);
+        $this->manipulator()->replaceResourceCollection($resource, $this->relatedFieldName(), $replaceRelationships);
         $this->repository()->em()->flush();
 
         return response()->collection(
-            $relationships->toArray(),
+            $this->manipulator()->getProperty($resource, $this->relatedFieldName()),
             $this->relatedResourceRepository()->getResourceKey(),
             $this->transformer()
         );

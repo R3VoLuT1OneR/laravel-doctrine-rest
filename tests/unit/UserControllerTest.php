@@ -41,44 +41,9 @@ class UserControllerTest extends TestCase
 
     public function test_user_related_role()
     {
-        $response = $this->postJson('/rest/users/1/relationships/roles', ['data' => [
-            ['id' => Role::USER, 'type' => Role::getResourceKey()]
-        ]]);
-        $response->assertStatus(201);
-        $response->assertJson([
-            'data' => [
-                ['id' => '1'],
-                ['id' => '2'],
-            ]
-        ]);
-        $response = $this->get('/rest/users/1/roles');
-        $response->assertStatus(200);
-        $response->assertJson([
-            'data' => [
-                ['id' => '1'],
-                ['id' => '2'],
-            ]
-        ]);
-
-        $response = $this->get('/rest/users/1/relationships/roles');
-        $response->assertStatus(200);
-        $response->assertExactJson([
-            'data' => [
-                ['id' => '1', 'type' => Role::getResourceKey(), 'links' => ['self' => '/role/1']],
-                ['id' => '2', 'type' => Role::getResourceKey(), 'links' => ['self' => '/role/2']],
-            ]
-        ]);
-
         $response = $this->patchJson('/rest/users/1/relationships/roles', ['data' => [
             ['id' => Role::USER, 'type' => Role::getResourceKey()],
         ]]);
-        $response->assertStatus(200);
-        $response->assertJson([
-            'data' => [
-                ['id' => '2'],
-            ]
-        ]);
-        $response = $this->get('/rest/users/1/roles');
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [
@@ -93,75 +58,5 @@ class UserControllerTest extends TestCase
         $response = $this->get('/rest/users/1/roles');
         $response->assertStatus(200);
         $response->assertJson(['data' => null]);
-    }
-
-    public function test_user_roles_relationship()
-    {
-        $queryString = http_build_query(['include' => 'roles']);
-        $response = $this->get("/rest/users?$queryString");
-        $response->assertStatus(200);
-        $response->assertJson([
-            'data' => [
-                [
-                    'id' => 1,
-                    'relationships' => [
-                        'roles' => [
-                            'links' => [
-                                'self' => '/user/1/relationships/roles',
-                                'related' => '/user/1/roles',
-                            ],
-                            'data' => [
-                                [
-                                    'id' => Role::ROOT,
-                                    'type' => Role::getResourceKey(),
-                                ]
-                            ]
-                        ]
-                    ],
-                ],
-                [
-                    'id' => 2,
-                    'relationships' => [
-                        'roles' => [
-                            'data' => [
-                                [
-                                    'id' => Role::USER,
-                                    'type' => Role::getResourceKey(),
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    'id' => 3,
-                    'relationships' => [
-                        'roles' => [
-                            'data' => [
-                                [
-                                    'id' => Role::USER,
-                                    'type' => Role::getResourceKey(),
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'included' => [
-                [
-                    'id' => Role::ROOT,
-                    'type' => Role::getResourceKey(),
-                    'attributes' => [
-                        'name' => Role::ROOT_NAME,
-                    ]
-                ],
-                [
-                    'id' => Role::USER,
-                    'type' => Role::getResourceKey(),
-                    'attributes' => [
-                        'name' => Role::USER_NAME,
-                    ]
-                ],
-            ]
-        ]);
     }
 }

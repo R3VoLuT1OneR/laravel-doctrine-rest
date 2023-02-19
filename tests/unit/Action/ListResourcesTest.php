@@ -110,7 +110,7 @@ class ListResourcesTest extends TestCase
     {
         $this->actingAsRoot();
 
-        $this->get('/users')
+        $this->get('/users?include=roles')
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
@@ -123,6 +123,9 @@ class ListResourcesTest extends TestCase
                         ],
                         'relationships' => [
                             'roles' => [
+                                'data' => [
+                                    ['type' => 'roles', 'id' => '2'],
+                                ],
                                 'links' => [
                                     'related' => '/users/1/roles',
                                     'self' => '/users/1/relationships/roles'
@@ -142,6 +145,10 @@ class ListResourcesTest extends TestCase
                         ],
                         'relationships' => [
                             'roles' => [
+                                'data' => [
+                                    ['type' => 'roles', 'id' => '1'],
+                                    ['type' => 'roles', 'id' => '2'],
+                                ],
                                 'links' => [
                                     'related' => '/users/2/roles',
                                     'self' => '/users/2/relationships/roles'
@@ -161,6 +168,10 @@ class ListResourcesTest extends TestCase
                         ],
                         'relationships' => [
                             'roles' => [
+                                'data' => [
+                                    ['type' => 'roles', 'id' => '2'],
+                                    ['type' => 'roles', 'id' => '3'],
+                                ],
                                 'links' => [
                                     'related' => '/users/3/roles',
                                     'self' => '/users/3/relationships/roles'
@@ -170,6 +181,38 @@ class ListResourcesTest extends TestCase
                         'links' => [
                             'self' => '/users/3'
                         ],
+                    ],
+                ],
+                'included' => [
+                    [
+                        'id' => '2',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'User',
+                        ],
+                        'links' => [
+                            'self' => '/roles/2'
+                        ]
+                    ],
+                    [
+                        'id' => '1',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'Root',
+                        ],
+                        'links' => [
+                            'self' => '/roles/1'
+                        ]
+                    ],
+                    [
+                        'id' => '3',
+                        'type' => 'roles',
+                        'attributes' => [
+                            'name' => 'Moderator',
+                        ],
+                        'links' => [
+                            'self' => '/roles/3'
+                        ]
                     ],
                 ]
             ]);
