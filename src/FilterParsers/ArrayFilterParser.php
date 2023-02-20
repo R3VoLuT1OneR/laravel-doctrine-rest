@@ -60,7 +60,7 @@ class ArrayFilterParser extends AbstractFilterParser
 
             if (!method_exists($criteria->expr(), $operator)) {
                 throw (new BadRequestException('Unknown filter operator.'))
-                    ->error('filter-array-unknown-operator', ['field' => $field, 'filter' => $value], 'Unknown operator');
+                    ->error('filter-array-unknown-operator', ['field' => $field, 'filter' => $value], 'Unknown operator.');
             }
 
             $criteria->andWhere(

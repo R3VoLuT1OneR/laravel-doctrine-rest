@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class BadRequestException extends RestException
+class BadRequestException extends JsonApiException
 {
     const ERROR_MESSAGE = 'Bad request.';
 

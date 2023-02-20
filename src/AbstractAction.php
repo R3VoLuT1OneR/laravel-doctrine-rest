@@ -3,7 +3,7 @@
 use Doctrine\ORM\EntityManager;
 use Illuminate\Auth\Access\AuthorizationException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\ForbiddenException;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\JsonApiException;
 
 /**
  * Any JSON:API endpoint handler should inherit this class.
@@ -40,7 +40,7 @@ abstract class AbstractAction
             return response()->exception(new ForbiddenException(
                 previous: $e
             ));
-        } catch (RestException $e) {
+        } catch (JsonApiException $e) {
             return response()->exception($e);
         }
     }

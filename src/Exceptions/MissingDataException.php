@@ -2,9 +2,8 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class MissingDataException extends RestException
+class MissingDataException extends JsonApiException
 {
-    const ERROR_CODE = 'missing-data';
     const ERROR_MESSAGE = 'Data is missing or not an array on pointer level.';
 
     /**
@@ -14,6 +13,6 @@ class MissingDataException extends RestException
     {
         parent::__construct(static::ERROR_MESSAGE, static::HTTP_BAD_REQUEST);
 
-        $this->error(static::ERROR_CODE, ['pointer' => $pointer], static::ERROR_MESSAGE);
+        $this->error(static::HTTP_BAD_REQUEST, ['pointer' => $pointer], static::ERROR_MESSAGE);
     }
 }

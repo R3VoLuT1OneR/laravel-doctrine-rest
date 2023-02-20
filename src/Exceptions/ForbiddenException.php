@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class ForbiddenException extends RestException
+class ForbiddenException extends JsonApiException
 {
     public function __construct(
         $message = 'This action is unauthorized.',

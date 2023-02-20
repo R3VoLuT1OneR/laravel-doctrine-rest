@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class NotFoundException extends RestException
+class NotFoundException extends JsonApiException
 {
     const ERROR_CODE = 'resource-not-found';
     const ERROR_MESSAGE = 'Resource type "%s" and id "%s" is not found.';

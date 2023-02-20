@@ -11,7 +11,7 @@ use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\NotFoundException;
 
 use InvalidArgumentException;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\JsonApiException;
 use UnexpectedValueException;
 
 class ResourceRepository extends EntityRepository
@@ -92,7 +92,7 @@ class ResourceRepository extends EntityRepository
         }
 
         if (null === ($resource = $this->find($data['id']))) {
-            throw RestException::create('Resource is not found', 404)
+            throw JsonApiException::create('Resource is not found', 404)
                 ->error(404, ['pointer' => $scope], sprintf(
                     'Resource not found by primary data %s(%s)',
                     $data['type'], $data['id']

@@ -1,7 +1,7 @@
 <?php
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
-class UnprocessableException extends RestException
+class UnprocessableException extends JsonApiException
 {
     const ERROR_CODE = 'unprocessable';
     const ERROR_MESSAGE = 'Unprocessable error.';

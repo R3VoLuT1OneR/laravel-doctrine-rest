@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class MissingDataMembersException extends RestException
+class MissingDataMembersException extends JsonApiException
 {
     const ERROR_CODE = 'missing-data-members';
     const ERROR_MESSAGE = 'Missing or not array `/data/attributes` or `/data/relationships` at pointer level.';

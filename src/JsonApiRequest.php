@@ -6,16 +6,13 @@ use Doctrine\Common\Collections\Criteria;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\JsonApiException;
 
 /**
  * TODO: Compare with last version of PZ/DoctrinRest and add improved stuff here.
  */
 class JsonApiRequest extends FormRequest
 {
-    const KEY_DATA = 'data';
-
     const QUERY_KEY_FIELDS = 'fields';
     const QUERY_KEY_FILTER = 'filter';
     const QUERY_KEY_SORT = 'sort';
@@ -74,7 +71,7 @@ class JsonApiRequest extends FormRequest
         $validated = $this->validated();
 
         if (!isset($validated['data'])) {
-            throw RestException::create('Not valid data', 400)
+            throw JsonApiException::create('Not valid data', 400)
                 ->error(400, ['pointer' => '/data'], 'Not found any validated data.');
         }
 

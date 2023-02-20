@@ -33,7 +33,8 @@
         "laravel-doctrine/migrations": "^2.3",
         "doctrine/annotations": "^1.13",
         "laravel/laravel": "^8.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.5"
     },
     "require": {
         "league/fractal": "^0.20.1"

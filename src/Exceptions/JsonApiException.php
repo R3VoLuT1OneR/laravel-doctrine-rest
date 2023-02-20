@@ -1,6 +1,6 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class RestException extends \Exception implements RestExceptionInterface
+class JsonApiException extends \Exception implements RestExceptionInterface
 {
     public function __construct(
         $message = '',

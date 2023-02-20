@@ -2,14 +2,11 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class UnknownAttributeException extends RestException
+class UnknownAttributeException extends JsonApiException
 {
-    const ERROR_CODE = 'unknown-attribute';
-    const ERROR_MESSAGE = 'Unknown attribute.';
-
     public function __construct(string $pointer)
     {
-        parent::__construct(static::ERROR_MESSAGE, static::HTTP_BAD_REQUEST);
-        $this->error(static::ERROR_CODE, ['pointer' => $pointer], static::ERROR_MESSAGE);
+        parent::__construct(sprintf("Unknown attributes: %s.", $pointer), static::HTTP_BAD_REQUEST);
+        $this->error(static::HTTP_BAD_REQUEST, ['pointer' => $pointer], 'Unknown attribute.');
     }
 }

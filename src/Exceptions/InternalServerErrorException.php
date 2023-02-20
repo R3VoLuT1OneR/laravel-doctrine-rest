@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi\Exceptions;
 
-class InternalServerErrorException extends RestException
+class InternalServerErrorException extends JsonApiException
 {
     const ERROR_CODE = 'internal';
     const ERROR_MESSAGE = 'Internal Server Error';

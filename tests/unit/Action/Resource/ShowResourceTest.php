@@ -116,6 +116,8 @@ class ShowResourceTest extends TestCase
     {
         $this->actingAsRoot();
 
+        $this->get('/users/2232')->assertStatus(404);
+
         $this->get('/users/1')
             ->assertStatus(200)
             ->assertExactJson([
@@ -193,6 +195,8 @@ class ShowResourceTest extends TestCase
     {
         $this->actingAsRoot();
 
+        $this->get('/roles/2232')->assertStatus(404);
+
         $this->get('/roles/1')
             ->assertStatus(200)
             ->assertExactJson([
@@ -243,6 +247,8 @@ class ShowResourceTest extends TestCase
 
     public function testShowPageResponse()
     {
+        $this->get('/pages/2232')->assertStatus(404);
+
         $this->get('/pages/1')
             ->assertStatus(200)
             ->assertExactJson([
@@ -270,6 +276,8 @@ class ShowResourceTest extends TestCase
 
     public function testShowPageCommentsResponse()
     {
+        $this->get('/pageComments/2232')->assertStatus(404);
+
         $this->get('/pageComments/1')
             ->assertStatus(200)
             ->assertExactJson([

@@ -2,7 +2,7 @@
 
 namespace Pz\LaravelDoctrine\JsonApi;
 
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\JsonApiException;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -108,7 +108,7 @@ class ResponseFactory extends \Illuminate\Routing\ResponseFactory
         return $this->jsonapi(['data' => null], $status, $headers);
     }
 
-    public function exception(RestException $e): JsonApiResponse
+    public function exception(JsonApiException $e): JsonApiResponse
     {
         return $this->jsonapi(['errors' => $e->errors()], $e->getCode());
     }

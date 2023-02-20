@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\MissingDataMembersException;
-use Pz\LaravelDoctrine\JsonApi\Exceptions\RestException;
+use Pz\LaravelDoctrine\JsonApi\Exceptions\JsonApiException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\UnknownAttributeException;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\UnknownRelationException;
 
@@ -139,7 +139,7 @@ class ResourceManipulator
             }
 
             if (null === ($resource = $this->em->find($class, $data['id']))) {
-                throw RestException::create('Resource is not found', 404)
+                throw JsonApiException::create('Resource is not found', 404)
                     ->error(404, ['pointer' => $scope], sprintf(
                         'Resource not found by primary data %s(%s)',
                         $data['type'], $data['id']
@@ -149,7 +149,7 @@ class ResourceManipulator
             return $resource;
         }
 
-        throw RestException::create('Wrong primary data provided.', 400)
+        throw JsonApiException::create('Wrong primary data provided.', 400)
             ->error(400, ['pointer' => $scope], 'Wrong primary data provided.');
     }
 
@@ -174,7 +174,7 @@ class ResourceManipulator
 
         if (!method_exists($resource, $setter)) {
             throw (new BadRequestException())->error(
-                'missing-setter',
+                400,
                 ['setter' => sprintf('%s::%s', ClassUtils::getClass($resource), $setter)],
                 'Missing field setter.'
             );
