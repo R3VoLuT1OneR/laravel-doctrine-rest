@@ -1,6 +1,6 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action\List;
+namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 

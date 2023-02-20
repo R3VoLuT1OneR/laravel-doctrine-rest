@@ -10,11 +10,11 @@ use LaravelDoctrine\Migrations\MigrationsServiceProvider;
 use LaravelDoctrine\ORM\DoctrineServiceProvider;
 use Tests\App\Entities\User;
 use Tests\App\Policies\UserPolicy;
-use Tests\Helpers\WithEntityManager;
+use Tests\Helpers\WithEntityManagerTrait;
 
 class TestCase extends LaravelTestCase
 {
-    use WithEntityManager;
+    use WithEntityManagerTrait;
 
     protected Kernel $kernel;
 

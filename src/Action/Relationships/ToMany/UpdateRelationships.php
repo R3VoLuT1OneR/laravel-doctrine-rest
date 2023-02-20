@@ -4,7 +4,7 @@ use Doctrine\Common\Collections\Collection;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelationshipsActionTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class UpdateRelationships extends AbstractAction
 {
     use RelatedActionTrait;
-    use AuthorizeRelatedTrait;
+    use AuthorizeRelationshipsTrait;
     use RelationshipsActionTrait;
 
     public function __construct(
@@ -61,6 +61,6 @@ class UpdateRelationships extends AbstractAction
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::UPDATE_RELATED_RELATIONSHIPS;
+        return AbilitiesInterface::UPDATE_RELATIONSHIPS;
     }
 }

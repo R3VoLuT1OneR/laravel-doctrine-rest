@@ -7,8 +7,8 @@ use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\CreateRelationships;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\UpdateRelationships;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
-use Tests\App\Actions\User\Relationships\CreateRoleRelationshipsRequest;
-use Tests\App\Actions\User\Relationships\UpdateRoleRelationshipsRequest;
+use Tests\App\Actions\User\Relationships\CreateUserRolesRequest;
+use Tests\App\Actions\User\Relationships\UpdateUserRolesRequest;
 use Tests\App\Entities\Role;
 use Tests\App\Transformers\RoleTransformer;
 use Tests\TestCase;
@@ -19,7 +19,7 @@ class UpdateRelationshipsTest extends TestCase
     {
         parent::setUp();
 
-        Route::patch('/users/{id}/relationships/roles', function (UpdateRoleRelationshipsRequest $request) {
+        Route::patch('/users/{id}/relationships/roles', function (UpdateUserRolesRequest $request) {
             return (
                 new UpdateRelationships(
                     $this->usersRepo(),

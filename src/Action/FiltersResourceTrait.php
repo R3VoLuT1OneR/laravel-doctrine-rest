@@ -1,12 +1,12 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action\List;
+namespace Pz\LaravelDoctrine\JsonApi\Action;
 
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\ArrayFilterParser;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\BuilderChain\CriteriaChain;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\SearchFilterParser;
+use Pz\LaravelDoctrine\JsonApi\FilterParsers\ArrayFilterParser;
+use Pz\LaravelDoctrine\JsonApi\FilterParsers\BuilderChain\CriteriaChain;
+use Pz\LaravelDoctrine\JsonApi\FilterParsers\SearchFilterParser;
 
 trait FiltersResourceTrait
 {

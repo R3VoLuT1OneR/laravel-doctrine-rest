@@ -5,7 +5,7 @@ namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
@@ -13,7 +13,7 @@ use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 class RemoveRelationships extends AbstractAction
 {
     use RelatedActionTrait;
-    use AuthorizeRelatedTrait;
+    use AuthorizeRelationshipsTrait;
 
     public function __construct(
         ResourceRepository $repository,
@@ -50,6 +50,6 @@ class RemoveRelationships extends AbstractAction
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::REMOVE_RELATED_RELATIONSHIPS;
+        return AbilitiesInterface::REMOVE_RELATIONSHIPS;
     }
 }

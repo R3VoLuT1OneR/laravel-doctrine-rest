@@ -2,10 +2,10 @@
 
 namespace Tests\App\Actions\PageComment;
 
-use Pz\LaravelDoctrine\JsonApi\Action\Related\ShowRelatedResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToOne\ShowRelated;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
-class ShowRelatedPage extends ShowRelatedResource
+class ShowRelatedPage extends ShowRelated
 {
     /**
      * Anyone can the page of the comment.

@@ -5,8 +5,8 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 use Doctrine\ORM\QueryBuilder;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeResourceTrait;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResourceTrait;
-use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\FiltersResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\PaginatesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
 trait ListsResourcesTrait

@@ -35,7 +35,14 @@ class UserPolicy
         return false;
     }
 
-    public function listRelated(User $user, User $resource, string $relatedResourceClass): bool
+    public function removeRelationships(User $user, User $resource, string $relationshipClass): bool
+    {
+        return match ($relationshipClass) {
+            default => false
+        };
+    }
+
+    public function listRelationships(User $user, User $resource, string $relatedResourceClass): bool
     {
         return match ($relatedResourceClass) {
             Role::class => $user === $resource,

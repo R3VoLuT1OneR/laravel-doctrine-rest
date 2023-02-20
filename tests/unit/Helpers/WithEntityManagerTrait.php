@@ -13,7 +13,7 @@ use Tests\App\Repositories\RolesRepository;
 use Tests\App\Repositories\TagsRepository;
 use Tests\App\Repositories\UsersRepository;
 
-trait WithEntityManager
+trait WithEntityManagerTrait
 {
     protected EntityManager $em;
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
+namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToOne;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceManipulator;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 
-class ShowRelatedResource extends AbstractAction
+class ShowRelated extends AbstractAction
 {
     use RelatedActionTrait;
-    use AuthorizeRelatedTrait;
+    use AuthorizeRelationshipsTrait;
 
     public function __construct(
         ResourceRepository $repository,
@@ -45,6 +45,6 @@ class ShowRelatedResource extends AbstractAction
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::SHOW_RELATED_RESOURCE;
+        return AbilitiesInterface::SHOW_RELATIONSHIPS;
     }
 }

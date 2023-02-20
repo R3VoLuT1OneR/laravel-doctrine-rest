@@ -1,4 +1,6 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\Related;
+<?php
+
+namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany;
 
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
@@ -9,7 +11,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 /**
 * Action for providing collection (list or array) of data with API.
 */
-class ListRelatedResources extends AbstractAction
+class ListRelated extends AbstractAction
 {
     use ListsRelatedResourcesTrait;
 

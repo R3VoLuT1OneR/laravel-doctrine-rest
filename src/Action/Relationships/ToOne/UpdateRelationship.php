@@ -1,7 +1,7 @@
 <?php namespace Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToOne;
 
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelationshipsActionTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
@@ -12,7 +12,7 @@ use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 class UpdateRelationship extends AbstractAction
 {
      use RelatedActionTrait;
-     use AuthorizeRelatedTrait;
+     use AuthorizeRelationshipsTrait;
      use RelationshipsActionTrait;
 
     public function __construct(
@@ -35,11 +35,11 @@ class UpdateRelationship extends AbstractAction
             return response()->null();
         }
 
-        $relatedResource = $this->relatedResourceRepository()->findByPrimaryData($data);
-        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $relatedResource);
+        $relationshipResource = $this->relatedResourceRepository()->findByPrimaryData($data);
+        $this->manipulator()->setProperty($resource, $this->relatedFieldName(), $relationshipResource);
         $this->repository()->em()->flush();
 
-        return response()->item($relatedResource, $this->transformer());
+        return response()->item($relationshipResource, $this->transformer());
     }
 
     public function resourceAccessAbility(): string
@@ -49,6 +49,6 @@ class UpdateRelationship extends AbstractAction
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::UPDATE_RELATED_RELATIONSHIPS;
+        return AbilitiesInterface::UPDATE_RELATIONSHIPS;
     }
 }

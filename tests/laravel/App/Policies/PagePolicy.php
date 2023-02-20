@@ -3,6 +3,7 @@
 namespace Tests\App\Policies;
 
 use Tests\App\Entities\Page;
+use Tests\App\Entities\Role;
 use Tests\App\Entities\User;
 
 class PagePolicy
@@ -12,7 +13,15 @@ class PagePolicy
         return true;
     }
 
-    public function showRelated(User $user, Page $page, string $relatedResourceClass): bool
+    public function updateRelationships(User $user, Page $page, string $relationshipClass): bool
+    {
+        return match ($relationshipClass) {
+            User::class => $user->getRoles()->contains(Role::moderator()),
+            default => false,
+        };
+    }
+
+    public function showRelationships(User $user, Page $page, string $relatedResourceClass): bool
     {
         return match ($relatedResourceClass) {
             User::class => true,

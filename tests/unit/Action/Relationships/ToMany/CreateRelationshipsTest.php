@@ -5,7 +5,7 @@ namespace Tests\Action\Relationships\ToMany;
 use Illuminate\Support\Facades\Route;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\CreateRelationships;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
-use Tests\App\Actions\User\Relationships\CreateRoleRelationshipsRequest;
+use Tests\App\Actions\User\Relationships\CreateUserRolesRequest;
 use Tests\App\Entities\Role;
 use Tests\App\Transformers\RoleTransformer;
 use Tests\TestCase;
@@ -16,7 +16,7 @@ class CreateRelationshipsTest extends TestCase
     {
         parent::setUp();
 
-        Route::post('/users/{id}/relationships/roles', function (CreateRoleRelationshipsRequest $request) {
+        Route::post('/users/{id}/relationships/roles', function (CreateUserRolesRequest $request) {
             return (
                 new CreateRelationships(
                     $this->usersRepo(),

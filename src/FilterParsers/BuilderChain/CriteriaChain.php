@@ -1,4 +1,4 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\BuilderChain;
+<?php namespace Pz\LaravelDoctrine\JsonApi\FilterParsers\BuilderChain;
 
 use Doctrine\Common\Collections\Criteria;
 

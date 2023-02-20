@@ -3,7 +3,7 @@
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
 use Pz\LaravelDoctrine\JsonApi\AbstractAction;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelationshipsActionTrait;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
@@ -12,7 +12,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
 class CreateRelationships extends AbstractAction
 {
     use RelatedActionTrait;
-    use AuthorizeRelatedTrait;
+    use AuthorizeRelationshipsTrait;
     use RelationshipsActionTrait;
 
     public function __construct(
@@ -59,6 +59,6 @@ class CreateRelationships extends AbstractAction
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::CREATE_RELATED_RELATIONSHIPS;
+        return AbilitiesInterface::CREATE_RELATIONSHIPS;
     }
 }

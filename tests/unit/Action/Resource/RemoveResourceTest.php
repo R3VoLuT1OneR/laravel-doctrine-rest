@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Action;
+namespace Tests\Action\Resource;
 
 use Illuminate\Support\Facades\Route;
 use Pz\LaravelDoctrine\JsonApi\Action\Resource\RemoveResource;

@@ -19,4 +19,4 @@ You can find all the testing documentation in the [./tests](./tests) folder.
 ## Roadmap
   - [ ] Create default global error handler or write down documentation how to create such one.
         How to handle missing route\endpoint 404 and internal 500 errors.
-        
+  - [ ] Move authorization logic to the "FormRequest::authorize" action as this is the way Laravel want's to authorize requests.

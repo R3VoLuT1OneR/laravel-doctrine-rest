@@ -5,9 +5,9 @@ namespace Pz\LaravelDoctrine\JsonApi\Action;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Pz\LaravelDoctrine\JsonApi\AbilitiesInterface;
-use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelatedTrait;
-use Pz\LaravelDoctrine\JsonApi\Action\List\FiltersResourceTrait;
-use Pz\LaravelDoctrine\JsonApi\Action\List\PaginatesResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\AuthorizeRelationshipsTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\FiltersResourceTrait;
+use Pz\LaravelDoctrine\JsonApi\Action\PaginatesResourceTrait;
 use Pz\LaravelDoctrine\JsonApi\Action\RelatedActionTrait;
 use Pz\LaravelDoctrine\JsonApi\ResourceInterface;
 
@@ -15,7 +15,7 @@ trait ListsRelatedResourcesTrait
 {
     use FiltersResourceTrait;
     use PaginatesResourceTrait;
-    use AuthorizeRelatedTrait;
+    use AuthorizeRelationshipsTrait;
     use RelatedActionTrait;
 
     /**
@@ -40,6 +40,6 @@ trait ListsRelatedResourcesTrait
 
     public function relatedResourceAccessAbility(): string
     {
-        return AbilitiesInterface::LIST_RELATED_RESOURCES;
+        return AbilitiesInterface::LIST_RELATIONSHIPS;
     }
 }

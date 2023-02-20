@@ -55,17 +55,17 @@ class Role implements ResourceInterface, RoleContract
 
     public static function root(): static
     {
-        return EntityManager::find(static::class, static::ROOT);
+        return EntityManager::getReference(static::class, static::ROOT);
     }
 
     public static function user(): static
     {
-        return EntityManager::find(static::class, static::USER);
+        return EntityManager::getReference(static::class, static::USER);
     }
 
     public static function moderator(): static
     {
-        return EntityManager::find(static::class, static::MODERATOR);
+        return EntityManager::getReference(static::class, static::MODERATOR);
     }
 
     public function getId(): ?int

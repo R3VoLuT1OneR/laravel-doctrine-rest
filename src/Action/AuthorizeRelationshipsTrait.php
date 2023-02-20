@@ -10,7 +10,7 @@ use Pz\LaravelDoctrine\JsonApi\ResourceRepository;
  * Used for access verification to resource and related resources.
  * It's verifies that user have access to resource and related resource.
  */
-trait AuthorizeRelatedTrait
+trait AuthorizeRelationshipsTrait
 {
     use AuthorizeResourceTrait {
         authorize as authorizeResource;

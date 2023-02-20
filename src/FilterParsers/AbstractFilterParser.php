@@ -1,6 +1,6 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers;
+<?php namespace Pz\LaravelDoctrine\JsonApi\FilterParsers;
 
-use Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers\BuilderChain\MemberInterface;
+use Pz\LaravelDoctrine\JsonApi\FilterParsers\BuilderChain\MemberInterface;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Doctrine\Common\Collections\Criteria;
 

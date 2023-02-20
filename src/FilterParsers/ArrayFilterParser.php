@@ -1,4 +1,4 @@
-<?php namespace Pz\LaravelDoctrine\JsonApi\Action\List\FilterParsers;
+<?php namespace Pz\LaravelDoctrine\JsonApi\FilterParsers;
 
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\Exceptions\BadRequestException;

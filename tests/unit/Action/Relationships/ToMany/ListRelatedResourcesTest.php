@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Action\Related;
+namespace Tests\Action\Relationships\ToMany;
 
 use Illuminate\Support\Facades\Route;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\ListRelatedResources;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\ListRelated;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Entities\Role;
@@ -18,7 +18,7 @@ class ListRelatedResourcesTest extends TestCase
 
         Route::get('/users/{id}/roles', function (JsonApiRequest $request) {
             return (
-                new ListRelatedResources(
+                new ListRelated(
                     $this->usersRepo(),
                     $this->rolesRepo(),
                     RoleTransformer::create(),

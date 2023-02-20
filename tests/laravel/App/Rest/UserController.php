@@ -2,7 +2,7 @@
 
 use Doctrine\ORM\EntityManager;
 use Pz\LaravelDoctrine\JsonApi\AbstractTransformer;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\ListRelatedResources;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\ListRelated;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\ListRelationships;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\CreateRelationships;
 use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToMany\RemoveRelationships;
@@ -47,7 +47,7 @@ class UserController extends AbstractController
 
     public function relatedRoles(JsonApiRequest $request): JsonApiResponse
     {
-        $action = new ListRelatedResources(
+        $action = new ListRelated(
             $this->repository(), 'users',
             ResourceRepository::create($this->em, Role::class),
             new RoleTransformer()

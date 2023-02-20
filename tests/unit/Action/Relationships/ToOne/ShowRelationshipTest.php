@@ -3,7 +3,7 @@
 namespace Tests\Action\Relationships\ToOne;
 
 use Illuminate\Support\Facades\Route;
-use Pz\LaravelDoctrine\JsonApi\Action\Related\ShowRelatedResource;
+use Pz\LaravelDoctrine\JsonApi\Action\Relationships\ToOne\ShowRelated;
 use Pz\LaravelDoctrine\JsonApi\JsonApiRequest;
 use Pz\LaravelDoctrine\JsonApi\JsonApiResponse;
 use Tests\App\Actions\PageComment\ShowRelatedPage;
@@ -14,7 +14,7 @@ use Tests\App\Transformers\PagesTransformer;
 use Tests\App\Transformers\UserTransformer;
 use Tests\TestCase;
 
-class ShowRelationshipResourceTest extends TestCase
+class ShowRelationshipTest extends TestCase
 {
     public function setUp(): void
     {
