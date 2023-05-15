@@ -1,4 +1,4 @@
-FROM php:7.4-cli-alpine
+FROM php:8.1-cli-alpine
 
 RUN apk add git zip unzip libzip-dev curl-dev && docker-php-ext-install zip curl
 
