@@ -38,7 +38,9 @@ class TestCase extends LaravelTestCase
         $app->register(DoctrineServiceProvider::class);
         $app->register(MigrationsServiceProvider::class);
 
-        $this->kernel->call('doctrine:migrations:refresh');
+        $this->kernel->call('doctrine:migrations:refresh', [
+            '--no-interaction' => true,
+        ]);
 
         $this->em = $app->make(EntityManager::class);
 
