@@ -12,10 +12,7 @@ use Illuminate\Http\Response;
 class UserControllerTest extends TestCase
 {
 
-    /**
-     * @var User
-     */
-    protected $user;
+    protected User $user;
 
     public function setUp(): void
     {
@@ -581,7 +578,7 @@ class UserControllerTest extends TestCase
         $this->get('/rest/users?filter=@test.com')
             ->assertSuccessful()
             ->assertJson([
-                'data' => [['id' => 1], ['id' => 3]],
+                'data' => [['id' => '1'], ['id' => '3']],
             ]);
 
         $this->get('/rest/users?filter=@test.com&page[limit]=1')

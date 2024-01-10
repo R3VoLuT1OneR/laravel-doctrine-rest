@@ -18,10 +18,10 @@ Use `docker-compose` for running PHPUnit tests even if your local PHP runtime ve
 
 To install dependencies and run the tests
 ```shell
-docker-composer run php
+docker compose run php
 ```
 
 To get shell into Docker environment run
 ```shell
-docker-compose run php sh
+docker compose run php sh
 ```
