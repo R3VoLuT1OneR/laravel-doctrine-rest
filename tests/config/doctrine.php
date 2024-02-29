@@ -31,7 +31,7 @@ return [
             ],
             'repository'    => Doctrine\ORM\EntityRepository::class,
             'proxies'       => [
-                'namespace'     => false,
+                'namespace'     => 'DoctrineProxies',
                 'path'          => storage_path('proxies'),
                 'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false)
             ],
@@ -107,9 +107,7 @@ return [
     | Create a custom or override a Doctrine Type
     |--------------------------------------------------------------------------
     */
-    'custom_types'               => [
-        'json' => LaravelDoctrine\ORM\Types\Json::class
-    ],
+    'custom_types'               => [],
     /*
     |--------------------------------------------------------------------------
     | DQL custom datetime functions

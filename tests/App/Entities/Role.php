@@ -52,7 +52,7 @@ class Role implements JsonApiResource, RoleContract
     /**
      * @var ArrayCollection
      *
-     * @ORM\Column(name="permissions", type="json_array")
+     * @ORM\Column(name="permissions", type="json")
      */
     protected $permissions;
 
