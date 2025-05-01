@@ -4,7 +4,10 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/R3VoLuT1OneR/laravel-doctrine-rest/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/R3VoLuT1OneR/laravel-doctrine-rest?branch=master)
 [![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/R3VoLuT1OneR/laravel-doctrine-rest/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/R3VoLuT1OneR/laravel-doctrine-rest?branch=master)
 
-Laravel 5 Rest API for Doctrine ORM
+This package supports Laravel 11 and Laravel Doctrine ORM 2.0 not plans to upgrade.
+
+Successor: https://github.com/ScholarshipOwl/laravel-doctrine-jsonapi
+
 
 ## Versions
 
@@ -13,7 +16,8 @@ Laravel 5 Rest API for Doctrine ORM
 | ^0.2.0  | 7.x                        |
 | ^0.3.0  | 8.x                        |
 | ^0.4.0  | 9.x                        |
-| ^0.5.0  | 10.x                        |
+| ^0.5.0  | 10.x                       |
+| ^0.6.0  | 11.x                       |
 
 ## Upgrade Guide
 
