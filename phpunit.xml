@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupStaticAttributes="false" bootstrap="tests/bootstrap/bootstrap.php" colors="false" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" forceCoversAnnotation="false" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" verbose="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage processUncoveredFiles="false">
-    <include>
-      <directory suffix=".php">./src/</directory>
-    </include>
-  </coverage>
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  bootstrap="tests/bootstrap/bootstrap.php"
+  colors="false"
+  processIsolation="false"
+  stopOnError="false"
+  stopOnFailure="false"
+  stopOnIncomplete="false"
+  stopOnSkipped="false"
+  displayDetailsOnTestsThatTriggerDeprecations="true"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+>
   <!--printerClass="PHPUnit_TextUI_ResultPrinter"-->
   <!--testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"-->
   <php>

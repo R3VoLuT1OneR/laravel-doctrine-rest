@@ -165,22 +165,11 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Service Providers...
-         */
-
-        /*
          * Application Service Providers...
          */
         \Pz\LaravelDoctrine\Rest\Tests\App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        // App\Providers\RouteServiceProvider::class,
-
         \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         \LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
-        \LaravelDoctrine\ACL\AclServiceProvider::class,
-
     ],
 
     /*

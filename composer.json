@@ -26,13 +26,12 @@
     },
     "require-dev": {
         "laravel-doctrine/orm": "^2.0",
-        "laravel-doctrine/acl": "^1.6",
         "laravel-doctrine/migrations": "^3.1",
-        "laravel/laravel": "^10.0",
-        "phpunit/phpunit": "^9.5"
+        "laravel/laravel": "^11.0",
+        "phpunit/phpunit": "^10.5"
     },
     "require": {
-        "php": "^8.1",
-        "pz/doctrine-rest": "^0.4.0"
+        "php": "^8.2",
+        "pz/doctrine-rest": "^0.5.0"
     }
 }

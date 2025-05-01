@@ -15,9 +15,9 @@ use LaravelDoctrine\ACL\Mappings as ACL;
  * @ORM\Entity()
  * @ORM\Table(name="role")
  */
-class Role implements JsonApiResource, RoleContract
+class Role implements JsonApiResource//, RoleContract
 {
-    use HasPermissions;
+    //use HasPermissions;
 
     const ROOT = 1;
     const ROOT_NAME = 'Root';

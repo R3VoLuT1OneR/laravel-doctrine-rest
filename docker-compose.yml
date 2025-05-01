@@ -1,4 +1,4 @@
-version: "3.3"
+# docker compose exec php sh
 services:
   php:
     build:
@@ -6,5 +6,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/opt/project
-    user: '1000'
     command: ['composer', 'install']
+#    command: ['tail', '-f', '/dev/null']

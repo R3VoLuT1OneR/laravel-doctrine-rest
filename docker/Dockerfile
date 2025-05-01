@@ -1,5 +1,5 @@
 # Used for local development
-FROM php:8.1-cli-alpine
+FROM php:8.2-cli-alpine
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 RUN apk add --no-cache git zip libzip-dev unzip curl-dev

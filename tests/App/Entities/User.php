@@ -46,22 +46,12 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @var string
      *
      * @ORM\Column(name="email", type="string", unique=true, nullable=false)
-     * @Assert\Email(message="Please provide correct email address")
-     * @Assert\NotNull()
      */
     protected $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="name", type="string", unique=false, nullable=false)
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *     min="3",
-     *     max="255",
-     *     minMessage="Name must be at least {{ limit }} characters long",
-     *     maxMessage="Name can't be more than {{ limit }} characters long"
-     * )
      */
     protected $name;
 
@@ -69,7 +59,6 @@ class User implements AuthenticatableContract, AuthorizableContract, CanResetPas
      * @var string
      *
      * @ORM\Column(name="password", type="string", nullable=false)
-     * @Assert\NotNull()
      */
     protected $password;
 

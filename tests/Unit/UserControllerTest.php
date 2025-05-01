@@ -21,9 +21,9 @@ class UserControllerTest extends TestCase
         Route::group(['prefix' => '/rest'], function() {
             Route::group(['prefix' => '/users'], function() {
                 Route::get('', UserController::class . '@index');
-                Route::post('', UserController::class . '@create');
+                Route::post('', [UserController::class, 'createCustom']);
                 Route::get('/{id}', UserController::class . '@show');
-                Route::patch('/{id}', UserController::class . '@update');
+                Route::patch('/{id}', [UserController::class, 'updateCustom']);
                 Route::delete('/{id}', UserController::class . '@delete');
 
                 Route::get('/{id}/roles', UserController::class . '@relatedRoles');
@@ -363,9 +363,9 @@ class UserControllerTest extends TestCase
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'email',
+                            'pointer' => 'data.attributes.email',
                         ],
-                        'detail' => 'Please provide correct email address'
+                        'detail' => 'The data.attributes.email field must be a valid email address.'
                     ],
                 ],
             ]);
@@ -402,11 +402,25 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'errors' => [
                     [
-                        'code' => 'missing-root-data',
+                        'code' => 'validation',
                         'source' => [
-                            'pointer' => '',
+                            'pointer' => 'data.attributes.email',
                         ],
-                        'detail' => 'Missing `data` member at document top level.'
+                        'detail' => 'The data.attributes.email field is required.'
+                    ],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'data.attributes.name',
+                        ],
+                        'detail' => 'The data.attributes.name field is required.'
+                    ],
+                    [
+                        'code' => 'validation',
+                        'source' => [
+                            'pointer' => 'data.attributes.password',
+                        ],
+                        'detail' => 'The data.attributes.password field is required.'
                     ],
                 ]
             ]);
@@ -419,23 +433,23 @@ class UserControllerTest extends TestCase
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'email',
+                            'pointer' => 'data.attributes.email',
                         ],
-                        'detail' => 'This value should not be null.'
+                        'detail' => 'The data.attributes.email field is required.'
                     ],
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'name',
+                            'pointer' => 'data.attributes.name',
                         ],
-                        'detail' => 'This value should not be null.'
+                        'detail' => 'The data.attributes.name field is required.'
                     ],
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'password',
+                            'pointer' => 'data.attributes.password',
                         ],
-                        'detail' => 'This value should not be null.'
+                        'detail' => 'The data.attributes.password field is required.'
                     ],
                 ],
             ]);
@@ -448,16 +462,16 @@ class UserControllerTest extends TestCase
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'name',
+                            'pointer' => 'data.attributes.name',
                         ],
-                        'detail' => 'Name must be at least 3 characters long',
+                        'detail' => 'The data.attributes.name field must be at least 3 characters.',
                     ],
                     [
                         'code' => 'validation',
                         'source' => [
-                            'pointer' => 'password',
+                            'pointer' => 'data.attributes.password',
                         ],
-                        'detail' => 'This value should not be null.',
+                        'detail' => 'The data.attributes.password field is required.',
                     ],
                 ],
             ]);
